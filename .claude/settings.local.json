@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(awk '{print $9, \"\\(\" $5 \"\\)\"}')",
+      "Bash(python3 -c \"from validate_restart_reader import IBPMRestart; r = IBPMRestart\\('examples/ibpm00000.bin'\\); print\\(f'✓ Reader works: Grid {r.data[\\\\\"nx\\\\\"]}x{r.data[\\\\\"ny\\\\\"]}, Time {r.data[\\\\\"time\\\\\"]}'\\)\")"
+    ]
+  }
+}

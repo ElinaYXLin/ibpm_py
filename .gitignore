@@ -1,0 +1,9 @@
+build/
+*.o
+*.bin
+*.plt
+ibpm.force
+ibpm.cmd
+__pycache__/
+*.pyc
+.DS_Store
