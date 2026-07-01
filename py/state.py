@@ -7,7 +7,7 @@
 from __future__ import annotations
 
 import sys
-from typing import BinaryIO, Optional
+from typing import BinaryIO, Optional, Union
 
 import numpy as np
 
@@ -43,16 +43,27 @@ def _fread(fp: BinaryIO, dtype: np.dtype, count: int) -> Optional[np.ndarray]:
 class State:
     """Structure for grouping state variables."""
 
-    def __init__(self, grid: Optional[Grid] = None, numPoints: Optional[int] = None, filename: Optional[str] = None) -> None:
-        # NOTE(port): C++ has three constructors: State() (default, no
+    def __init__(self, grid: "Optional[Union[Grid, State]]" = None, numPoints: Optional[int] = None, filename: Optional[str] = None) -> None:
+        # NOTE(port): C++ has three explicit constructors: State() (default, no
         # allocation), State(const Grid&, int numPoints) (allocate), and
-        # State(string filename) (load from file). Collapsed here into one
-        # constructor dispatching on which optional arguments are given,
-        # matching the pattern used throughout this port. `filename` takes
-        # priority if given alongside grid/numPoints (which the C++
-        # overload set never allows simultaneously anyway).
+        # State(string filename) (load from file), plus the compiler-generated
+        # copy constructor State(const State&) (member-wise deep copy).
+        # Collapsed here into one constructor dispatching on which arguments
+        # are given, matching the pattern used throughout this port. Passing a
+        # State as the first argument reproduces the copy constructor;
+        # `filename` takes priority if given alongside grid/numPoints (which
+        # the C++ overload set never allows simultaneously anyway).
         self.timestep: int = 0
         self.time: float = 0.0
+        # NOTE(port): copy-constructor branch. C++ member-wise copy deep-copies
+        # q/omega/f (each has value semantics) and copies timestep/time; the
+        # `assign` method below performs the same work, so we delegate to it.
+        if isinstance(grid, State):
+            self.q = Flux()
+            self.omega = Scalar()
+            self.f = BoundaryVector()
+            self.assign(grid)
+            return
         # NOTE(port): C++ `q`, `omega`, `f` are public data members,
         # default-constructed (Flux()/Scalar()/BoundaryVector(), i.e. no
         # grid/no data) whenever the constructor body does not call
@@ -75,6 +86,22 @@ class State:
         self.q.resize(grid)
         self.omega.resize(grid)
         self.f.resize(numPoints)
+
+    def assign(self, other: "State") -> "State":
+        """Copy assignment from another State (member-wise deep copy).
+
+        NOTE(port): reproduces the compiler-generated C++
+        `State::operator=(const State&)`. Python cannot overload `=`, so (as
+        with Scalar.assign / Flux.assign / BoundaryVector.assign) the copy is
+        exposed through this method. Each field is deep-copied via its own
+        copy constructor so that the two States do not share buffers.
+        """
+        self.q = Flux(other.q)
+        self.omega = Scalar(other.omega)
+        self.f = BoundaryVector(other.f)
+        self.timestep = other.timestep
+        self.time = other.time
+        return self
 
     def computeNetForce(self) -> "tuple[float, float]":
         """Routine for computing X & Y forces.
