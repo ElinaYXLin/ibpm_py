@@ -22,12 +22,12 @@ class BaseFlow:
 
     def __init__(
         self,
-        grid: Optional[Grid] = None,
+        grid: Optional[Union[Grid, "BaseFlow"]] = None,
         mag: Optional[float] = None,
         alpha: Optional[float] = None,
         motion: Optional[Motion] = None,
     ) -> None:
-        # NOTE(port): C++ has four constructors:
+        # NOTE(port): C++ has four *explicit* constructors:
         #   BaseFlow()                                    -- no allocation
         #   BaseFlow(const Grid&)                         -- no motion/baseflow
         #   BaseFlow(const Grid&, double mag, double alpha)      -- no motion
@@ -43,6 +43,40 @@ class BaseFlow:
         # nothing to faithfully port for that case, so it is simply not
         # reachable here -- callers must supply mag and alpha whenever
         # motion is supplied, matching what BaseFlow.cc actually defines).
+        #
+        # NOTE(port) -- judgment call: C++ also has an *implicit*,
+        # compiler-generated copy constructor `BaseFlow(const BaseFlow&)`
+        # (BaseFlow.h declares no copy constructor of its own, and no
+        # explicit `= delete`/`= default`), which NavierStokesModel.cc's
+        # constructor relies on via its `_baseFlow( q_potential )` member
+        # initializer. The compiler-generated copy constructor does a plain
+        # memberwise copy -- including `_motion`, a raw `Motion*` pointer --
+        # so the copy ends up *sharing* the same `_motion` object as the
+        # original (not cloning it), which is a latent double-free /
+        # dangling-pointer hazard in C++ (both objects' destructors would
+        # eventually try to delete the same pointer, though `~BaseFlow()` in
+        # BaseFlow.cc happens to be a no-op that never actually deletes
+        # `_motion`, so in practice this particular hazard is never
+        # triggered). This is reproduced verbatim below (`grid` being a
+        # BaseFlow triggers a memberwise copy that reuses the *same*
+        # `_motion` reference, not a clone), since Python's GC has no
+        # equivalent double-free risk and there is nothing to "fix" here
+        # beyond faithfully matching the aliasing.
+        if isinstance(grid, BaseFlow):
+            other = grid
+            self._xCenter = other._xCenter
+            self._yCenter = other._yCenter
+            self._isStationary = other._isStationary
+            self._motion = other._motion
+            self._time = other._time
+            self._mag = other._mag
+            self._magBF = other._magBF
+            self._alpha = other._alpha
+            self._alphaBF = other._alphaBF
+            self._gamma = other._gamma
+            self._q = Flux(other._q)
+            return
+
         self._xCenter: float = 0.0
         self._yCenter: float = 0.0
         self._isStationary: bool = True
