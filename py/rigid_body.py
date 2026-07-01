@@ -18,29 +18,20 @@ import numpy as np
 
 from .boundary_vector import BoundaryVector
 from .direction import Direction
+from .eldredge1 import Eldredge1
+from .eldredge2 import Eldredge2
+from .eldredge_combined2 import EldredgeCombined2
+from .eldredge_maneuver import EldredgeManeuver
 from .fixed_position import FixedPosition
+from .fixed_velocity import FixedVelocity
+from .lag_step1 import LagStep1
+from .lag_step2 import LagStep2
 from .motion import Motion
+from .motion_file import MotionFile
+from .motion_file_periodic import MotionFilePeriodic
+from .pitch_plunge import PitchPlunge
+from .sigmoidal_step import SigmoidalStep
 from .utils import EatWhitespace, MakeLowercase
-
-# NOTE(port): Motion subclasses other than FixedPosition (FixedVelocity,
-# PitchPlunge, SigmoidalStep, LagStep1/2, EldredgeManeuver/Combined2/1/2,
-# MotionFile, MotionFilePeriodic) are not ported -- see the NOTE(port) at
-# the top of fixed_position.py for the rationale. `load()` below still
-# recognizes their command names (matching the C++ parser's structure) but
-# raises NotImplementedError instead of silently mis-parsing.
-_UNPORTED_MOTION_TYPES = {
-    "fixedvel",
-    "pitchplunge",
-    "sigmoidalstep",
-    "lagstep1",
-    "lagstep2",
-    "eldredge",
-    "eldredgecombined2",
-    "eldredge1",
-    "eldredge2",
-    "motionfile",
-    "motionfileperiodic",
-}
 
 
 class Point:
@@ -243,23 +234,52 @@ class RigidBody:
                     error_found = True
                     continue
                 motionType = MakeLowercase(tokens[1])
-                if motionType == "fixed":
-                    try:
-                        x, y, theta = (float(t) for t in tokens[2:5])
-                    except (IndexError, ValueError):
-                        _parse_error(buf)
-                        error_found = True
-                        continue
-                    self.setMotion(FixedPosition(x, y, theta))
-                elif motionType in _UNPORTED_MOTION_TYPES:
-                    raise NotImplementedError(
-                        f"RigidBody.load(): motion type '{motionType}' is not "
-                        "ported to Python yet (only 'fixed' / FixedPosition is "
-                        "currently implemented); see fixed_position.py."
-                    )
-                # NOTE(port): C++ has no final `else` here either -- an
-                # unrecognized motionType is silently ignored, matching
-                # that (arguably buggy) original behavior faithfully.
+                args = tokens[2:]
+                try:
+                    if motionType == "fixed":
+                        x, y, theta = (float(t) for t in args[0:3])
+                        self.setMotion(FixedPosition(x, y, theta))
+                    elif motionType == "fixedvel":
+                        xdot, ydot, thetadot = (float(t) for t in args[0:3])
+                        self.setMotion(FixedVelocity(xdot, ydot, thetadot))
+                    elif motionType == "pitchplunge":
+                        amp1, freq1, phase1, amp2, freq2, phase2 = (float(t) for t in args[0:6])
+                        self.setMotion(PitchPlunge(amp1, freq1, phase1, amp2, freq2, phase2))
+                    elif motionType == "sigmoidalstep":
+                        AMP, DUR, startTime = (float(t) for t in args[0:3])
+                        self.setMotion(SigmoidalStep(AMP, DUR, startTime))
+                    elif motionType == "lagstep1":
+                        AMP, PW, TAU, T0 = (float(t) for t in args[0:4])
+                        self.setMotion(LagStep1(AMP, PW, TAU, T0))
+                    elif motionType == "lagstep2":
+                        AMP, PW, TAU, T0 = (float(t) for t in args[0:4])
+                        self.setMotion(LagStep2(AMP, PW, TAU, T0))
+                    elif motionType == "eldredge":
+                        AMP, a, t1, t2, t3, t4 = (float(t) for t in args[0:6])
+                        self.setMotion(EldredgeManeuver(AMP, a, t1, t2, t3, t4))
+                    elif motionType == "eldredgecombined2":
+                        AMPa, a, a1, a2, a3, a4, AMPb, b, b1, b2, b3, b4 = (float(t) for t in args[0:12])
+                        self.setMotion(EldredgeCombined2(AMPa, a, a1, a2, a3, a4, AMPb, b, b1, b2, b3, b4))
+                    elif motionType == "eldredge1":
+                        AMP, a, t1, t2, t3, t4 = (float(t) for t in args[0:6])
+                        self.setMotion(Eldredge1(AMP, a, t1, t2, t3, t4))
+                    elif motionType == "eldredge2":
+                        AMP, a, t1, t2, t3, t4 = (float(t) for t in args[0:6])
+                        self.setMotion(Eldredge2(AMP, a, t1, t2, t3, t4))
+                    elif motionType == "motionfile":
+                        filename = args[0]
+                        self.setMotion(MotionFile(filename))
+                    elif motionType == "motionfileperiodic":
+                        filename = args[0]
+                        period = float(args[1])
+                        self.setMotion(MotionFilePeriodic(filename, period))
+                    # NOTE(port): C++ has no final `else` here either -- an
+                    # unrecognized motionType is silently ignored, matching
+                    # that (arguably buggy) original behavior faithfully.
+                except (IndexError, ValueError):
+                    _parse_error(buf)
+                    error_found = True
+                    continue
             elif cmd == "name":
                 idx = buf.find(tokens[0])
                 name = EatWhitespace(buf[idx + len(tokens[0]):])
