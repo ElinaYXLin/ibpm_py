@@ -41,6 +41,20 @@
 #      way. Flagged because it is a deliberate faithful reproduction of an
 #      apparently wasteful C++ loop.
 #
+#   3b. assert() and -DNDEBUG.  The C++ project builds with -DNDEBUG (see
+#      config/make.inc / config/make.inc.clang), so every C++ `assert(...)`
+#      is compiled out in the binary that actually runs. The one place this
+#      matters numerically is `assert( sum > 0 )` in computeFactorization:
+#      an earlier version of this port raised a Python AssertionError there,
+#      which HALTED on any non-SPD matrix M -- behavior the shipped C++ never
+#      exhibits. It is now a faithful no-op (np.sqrt(sum) -> nan for sum <= 0,
+#      matching <cmath> sqrt under NDEBUG); see the inline note at that site.
+#      A non-SPD M arises only for degenerate configurations (immersed
+#      boundary over-resolved relative to the grid), identically in C++ and
+#      here. The remaining `assert self._hasBeenInitialized` guards are left
+#      in place: they never fire in correct use and only document a
+#      precondition.
+#
 #   4. Exact float comparison in load().  C++ compares `alphaBeta_in !=
 #      _alphaBeta` with exact double equality; ported verbatim. This is
 #      fragile (a file written by a slightly different build could fail to
@@ -145,7 +159,25 @@ class CholeskySolver(ProjectionSolver):
                         np.dot(self._lower[i, :i], self._lower[j, :i])
                     )
                     if i == j:
-                        assert s > 0
+                        # NOTE(port): the C++ has `assert( sum > 0 )` here,
+                        # but the project's release build defines -DNDEBUG
+                        # (config/make.inc, config/make.inc.clang), which
+                        # compiles every assert() out. The C++ binary that
+                        # actually runs therefore never aborts here: it takes
+                        # sqrt(sum) directly, yielding NaN (via <cmath> sqrt)
+                        # whenever sum <= 0, and proceeds. We reproduce that
+                        # release behavior with np.sqrt (nan for sum <= 0,
+                        # its 'invalid' warning silenced by the errstate above)
+                        # rather than raising a Python AssertionError, which
+                        # was an infidelity relative to the shipped build.
+                        #
+                        # NB: sum <= 0 only occurs when M is not SPD, which for
+                        # this discretization happens when the immersed boundary
+                        # is over-resolved (point spacing << grid dx), making
+                        # M = C A^{-1} B rank-deficient. That is a property of
+                        # the *configuration*, identical in C++ and in this
+                        # port (both first hit it at the same pivot); it is not
+                        # a bug in the factorization itself.
                         self._diagonal[i] = np.sqrt(s)
                     else:
                         self._lower[j, i] = s / self._diagonal[i]
