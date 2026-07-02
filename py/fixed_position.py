@@ -5,20 +5,19 @@
 # Subclass of Motion, for a stationary body: specifies the location of the
 # center of the body, and an angle of rotation about the center.
 #
-# NOTE(port): FixedPosition is the only Motion subclass ported here. It is
-# ported because it is the minimal concrete Motion needed to exercise
+# NOTE(port): FixedPosition was originally the only Motion subclass ported
+# here, because it is the minimal concrete Motion needed to exercise
 # RigidBody's motion machinery (setMotion/getMotion/moveBody) and because
 # RigidBody::load()'s "motion fixed x y theta" command is documented
-# directly in RigidBody.h's own docstring. The C++ codebase has ~10 other
-# Motion subclasses (FixedVelocity, PitchPlunge, SigmoidalStep, LagStep1/2,
-# EldredgeManeuver/Combined2/1/2, MotionFile, MotionFilePeriodic) that are
+# directly in RigidBody.h's own docstring. The remaining ~10 Motion
+# subclasses (FixedVelocity, PitchPlunge, SigmoidalStep, LagStep1/2,
+# EldredgeManeuver/Combined2/1/2, MotionFile, MotionFilePeriodic), which are
 # only reachable through RigidBody::load()'s "motion <type> ..." command
-# parser, not through any other public entry point of RigidBody/Geometry.
-# Per the porting scope ("only port other files when there are
-# dependencies"), those are treated as optional plugins of the config-file
-# parser rather than hard dependencies of RigidBody/Geometry, and are left
-# unported; RigidBody.load() raises NotImplementedError with a clear
-# message if one of those motion types is requested (see rigid_body.py).
+# parser, have since been ported too (see fixed_velocity.py, pitch_plunge.py,
+# sigmoidal_step.py, lag_step1.py, lag_step2.py, eldredge_maneuver.py,
+# eldredge_combined2.py, eldredge1.py, eldredge2.py, motion_file.py,
+# motion_file_periodic.py). RigidBody.load()'s "motion <type> ..." dispatch
+# now fully constructs every one of them; none raise NotImplementedError.
 
 from __future__ import annotations
 

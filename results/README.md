@@ -26,7 +26,7 @@ reported by the script, not silently skipped):
 | `cylinder` | `examples/cylinder.geom` | 160 | 200x200 | 0.02 | the standard example distributed with this project |
 | `ibpm_geom` | `ibpm.geom` | 314 | 400x400 | 0.01 | a finer boundary, originally sized to match a Fortran reference case |
 | `cylinder2pa` | `benchmarking/cylinder2Pa.geom` | 160 | 200x200 | 0.02 | same body as `cylinder.geom`, but with an explicit `motion fixed 0 0 0` command — exercises `RigidBody`'s motion-parsing code path, which `cylinder.geom` doesn't |
-| ~~`cylinder2paplunge`~~ | `benchmarking/cylinder2PaPlunge.geom` | — | — | — | **excluded**: its `motion PitchPlunge 0 0 0.5 0.2` line supplies only 4 of PitchPlunge's 6 required parameters (a malformed file, not a porting issue), and PitchPlunge motion itself isn't ported to Python yet (see `py/fixed_position.py`'s module docstring). `Geometry.load()` returns `False` for this file in `py/` — it currently cannot be run through the Python port at all. |
+| ~~`cylinder2paplunge`~~ | `benchmarking/cylinder2PaPlunge.geom` | — | — | — | **excluded**: its `motion PitchPlunge 0 0 0.5 0.2` line supplies only 4 of PitchPlunge's 6 required parameters — a malformed file (PitchPlunge motion itself is ported; see `py/pitch_plunge.py`). `Geometry.load()` returns `False` for this file in **both** implementations (independently verified: `build/ibpm` also fails to parse it and exits with a nonzero status) — it isn't a Python-vs-C++ discrepancy, the file just can't be run by either program. |
 
 All three valid cases use Re=100, RK3 timestepping, 250 steps, run from a
 zero initial condition. `ibpm.geom` uses `dt=0.01` instead of `0.02`
