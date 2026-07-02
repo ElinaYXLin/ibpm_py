@@ -7,3 +7,7 @@ ibpm.cmd
 __pycache__/
 *.pyc
 .DS_Store
+
+# raw output from results/generate_validation_report.py (regenerable;
+# see results/README.md)
+results/_run_data/
