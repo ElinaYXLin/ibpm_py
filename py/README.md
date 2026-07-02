@@ -17,10 +17,55 @@ has been "improved" or restructured relative to the original algorithm.
 
 - Python 3.9+
 - `numpy`
-- `scipy` (used by `conjugate_gradient_solver.py`)
+- `scipy` (used by `elliptic_solver_2d.py`, for the sine-transform Poisson solve)
+
+Install both with:
+
+```bash
+pip install -r py/requirements.txt
+```
 
 No compilation step is needed — unlike the C++ version, there's nothing to
 `make`. Just run the scripts directly with Python.
+
+## File organization
+
+All ~45 modules live flat inside `py/`, one file per class/topic, e.g.
+`py/state.py` <-> `src/State.h`/`src/State.cc`. This mirrors `src/`, which
+is *also* one flat directory of ~40 files with no subfolders — so the flat
+layout here isn't a Python-specific choice, it's carried over from the
+original C++ project's own convention.
+
+We considered pulling the handful of general-purpose helper modules (e.g.
+`utils.py`, `parm_parser.py`, `logger.py`, `scheme.py`) into a `py/utils/`
+subfolder, but decided against it:
+
+- **It breaks the 1:1 mapping to `src/`.** Right now, given a C++ file you
+  can find its Python port by name alone (`Grid.h` -> `grid.py`). Moving
+  files into subfolders would break that correspondence for no benefit,
+  making it harder to cross-check the port against the original.
+- **There's no clean "utility vs. core" line to draw.** Files like
+  `vector_operations.py` or `elliptic_solver.py` are both "core physics"
+  *and* general-purpose numerical utilities used all over the codebase;
+  a `utils/` bucket would end up being an arbitrary, ill-defined split
+  rather than a meaningful grouping.
+- **It's not solving an actual problem.** All imports are already
+  explicit (`from .grid import Grid`), so there's no import-cycle or
+  namespace-collision issue a subfolder would fix — 45 files in one
+  directory is still easy to navigate/search, and the original C++ project
+  manages 80 files in `src/` the same way.
+- **It has real, non-trivial cost.** Every relative import
+  (`from .x import Y`) in every moved file, and every file that imports
+  *from* a moved file, would need updating. That's a mechanical but
+  error-prone change across dozens of files, with real risk of quietly
+  breaking the cross-validation tests in `py/tests/cross_validation/`,
+  for a purely cosmetic reorganization.
+
+If the project grows substantially beyond its current scope (e.g. a real
+package split with a public API vs. internals), it may be worth revisiting
+this — but for a faithful, already-flat 1:1 port of a flat C++ codebase,
+introducing a `utils/` subfolder now would add churn and risk without a
+concrete benefit.
 
 ## Which file do I run?
 
