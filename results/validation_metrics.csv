@@ -1,9 +1,41 @@
-quantity,error_type,max_error,mean_error,max_relative_to_peak,mean_relative_to_peak
-Cd (drag coefficient),"relative (|py-cpp|/|cpp|, t>0)",0.000e+00,0.000e+00,,
-Cl (lift coefficient),absolute (reference ~0 by symmetry),5.192e-14,1.383e-14,,
-"vorticity field, t=0",absolute,0.000e+00,0.000e+00,0.000e+00,0.000e+00
-"vorticity field, t=2",absolute,4.158e-12,2.506e-14,1.783e-13,1.074e-15
-"vorticity field, t=4",absolute,6.136e-12,2.764e-14,2.655e-13,1.196e-15
-"runtime, C++ (build/ibpm)",wall-clock seconds,12.163,,,
-"runtime, Python (py/ibpm.py)",wall-clock seconds,4.559,,,
-"runtime, Python / C++ ratio",dimensionless,0.375,,,
+case,quantity,error_type,max_error,mean_error,max_relative_to_peak,mean_relative_to_peak
+cylinder,Cd (drag coefficient),"relative (|py-cpp|/|cpp|, t>0)",0.000e+00,0.000e+00,,
+cylinder,Cl (lift coefficient),absolute (reference ~0 by symmetry),5.192e-14,1.383e-14,,
+cylinder,"vorticity field, t=0",absolute,0.000e+00,0.000e+00,0.000e+00,0.000e+00
+cylinder,"vorticity field, t=4",absolute,6.136e-12,2.764e-14,2.655e-13,1.196e-15
+cylinder,"runtime, C++: model construction",wall-clock seconds,9.058,,,
+cylinder,"runtime, C++: solver factorization",wall-clock seconds,2.000,,,
+cylinder,"runtime, C++: timestepping (250 steps)",wall-clock seconds,2.884,,,
+cylinder,"runtime, Python: model construction",wall-clock seconds,0.825,,,
+cylinder,"runtime, Python: solver factorization",wall-clock seconds,2.183,,,
+cylinder,"runtime, Python: timestepping (250 steps)",wall-clock seconds,3.013,,,
+cylinder,"runtime ratio, Python/C++: timestepping only",dimensionless,1.045,,,
+cylinder,"ms/step, C++: timestepping",milliseconds,11.536,,,
+cylinder,"ms/step, Python: timestepping",milliseconds,12.053,,,
+ibpm_geom,Cd (drag coefficient),"relative (|py-cpp|/|cpp|, t>0)",0.000e+00,0.000e+00,,
+ibpm_geom,Cl (lift coefficient),absolute (reference ~0 by symmetry),1.117e-13,2.639e-14,,
+ibpm_geom,"vorticity field, t=0",absolute,0.000e+00,0.000e+00,0.000e+00,0.000e+00
+ibpm_geom,"vorticity field, t=2",absolute,9.043e-12,3.850e-14,3.504e-13,1.492e-15
+ibpm_geom,"runtime, C++: model construction",wall-clock seconds,17.842,,,
+ibpm_geom,"runtime, C++: solver factorization",wall-clock seconds,14.930,,,
+ibpm_geom,"runtime, C++: timestepping (250 steps)",wall-clock seconds,12.131,,,
+ibpm_geom,"runtime, Python: model construction",wall-clock seconds,0.920,,,
+ibpm_geom,"runtime, Python: solver factorization",wall-clock seconds,16.970,,,
+ibpm_geom,"runtime, Python: timestepping (250 steps)",wall-clock seconds,11.891,,,
+ibpm_geom,"runtime ratio, Python/C++: timestepping only",dimensionless,0.980,,,
+ibpm_geom,"ms/step, C++: timestepping",milliseconds,48.523,,,
+ibpm_geom,"ms/step, Python: timestepping",milliseconds,47.564,,,
+cylinder2pa,Cd (drag coefficient),"relative (|py-cpp|/|cpp|, t>0)",0.000e+00,0.000e+00,,
+cylinder2pa,Cl (lift coefficient),absolute (reference ~0 by symmetry),5.192e-14,1.383e-14,,
+cylinder2pa,"vorticity field, t=0",absolute,0.000e+00,0.000e+00,0.000e+00,0.000e+00
+cylinder2pa,"vorticity field, t=4",absolute,6.136e-12,2.764e-14,2.655e-13,1.196e-15
+cylinder2pa,"runtime, C++: model construction",wall-clock seconds,9.000,,,
+cylinder2pa,"runtime, C++: solver factorization",wall-clock seconds,2.046,,,
+cylinder2pa,"runtime, C++: timestepping (250 steps)",wall-clock seconds,2.795,,,
+cylinder2pa,"runtime, Python: model construction",wall-clock seconds,0.935,,,
+cylinder2pa,"runtime, Python: solver factorization",wall-clock seconds,2.011,,,
+cylinder2pa,"runtime, Python: timestepping (250 steps)",wall-clock seconds,3.006,,,
+cylinder2pa,"runtime ratio, Python/C++: timestepping only",dimensionless,1.076,,,
+cylinder2pa,"ms/step, C++: timestepping",milliseconds,11.180,,,
+cylinder2pa,"ms/step, Python: timestepping",milliseconds,12.025,,,
+cylinder2paplunge,EXCLUDED,"'motion PitchPlunge 0 0 0.5 0.2' supplies only 4 of the 6 parameters PitchPlunge requires (a malformed file), and PitchPlunge motion is not yet ported to Python -- Geometry.load() returns False for this file in py/. Not run.",,,,
