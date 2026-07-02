@@ -1,0 +1,8 @@
+# Python dependencies for the IBPM Python port (py/).
+#
+# Everything else imported by this package (abc, enum, math, os, re, struct,
+# sys, typing, pathlib, ...) is part of the Python 3 standard library and
+# does not need to be installed separately.
+
+numpy>=1.20
+scipy>=1.7
