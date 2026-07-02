@@ -18,6 +18,30 @@ if TYPE_CHECKING:
     from .state import State
 
 
+def _sprintf1(fmt: str, value: int) -> str:
+    """Mimic C's `sprintf(buf, fmt, value)` for a single trailing integer
+    argument, tolerating a mismatch between the number of `%`-conversion
+    specifiers in `fmt` and the number of arguments supplied -- the way
+    C's varargs `sprintf` does (extra arguments are silently ignored; too
+    few are undefined behavior that in practice leaves the format string's
+    extra specifiers un-substituted rather than crashing). Python's `%`
+    operator instead requires an exact match, raising `TypeError` in both
+    the "too many" case (e.g. a title string like "Check geometry" with no
+    `%d` at all -- a legitimate caller-supplied title, not just a
+    C++-vs-Python translation artifact) and the "too few" case. Both are
+    caught here and `fmt` is returned unmodified: this is exactly correct
+    for the "too many" case (matching sprintf's literal-copy behavior when
+    there is nothing to substitute), and a safe, non-crashing placeholder
+    for the "too few" case, which only arises in `doOutput` below in a
+    branch where the resulting string is provably unused (see the
+    docstring there).
+    """
+    try:
+        return fmt % value
+    except TypeError:
+        return fmt
+
+
 class OutputTecplot(Output):
     """Output routines for writing ASCII Tecplot files."""
 
@@ -54,26 +78,26 @@ class OutputTecplot(Output):
         # Add timestep to filename and title
         #
         # NOTE(port) -- judgment call: C++ unconditionally does
-        # `sprintf(filename, _filename.c_str(), state.timestep)` here, even
-        # when `_TecplotAllGrids` is true and `_filename` is expected to
-        # contain a *second* `%d` (for the per-grid-level index, filled in
-        # inside the loop below) -- calling sprintf with fewer arguments
-        # than format specifiers is undefined behavior in C++ (typically it
-        # reads a garbage/stray value rather than crashing), and the
-        # resulting `filename` is provably unused in that branch anyway (it
-        # is unconditionally overwritten inside the loop before any file is
-        # written). Python's `%` operator has no such "UB but survives"
-        # behavior -- it raises `TypeError` immediately for too few
-        # arguments. Since this value is dead code exactly when the
-        # mismatch would occur, the exception is caught and `filename` left
-        # as `None` in that case; it is unconditionally reassigned before
-        # use in the `_TecplotAllGrids` branch below, and used as-is
-        # (successfully formatted) in the non-`_TecplotAllGrids` branch.
-        try:
-            filename = self._filename % state.timestep
-        except TypeError:
-            filename = None
-        title = self._title % state.timestep
+        # `sprintf(filename, _filename.c_str(), state.timestep)` and
+        # `sprintf(title, _title.c_str(), state.timestep)` here, even
+        # though: (a) when `_TecplotAllGrids` is true, `_filename` is
+        # expected to contain a *second* `%d` (for the per-grid-level
+        # index, filled in inside the loop below), so this first
+        # `filename` sprintf is called with fewer arguments than format
+        # specifiers -- undefined behavior in C++ that in practice leaves
+        # the extra specifier un-substituted rather than crashing, and the
+        # resulting value is provably unused in that branch anyway (it is
+        # unconditionally overwritten inside the loop before any file is
+        # written); and (b) `title` may legitimately contain *no* `%d` at
+        # all (e.g. checkgeom.cc's literal `"Check geometry"`), in which
+        # case sprintf just ignores the extra `state.timestep` argument and
+        # copies the string unchanged. Python's `%` operator has no
+        # equivalent tolerance for either case -- it raises `TypeError` for
+        # both too few and too many arguments. Both are handled uniformly
+        # by `_sprintf1` above (see its docstring for why returning `fmt`
+        # unmodified is correct/safe in each case).
+        filename = _sprintf1(self._filename, state.timestep)
+        title = _sprintf1(self._title, state.timestep)
         status = False
         grid = state.omega.getGrid()
 
