@@ -11,10 +11,12 @@
 #   * FluxToXVelocity / FluxToYVelocity -- needed by CrossProduct
 #   * XVelocityToFlux / YVelocityToFlux -- needed by VelocityToFlux
 #   * VelocityToFlux / FluxToVelocity   -- convenience wrappers
-# Still not ported (no dependent yet): InnerProduct(Scalar/Flux),
-# FineGridInnerProduct, VorticityInnerProduct, FineGridVorticityInnerProduct,
-# the Laplacian(Array2, dx, BC, Array2) low-level form (used only inside the
-# already-ported EllipticSolver2d, which reimplements it directly).
+#   * InnerProduct(Flux, Flux)           -- needed by OutputEnergy
+# Still not ported (no dependent yet): InnerProduct(Scalar, Scalar),
+# FineGridInnerProduct(Scalar, Scalar), VorticityInnerProduct,
+# FineGridVorticityInnerProduct, the Laplacian(Array2, dx, BC, Array2)
+# low-level form (used only inside the already-ported EllipticSolver2d,
+# which reimplements it directly).
 #
 # NOTE(port) -- vectorization judgment call for the velocity<->flux
 # conversions: the C++ FluxToXVelocity/FluxToYVelocity/XVelocityToFlux/
@@ -688,3 +690,99 @@ def CrossProduct(q: Flux, arg: Union[Flux, Scalar]) -> Union[Flux, Scalar]:
 
     else:
         raise TypeError(f"CrossProduct: unsupported second argument type {type(arg)!r}")
+
+
+# ---------------------------------------------------------------------------
+# Inner products (Flux form only ported so far -- see module scope note)
+# ---------------------------------------------------------------------------
+
+def _fine_grid_inner_product_flux(p: Flux, q: Flux) -> float:
+    """Inner product of Flux p and Flux q, restricted to the finest grid
+    (interior points only). Note this is not multiplied by dx * dx, since
+    the Fluxes are already multiplied by dx (i.e. the inner product is
+    really over *velocities*).
+
+    NOTE(port): the C++ nested (i,j) loops over the X- and Y-flux interior
+    ranges are vectorized below with numpy slicing/sum, instead of a manual
+    per-element Python loop.
+    """
+    nx = p.Nx()
+    ny = p.Ny()
+    Xp = _flux_x_views(p)[0]
+    Xq = _flux_x_views(q)[0]
+    Yp = _flux_y_views(p)[0]
+    Yq = _flux_y_views(q)[0]
+
+    ip = float(np.sum(Xp[1:nx, :] * Xq[1:nx, :]))
+    ip += float(np.sum(Yp[:, 1:ny] * Yq[:, 1:ny]))
+    return ip
+
+
+def InnerProduct(p: Flux, q: Flux) -> float:
+    """Inner product of Flux p and Flux q, over all grid levels.
+
+    NOTE(port): only the Flux overload of C++'s
+        double InnerProduct(const Scalar& f, const Scalar& g);
+        double InnerProduct(const Flux& p, const Flux& q);
+    is ported here (needed by OutputEnergy); see the module scope note at
+    the top of this file. If a future dependent needs the Scalar overload,
+    add it here following the same pattern (and re-introduce the type
+    dispatch collapsing both, matching Curl/Laplacian/CrossProduct above).
+
+    NOTE(port): the C++ nested (lev, i, j) loops over the coarser-grid
+    interface/border/coarse-point ranges are vectorized below with numpy
+    slicing/sum on each level's X/Y views; the outer level loop is kept as
+    a plain Python loop (Ngrid is small, and this path only executes for
+    Ngrid > 1), matching the same convention used in FluxToXVelocity/
+    FluxToYVelocity/XVelocityToFlux/YVelocityToFlux above.
+    """
+    assert p.Ngrid() == q.Ngrid()
+    assert p.Nx() == q.Nx()
+    assert p.Ny() == q.Ny()
+    nx = p.Nx()
+    ny = p.Ny()
+    nx2 = p.NxExt()
+    ny2 = p.NyExt()
+
+    ip = _fine_grid_inner_product_flux(p, q)
+
+    Xp_all = _flux_x_views(p)
+    Xq_all = _flux_x_views(q)
+    Yp_all = _flux_y_views(p)
+    Yq_all = _flux_y_views(q)
+
+    for lev in range(1, p.Ngrid()):
+        Xp, Xq = Xp_all[lev], Xq_all[lev]
+        Yp, Yq = Yp_all[lev], Yq_all[lev]
+
+        # X-fluxes, coarser grids
+        # left and right interfaces (edges)
+        ip += float(np.sum(Xp[nx2, ny2:ny // 2 + ny2] * Xq[nx2, ny2:ny // 2 + ny2])) * 0.75
+        ip += float(
+            np.sum(Xp[nx // 2 + nx2, ny2:ny // 2 + ny2] * Xq[nx // 2 + nx2, ny2:ny // 2 + ny2])
+        ) * 0.75
+        # left and right coarse points
+        ip += float(np.sum(Xp[1:nx2, :] * Xq[1:nx2, :]))
+        ip += float(np.sum(Xp[nx // 2 + nx2 + 1:nx, :] * Xq[nx // 2 + nx2 + 1:nx, :]))
+        # top and bottom coarse points
+        ip += float(np.sum(Xp[nx2:nx // 2 + nx2 + 1, 0:ny2] * Xq[nx2:nx // 2 + nx2 + 1, 0:ny2]))
+        ip += float(
+            np.sum(Xp[nx2:nx // 2 + nx2 + 1, ny // 2 + ny2:ny] * Xq[nx2:nx // 2 + nx2 + 1, ny // 2 + ny2:ny])
+        )
+
+        # Y-fluxes, coarser grids
+        # left and right interfaces (edges)
+        ip += float(np.sum(Yp[nx2:nx // 2 + nx2, ny2] * Yq[nx2:nx // 2 + nx2, ny2])) * 0.75
+        ip += float(
+            np.sum(Yp[nx2:nx // 2 + nx2, ny // 2 + ny2] * Yq[nx2:nx // 2 + nx2, ny // 2 + ny2])
+        ) * 0.75
+        # left and right coarse points
+        ip += float(np.sum(Yp[:, 1:ny2] * Yq[:, 1:ny2]))
+        ip += float(np.sum(Yp[:, ny // 2 + ny2 + 1:ny] * Yq[:, ny // 2 + ny2 + 1:ny]))
+        # top and bottom coarse points
+        ip += float(np.sum(Yp[0:nx2, ny2:ny // 2 + ny2 + 1] * Yq[0:nx2, ny2:ny // 2 + ny2 + 1]))
+        ip += float(
+            np.sum(Yp[nx // 2 + nx2:nx, ny2:ny // 2 + ny2 + 1] * Yq[nx // 2 + nx2:nx, ny2:ny // 2 + ny2 + 1])
+        )
+
+    return ip
