@@ -75,19 +75,6 @@
 #      outer loops in Python. A later JAX port would replace those with
 #      jax.numpy plus jax.lax control flow; nothing here relies on numpy-only
 #      semantics (in-place mutation aside, which is called out at each site).
-#
-#   8. `regularization` constructor argument -- NOT PRESENT IN C++.  An opt-in
-#      Tikhonov diagonal shift: when non-zero, computeMatrixM factors
-#      (M + regularization * I) instead of M. Default 0.0 reproduces the C++
-#      exactly (byte-for-byte factorization). Motivation: M = C A^{-1} B is
-#      only positive-definite when the immersed boundary is resolved at
-#      roughly the grid spacing; for an over-resolved boundary (e.g.
-#      cylinder.geom's 160 points on a 64x64 grid) M is rank-deficient and the
-#      plain Cholesky yields NaNs -- exactly as the unmodified C++ build/ibpm
-#      does (verified). A small shift (1e-8) restores SPD-ness. This is the
-#      only intentional numerical deviation from src/ in this port, gated off
-#      by default and surfaced as an explicit choice; see IBSolver's
-#      `regularization` arg and ibpm.py's `-cholreg` flag.
 # ---------------------------------------------------------------------------
 
 from __future__ import annotations
@@ -106,8 +93,7 @@ class CholeskySolver(ProjectionSolver):
     """Solve M f = b directly via a Cholesky factorization of M."""
 
     def __init__(
-        self, grid: Grid, model: NavierStokesModel, beta: float,
-        regularization: float = 0.0,
+        self, grid: Grid, model: NavierStokesModel, beta: float
     ) -> None:
         # Allocate memory for the Cholesky factorization, but do not compute
         # it.
@@ -117,18 +103,6 @@ class CholeskySolver(ProjectionSolver):
         # local copy of alpha*beta, as a check when reading factorizations
         # from files
         self._alphaBeta: float = model.getAlpha() * beta
-        # NOTE(port) -- NOT IN C++ (opt-in extension, default 0.0 == faithful):
-        # a Tikhonov regularization added to the diagonal of M before
-        # factoring, i.e. factor (M + regularization * I) instead of M. The
-        # C++ src/ has no such term, so the default 0.0 reproduces the C++
-        # exactly. It exists because M = C A^{-1} B is rank-deficient (not
-        # SPD) whenever the immersed boundary is over-resolved relative to the
-        # grid (point spacing << dx), which makes the plain Cholesky produce
-        # NaNs (as the unmodified C++ also does). A small positive value
-        # (e.g. 1e-8) shifts the near-zero eigenvalues just positive and
-        # recovers an SPD, factorable matrix. See IBSolver/ibpm.py for how it
-        # is plumbed through, and the module header for the full rationale.
-        self._regularization: float = regularization
         self._lower: np.ndarray = np.zeros((self._size, self._size), dtype=np.float64)
         self._diagonal: np.ndarray = np.zeros(self._size, dtype=np.float64)
         self._hasBeenInitialized: bool = False
@@ -162,10 +136,6 @@ class CholeskySolver(ProjectionSolver):
             # NOTE(port): C++ inner `for i` copy vectorized into a column
             # assignment.
             matrixM[:, j] = x.flatten()
-        # NOTE(port) -- NOT IN C++ (opt-in, no-op when regularization == 0.0):
-        # add regularization * I so we factor (M + reg*I). See __init__.
-        if self._regularization != 0.0:
-            matrixM[np.diag_indices(self._size)] += self._regularization
         print("done", file=sys.stderr)
 
     def computeFactorization(self, matrixM: np.ndarray) -> None:

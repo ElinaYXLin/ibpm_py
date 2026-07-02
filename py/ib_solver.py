@@ -88,7 +88,6 @@ class IBSolver(abc.ABC):
         dt: float,
         scheme: "Scheme.SchemeType",
         tol: float = 1e-7,
-        regularization: float = 0.0,
     ) -> None:
         # NOTE(port): the two C++ constructors (with/without tol) are collapsed
         # into one with tol defaulting to 1e-7 (port note 2).
@@ -102,11 +101,6 @@ class IBSolver(abc.ABC):
         self._oldSaved: bool = False
         self._solver: List[Optional[ProjectionSolver]] = [None] * self._scheme.nsteps()
         self._tol: float = tol
-        # NOTE(port) -- NOT IN C++ (opt-in, default 0.0 == faithful): Tikhonov
-        # regularization passed to any CholeskySolver built below. See
-        # setCholeskyRegularization() and CholeskySolver's `regularization`
-        # arg for the full rationale.
-        self._choleskyRegularization: float = regularization
         self.createAllSolvers()
 
     def getName(self) -> str:
@@ -168,23 +162,10 @@ class IBSolver(abc.ABC):
             return ConjugateGradientSolver(self._grid, self._model, beta, self._tol)
         else:
             print("Using Cholesky solver for projection step", file=sys.stderr)
-            # NOTE(port): `regularization` kwarg is not in C++; default 0.0
-            # keeps the factorization byte-for-byte identical to C++.
-            return CholeskySolver(
-                self._grid, self._model, beta,
-                regularization=self._choleskyRegularization,
-            )
+            return CholeskySolver(self._grid, self._model, beta)
 
     def setTol(self, tol: float) -> None:
         self._tol = tol
-        self.createAllSolvers()
-
-    def setCholeskyRegularization(self, regularization: float) -> None:
-        # NOTE(port) -- NOT IN C++: opt-in setter mirroring setTol(). Sets the
-        # Tikhonov diagonal shift used when (re)building CholeskySolvers and
-        # rebuilds them, so callers can enable regularization after
-        # construction (e.g. ibpm.py when -cholreg > 0). See CholeskySolver.
-        self._choleskyRegularization = regularization
         self.createAllSolvers()
 
     def advance(self, x: State, Bu: Optional[Scalar] = None) -> None:

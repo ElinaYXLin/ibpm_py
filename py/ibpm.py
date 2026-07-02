@@ -222,17 +222,6 @@ def main(argv: Optional[List[str]] = None) -> int:
     chi = parser.getDouble("chi", "sfd gain", 0.02)
     Delta = parser.getDouble("Delta", "sfd cutoff frequency", 15.0)
 
-    # NOTE(port) -- NOT IN C++ ibpm.cc: opt-in Cholesky regularization. When
-    # > 0, factor (M + cholreg*I) instead of M, which restores an SPD matrix
-    # for over-resolved boundaries where the plain (C++-faithful) factorization
-    # produces NaNs. Default 0.0 reproduces the C++ behavior exactly.
-    cholReg = parser.getDouble(
-        "cholreg",
-        "Tikhonov diagonal regularization for the Cholesky projection solver "
-        "(0 = faithful to C++; try 1e-8 if the factorization yields NaNs)",
-        0.0,
-    )
-
     modelType = str2model(modelName)
     schemeType = str2scheme(integratorType)
 
@@ -366,11 +355,6 @@ def main(argv: Optional[List[str]] = None) -> int:
     if modelType == ModelType.SFD:
         assert chi != 0
         assert SFDsolver is not None
-    # NOTE(port) -- NOT IN C++: enable opt-in Cholesky regularization if the
-    # user passed -cholreg > 0. Rebuilds the projection solvers with the shift.
-    if cholReg > 0.0:
-        print(f"Using Cholesky regularization {cholReg}", file=sys.stderr)
-        solver.setCholeskyRegularization(cholReg)
     # NOTE: still need to initialize model, but wait until after loading the
     #       initial condition, so we know what the initial time is, for
     #       moving the bodies
