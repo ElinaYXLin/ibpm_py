@@ -34,10 +34,10 @@ runtime (not silently skipped):
                                       which cylinder.geom does not)
   - benchmarking/cylinder2PaPlunge.geom -- EXCLUDED. Its "motion PitchPlunge
     0 0 0.5 0.2" line only supplies 4 of PitchPlunge's 6 required
-    parameters (a malformed file, not a porting artifact), AND PitchPlunge
-    motion itself is not yet ported to Python (see py/fixed_position.py's
-    module docstring for why). Geometry.load() returns False for this file
-    in the Python port; it cannot currently be run for comparison.
+    parameters -- a malformed file (PitchPlunge motion itself is ported;
+    see py/pitch_plunge.py). Geometry.load() returns False for this file
+    in both the Python port and (independently checked) the C++ code; it
+    cannot currently be run for comparison in either implementation.
 
 A note on runtime
 ------------------
@@ -142,9 +142,12 @@ CASES = [
 EXCLUDED_CASES = [
     dict(name="cylinder2paplunge", geom="benchmarking/cylinder2PaPlunge.geom",
          reason="'motion PitchPlunge 0 0 0.5 0.2' supplies only 4 of the 6 "
-                "parameters PitchPlunge requires (a malformed file), and "
-                "PitchPlunge motion is not yet ported to Python -- "
-                "Geometry.load() returns False for this file in py/. "
+                "parameters PitchPlunge requires -- a malformed file "
+                "(PitchPlunge motion itself is ported; see py/pitch_plunge.py). "
+                "Geometry.load() returns False for this file in BOTH "
+                "implementations (build/ibpm also fails to parse it and exits "
+                "nonzero, independently verified) -- not a Python-vs-C++ "
+                "discrepancy, the file just can't be run by either program. "
                 "Not run."),
 ]
 
