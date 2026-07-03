@@ -1,0 +1,23 @@
+=== SD7003: polar sweep at dx=0.02 ===
+  geometry: 101 points, perimeter=2.0247
+  alpha=-2.92  Cl=-0.0158±0.1590  Cd=+0.0226±0.0185  (38.7s)
+  alpha=-0.09  Cl=+0.1256±0.2333  Cd=+0.0155±0.0154  (38.5s)
+  alpha=+1.66  Cl=+0.3034±0.7557  Cd=+0.0022±0.0569  (39.1s)
+  alpha=+4.60  Cl=+0.6676±0.5605  Cd=+0.0821±0.0436  (38.7s)
+  alpha=+7.72  Cl=+0.9057±0.5227  Cd=+0.1401±0.0794  (41.9s)
+=== SD7003: grid convergence at alpha=-0.09 ===
+  coarse   dx=0.040 nx= 150  Cl=+0.2246±0.7155  Cd=+0.0109±0.0853  (14.3s)
+  medium   dx=0.020 nx= 300  Cl=+0.1256±0.2333  Cd=+0.0155±0.0154  (38.6s)
+  fine     dx=0.010 nx= 600  Cl=+nan±nan  Cd=+nan±nan  (167.0s)
+=== SD8000: polar sweep at dx=0.02 ===
+  geometry: 101 points, perimeter=2.0260
+  alpha=-3.88  Cl=-0.1359±0.2937  Cd=+0.0447±0.0373  (40.3s)
+  alpha=-0.81  Cl=+0.1212±0.3071  Cd=+0.0130±0.0345  (39.4s)
+  alpha=+2.29  Cl=+0.3969±0.5662  Cd=+0.0045±0.0405  (38.9s)
+  alpha=+5.36  Cl=+0.5959±0.9630  Cd=+0.0255±0.0896  (39.8s)
+  alpha=+8.36  Cl=+0.9207±0.2906  Cd=+0.1467±0.0377  (40.1s)
+=== SD8000: grid convergence at alpha=-0.81 ===
+  coarse   dx=0.040 nx= 150  Cl=-0.1488±1.2177  Cd=-0.0240±0.2367  (14.5s)
+  medium   dx=0.020 nx= 300  Cl=+0.1212±0.3071  Cd=+0.0130±0.0345  (40.2s)
+  fine     dx=0.010 nx= 600  Cl=+nan±nan  Cd=+nan±nan  (180.4s)
+ALL DONE

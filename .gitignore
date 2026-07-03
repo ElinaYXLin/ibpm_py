@@ -2,6 +2,7 @@ build/
 *.o
 *.bin
 *.plt
+*.cholesky
 ibpm.force
 ibpm.cmd
 __pycache__/
@@ -11,3 +12,7 @@ __pycache__/
 # raw output from results/generate_validation_report.py (regenerable;
 # see results/README.md)
 results/_run_data/
+
+# large raw reference dataset (98MB); not something to bloat repo
+# history with -- see results/vortall/README.md for how it's used
+SURF_test/VORTALL.mat

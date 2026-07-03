@@ -1,0 +1,1 @@
+./build/ibpm -name vortall -outdir results/vortall/_run_data_cpp -tecplot 0 -restart 100 -force 1 -nx 450 -ny 200 -ngrid 1 -length 9 -xoffset -1 -yoffset -2 -geom examples/cylinder.geom -Re 100 -ic results/vortall/_run_data_cpp/vortall00200.bin -dt 0.02 -nsteps 13800

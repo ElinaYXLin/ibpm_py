@@ -1,0 +1,14 @@
+Three-way comparison at t=280, Re=100, nx=450 ny=200, x in [-1,8], y in [-2,2]
+
+max |omega|, VORTALL.mat snapshot 150:      18.0910
+max |omega|, this repo's C++ build:          24.0638
+max |omega|, Python port:                    24.0638
+
+max |Python - C++| (same run, same t=280):   5.036e-12
+  -> Python and C++ agree to near machine precision here, exactly as in
+     results/README.md's 200x200 validation -- the port is faithful at this
+     resolution too. This confirms the C++/Python difference is NOT the
+     source of the visual difference from VORTALL.mat.
+
+Cl peak amplitude (saturated shedding), Python: 0.84604   C++: 0.84604
+(computed independently by each solver; agree to 5 significant figures)
