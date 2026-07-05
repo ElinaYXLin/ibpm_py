@@ -14,5 +14,9 @@ __pycache__/
 results/_run_data/
 
 # large raw reference dataset (98MB); not something to bloat repo
-# history with -- see results/vortall/README.md for how it's used
+# history with -- see results/vortall/README.md for how it's used.
+# gen_vortall_report.py/gen_three_way.py load this from the repo root;
+# download from http://databookuw.com/DATA.zip (DATA/VORTALL.mat inside)
+# to regenerate it locally.
+/VORTALL.mat
 SURF_test/VORTALL.mat

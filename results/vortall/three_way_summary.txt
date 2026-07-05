@@ -1,14 +1,28 @@
 Three-way comparison at t=280, Re=100, nx=450 ny=200, x in [-1,8], y in [-2,2]
 
 max |omega|, VORTALL.mat snapshot 150:      18.0910
-max |omega|, this repo's C++ build:          24.0638
-max |omega|, Python port:                    24.0638
+max |omega|, this repo's C++ build:          23.7218
+max |omega|, Python port:                    24.4917
 
-max |Python - C++| (same run, same t=280):   5.036e-12
-  -> Python and C++ agree to near machine precision here, exactly as in
-     results/README.md's 200x200 validation -- the port is faithful at this
-     resolution too. This confirms the C++/Python difference is NOT the
-     source of the visual difference from VORTALL.mat.
+max |Python - C++| (same run, same t=280):   7.365e+00
+  -> C++ and Python are two FULLY INDEPENDENT runs from a zero initial
+     condition (see README's 'Correction' section -- an earlier version of
+     this comparison seeded Python from C++'s own restart file, which made
+     near-machine-precision agreement here trivial; that bug is fixed).
+     The Re=100 wake instability is seeded only by floating-point roundoff,
+     so two independent runs diverge in exact phase/timing once the
+     instability grows (chaotic sensitivity) -- this pointwise difference is
+     therefore EXPECTED to be large (comparable to the field's own peak
+     magnitude), and is not evidence of a porting bug. The right way to
+     compare two independently-seeded chaotic runs is the periodic *state*
+     they converge to, not a pointwise snapshot at a fixed time:
 
-Cl peak amplitude (saturated shedding), Python: 0.84604   C++: 0.84604
-(computed independently by each solver; agree to 5 significant figures)
+                             Python         C++
+     Cl peak amplitude      0.84607     0.84607
+     Cd mean (t>=200)       1.91296     1.91261
+     shedding period         4.6550      4.6538
+     Strouhal number         0.2148      0.2149
+  -> these agree to 4-5 significant figures between the two independent
+     implementations -- this (not the pointwise diff above) is the evidence
+     the Python port is faithful, consistent with the exact-agreement
+     validation on the non-chaotic 200x200 case in results/README.md.
