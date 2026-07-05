@@ -99,7 +99,15 @@ plt.close(fig)
 # ============================================================
 # Figure 3: lift/drag coefficient history -- transient growth -> saturation
 # ============================================================
-t, cd, cl = load_force()  # this is only the t=200..280 segment (see README: earlier force logs were overwritten)
+# load_force() returns the FULL t=0..280 trace (this run's own restart chain
+# is fully independent -- see README's "Correction" section). This figure is
+# specifically about the *saturated* regime, so it's windowed to t>=200 --
+# comfortably past saturation (measured onset ~t=150-160 in this run; see
+# README) -- rather than plotting the transient growth from ~1e-14 as well.
+t_full, cd_full, cl_full = load_force()
+window = t_full >= 200
+t, cd, cl = t_full[window], cd_full[window], cl_full[window]
+
 fig, ax = plt.subplots(figsize=(9, 4))
 ax.plot(t, cl, color="C0", label="$C_l(t)$ (Python)")
 ax.plot(t, cd, color="C1", alpha=0.7, label="$C_d(t)$ (Python)")

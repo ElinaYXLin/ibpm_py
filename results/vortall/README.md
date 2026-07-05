@@ -16,17 +16,46 @@ AI-generated.
 `(nx-1)×(ny-1) = 449×199`, see `VALIDATION_README.md`). Combined with
 the standard domain used for this classic dataset (length 9 in x,
 length 4 in y, dx=0.02 → x ∈ [-1, 8], y ∈ [-2, 2], cylinder of diameter
-1 centered at the origin), this pins down the run:
+1 centered at the origin), this pins down the run, driven by
+[`run_vortall.py`](run_vortall.py):
 
 ```bash
-python3 -m py.ibpm -geom examples/cylinder.geom -name vortall \
-  -outdir results/vortall/_run_data \
-  -nx 450 -ny 200 -ngrid 1 -length 9 -xoffset -1 -yoffset -2 \
-  -Re 100 -dt 0.02 -nsteps <N> -tecplot 0 -restart 100 -force 1
+python3 results/vortall/run_vortall.py
 ```
 
-(run in three chunks, using `-ic` to continue from the last restart
-file each time, to reach t=280 total — see `_run_data_log*.txt`).
+which runs both `build/ibpm` (into `_run_data_cpp/`) and `py/ibpm.py`
+(into `_run_data/`) out to step 14000 (t=280), each resuming *only* from
+its own last restart file if run again (e.g. after an interruption).
+
+### Correction: an earlier version of this run seeded Python from C++'s own output
+
+An earlier version of this dataset advanced the Python trajectory's
+final 100 steps with `-ic results/vortall/_run_data_cpp/vortall13900.bin`
+— i.e., using the **C++** run's own restart file as Python's initial
+condition, instead of Python's own. That meant 13900 of the reported
+"Python" run's 14000 steps (99.3%) were actually C++-computed, and
+Python only independently integrated the last 100 steps (2 of 280 time
+units) from a state it did not itself produce. It also silently
+overwrote a fully-independent Python trajectory that a prior, correct
+multi-chunk run (`_run_data_log.txt`/`log2.txt`/`log3.txt`) had already
+completed on its own.
+
+This made the headline "Python vs. C++ agree to 5e-12" claim close to
+tautological — two runs sharing 99.3% identical history and diverging
+only over a 100-step tail from an *identical* starting state will
+trivially agree at the end — and it left `_run_data/vortall.force` with
+only 101 rows (t=278–280) even though `shedding_summary.txt` and
+`force_coefficients_saturated.png` (generated earlier, from the correct
+run, and never regenerated afterward) report statistics computed over
+t=200–280. The two were quietly inconsistent with each other.
+
+**Fixed** by [`run_vortall.py`](run_vortall.py): its `_last_checkpoint()`
+only ever globs restart files inside the implementation's *own* output
+directory, so it is structurally impossible for one implementation's
+continuation to pick up the other's restart file, even by accident. All
+figures/tables in this directory were regenerated from a from-scratch
+rerun (both implementations independently integrated from t=0 through
+t=280, no cross-seeding) using this script.
 
 **Local environment note:** on this machine, `python3 -m py.ibpm`
 fails with `ModuleNotFoundError: __path__ attribute not found on 'py'`
@@ -62,12 +91,16 @@ With a symmetric geometry and a zero initial condition, `py/ibpm.py`
 (like the C++ original) starts with an exactly symmetric flow. The
 Re=100 wake instability is real but the only thing that seeds it is
 floating-point roundoff, so it grows *exponentially slowly* from
-~1e-16: lift stayed below 1e-9 through t=60, was still growing at
-t=200, and only reached its full periodic limit-cycle amplitude
-(`Cl` peak ≈ 0.846, unchanging cycle-to-cycle) by about t=230. This is
-expected, physically-correct behavior for an unperturbed impulsive
-start, not a bug — see `shedding_summary.txt` and
-`force_coefficients_saturated.png`.
+~1e-14: `Cl` stayed below 1e-6 through t=80, crossed 0.5 by about
+t=135, and reached its full periodic limit-cycle amplitude (`Cl` peak =
+0.846, unchanging cycle-to-cycle) by about t=160 in this run (the exact
+growth timescale depends on the fine details of the floating-point
+roundoff pattern, so it's expected to differ slightly, e.g. between the
+C++ and Python runs — see "Correction", below). t=200 is used as the
+"safely saturated" cutoff for all statistics/plots in this directory,
+comfortably past that. This is expected, physically-correct behavior
+for an unperturbed impulsive start, not a bug — see `shedding_summary.txt`
+and `force_coefficients_saturated.png`.
 
 **Caveat on the comparison:** `VORTALL.mat`'s snapshots are *not*
 time-aligned with this run (its own snapshot 0 already shows a fully
@@ -80,6 +113,7 @@ qualitative pattern), not of matching timestamps.
 
 | File | What it is |
 |---|---|
+| `run_vortall.py` | Drives both `build/ibpm` and `py/ibpm.py` independently out to t=280, each resuming only from its own restart files (see "Correction" above). Run this first. |
 | `gen_vortall_report.py` | Script that produces the Python-only figures. |
 | `gen_three_way.py` | Script that produces the VORTALL/C++/Python three-way figures below (needs a C++ `build/ibpm` reference run in `_run_data_cpp/`, see next section). |
 | `vorticity_comparison.png` | `VORTALL.mat` snapshot 150 vs. this run's saturated-shedding vorticity field (t=280), same colorbar/domain. Visually near-identical vortex street. |
@@ -89,28 +123,44 @@ qualitative pattern), not of matching timestamps.
 | `flow_evolution_python.png` | Six vorticity snapshots (t=200..280) from this run's periodic regime, showing the wake pattern advecting/shedding self-consistently over multiple periods. |
 | `force_coefficients_saturated.png` | `Cd(t)`, `Cl(t)` over t=200-280: `Cl` oscillates with constant amplitude cycle-to-cycle — direct evidence the flow has reached its periodic limit cycle, not still transiently evolving. |
 | `shedding_summary.txt` | Measured shedding period/Strouhal number from `Cl` peak spacing, with a literature comparison. |
-| `_run_data/`, `_run_data_cpp/` | `.force`/`.cmd`/`.cholesky` files from the Python and C++ runs respectively (the restart `.bin` snapshots used to make the figures above were deleted afterward to save space — rerun the commands in this README to regenerate them; the Cholesky cache means a rerun on this grid/geometry/dt is fast). |
+| `_run_data/`, `_run_data_cpp/` | `.force`/`.cmd`/`.cholesky`/`run_log.txt` files from the Python and C++ runs respectively (`.bin` and `.cholesky` are gitignored — see `.gitignore` — so those aren't committed; `.force`/`.cmd`/`run_log.txt` are small and are). The restart `.bin` snapshots used to make the figures above were deleted afterward to save local disk space — rerun `python3 results/vortall/run_vortall.py` to regenerate a full trajectory from scratch; the `.cholesky` cache means a rerun on this grid/geometry/dt skips the slow factorization step. |
 
 ## Why do the Python and VORTALL.mat panels look different?
 
 Short answer: **they're not different because of a Python-port bug** —
 this repo's C++ reference build (`build/ibpm`, compiled from `src/`,
-the actual reference implementation) was run on the exact same
-grid/Re/domain and produces a field that agrees with the Python port to
-**5e-12** (floating-point roundoff; see `python_vs_cpp_diff.png` and
-`three_way_summary.txt`). The two implementations are numerically
-identical here, exactly as already shown for the 200×200 grid in
+the actual reference implementation) was run independently on the exact
+same grid/Re/domain, from its own zero initial condition (no
+cross-seeding with the Python run; see "Correction" above). Its final
+snapshot does **not** match Python's pointwise (max |diff| = 7.4,
+comparable to the field's own ~24 peak magnitude — see
+`python_vs_cpp_diff.png` and `three_way_summary.txt`), and that's
+*expected*: the Re=100 wake instability here is seeded only by
+floating-point roundoff (see previous section), so two independently-run
+trajectories are chaotically sensitive to fp-level differences during
+the transient growth phase and end up at different, uncorrelated *phases*
+of the same periodic cycle by t=280 — like two identical pendulum clocks
+started a fraction of a second apart, still ticking at the same rate
+but no longer showing the same second. The right comparison for two
+independently-seeded chaotic runs is therefore the periodic *state* they
+converge to, not a pointwise snapshot at a fixed time — and there, C++
+and Python agree to 4-5 significant figures (shedding period, Strouhal
+number, peak `Cl`, mean `Cd`; see `three_way_summary.txt`), exactly as
+the exact (non-chaotic) agreement already shown for the 200×200 case in
 `results/README.md`. So whatever's different from `VORTALL.mat` is
-different from *both* C++ and Python equally, and traces to a real
-mismatch with the (unknown, undocumented) parameters used to generate
-`VORTALL.mat` itself, not to this codebase. Two concrete, measured
-differences:
+different from *both* C++ and Python (which agree with each other in
+periodic state) equally, and traces to a real mismatch with the
+(unknown, undocumented) parameters used to generate `VORTALL.mat`
+itself, not to this codebase. Two concrete, measured differences:
 
 1. **Peak vorticity magnitude**: `VORTALL.mat`'s snapshot 150 has
-   max |ω| ≈ 18.1; both this repo's C++ and Python runs reach max
-   |ω| ≈ 24.1 at t=280 — about 33% higher. Both codes agree with each
-   other to 12 significant figures, so this 33% gap is real, not
-   noise. Plausible causes (not independently confirmed, since
+   max |ω| ≈ 18.1; this repo's C++ and Python runs reach max |ω| ≈ 23.7
+   and ≈ 24.5 respectively at t=280 (the two codes' own instantaneous
+   peaks differ by a few percent from each other for the same phase-drift
+   reason as above — a snapshot-to-snapshot vorticity extremum is a
+   pointwise, phase-sensitive quantity, unlike the periodic-state
+   statistics in `three_way_summary.txt`) — both around 30-35% higher
+   than `VORTALL.mat`. Plausible causes (not independently confirmed, since
    `VORTALL.mat` ships with no metadata beyond the array itself):
    the reference dataset may have been produced with a coarser `dt`
    or different multi-domain (`ngrid`) far-field treatment (this run
@@ -137,10 +187,13 @@ pattern, same downstream decay envelope — see
   staggered, alternating-sign vortex street, same approximate vortex
   core spacing and downstream decay envelope, across all three fields
   (`VORTALL.mat`, C++, Python).
-- **Python == C++ (this codebase)**: max pointwise difference 5e-12 at
-  t=280 (`three_way_summary.txt`) — the port is faithful at this
-  resolution, same conclusion as the existing 200×200 validation in
-  `results/README.md`.
+- **Python == C++ (this codebase)**: NOT a pointwise match at t=280 (max
+  |diff| = 7.4 — expected, see "Why do the panels look different?"
+  above) but agreement to 4-5 significant figures in every periodic-state
+  statistic — shedding period, Strouhal number, peak `Cl`, mean `Cd`
+  (`three_way_summary.txt`) — which is the correct evidence the port is
+  faithful for a chaotically-sensitive case, consistent with the exact
+  (non-chaotic) agreement in the 200×200 validation in `results/README.md`.
 - **Quantitative check vs. literature**: this run's Strouhal number,
   St ≈ 0.215 (period ≈ 4.655, see `shedding_summary.txt`), is higher
   than the unbounded-domain literature value (St ≈ 0.164-0.17 at
