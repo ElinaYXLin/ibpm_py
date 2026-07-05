@@ -1,0 +1,1 @@
+py.ibpm -name run -outdir /Users/elina/Desktop/SURF2026/ibpm_py-main/results/cost/raw/python_nx200 -tecplot 0 -restart 0 -force 1 -nx 200 -ny 200 -ngrid 1 -length 4.0 -xoffset -2.0 -yoffset -2.0 -geom /Users/elina/Desktop/SURF2026/ibpm_py-main/results/cost/geom/cylinder_dx0.02000.geom -Re 100.0 -dt 0.02 -nsteps 150 -scheme rk3

@@ -1,0 +1,1 @@
+py.ibpm -name run -outdir /Users/elina/Desktop/SURF2026/ibpm_py-main/results/SD7003/_run_data/conv_coarse -tecplot 0 -restart 0 -force 1 -nx 150 -ny 75 -ngrid 1 -length 6.0 -xoffset -2.0 -yoffset -1.5 -alpha -0.09 -geom /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/geom/sd7003_dx0.0400.geom -Re 61100.0 -dt 0.01 -nsteps 3000

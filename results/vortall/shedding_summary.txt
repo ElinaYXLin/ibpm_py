@@ -1,0 +1,7 @@
+Vortex-shedding diagnostics, Python IBPM port, Re=100, nx=450 ny=200 (blockage-affected)
+Number of Cl peaks detected in t=[200.00,280.00]: 17
+Mean shedding period: 4.6550
+Estimated Strouhal number St = 1/T: 0.2148
+Literature St at Re=100, unbounded domain: ~0.164-0.170
+This run's domain has a 25% blockage ratio (D=1 in a height-4 domain),
+which is known to raise the shedding frequency relative to the unbounded case.

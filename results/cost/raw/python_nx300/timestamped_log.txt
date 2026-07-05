@@ -1,0 +1,646 @@
+   0.413s  Immersed Boundary Projection Method (IBPM), version 1.0
+   0.413s  
+   0.413s  Command:
+   0.413s  py.ibpm -name run -outdir /Users/elina/Desktop/SURF2026/ibpm_py-main/results/cost/raw/python_nx300 -tecplot 0 -restart 0 -force 1 -nx 300 -ny 300 -ngrid 1 -length 4.0 -xoffset -2.0 -yoffset -2.0 -geom /Users/elina/Desktop/SURF2026/ibpm_py-main/results/cost/geom/cylinder_dx0.01333.geom -Re 100.0 -dt 0.02 -nsteps 150 -scheme rk3
+   0.413s  
+   0.414s  Run name: run
+   0.414s  
+   0.414s  Grid parameters:
+   0.414s      nx      300
+   0.414s      ny      300
+   0.414s      ngrid   1
+   0.414s      length  4.0
+   0.414s      xoffset -2.0
+   0.414s      yoffset -2.0
+   0.414s      xshift  0.0
+   0.414s      yshift  0.0
+   0.414s  
+   0.414s  Reading geometry from file /Users/elina/Desktop/SURF2026/ibpm_py-main/results/cost/geom/cylinder_dx0.01333.geom
+   0.415s      236 points on the boundary
+   0.415s  
+   0.415s  Reynolds number = 100.0
+   0.415s  
+   0.416s  Setting up Immersed Boundary Solver...Using Cholesky solver for projection step
+   0.416s  Using Cholesky solver for projection step
+   0.417s  Using Cholesky solver for projection step
+   0.417s  Using zero initial condition
+   2.085s  using 3rd-order Runge Kutta (3-step) timestepper
+   2.085s      dt = 0.02
+   2.085s  
+   2.119s  Loading Cholesky factorization from file /Users/elina/Desktop/SURF2026/ibpm_py-main/results/cost/raw/python_nx300/run_01.cholesky...done
+   2.154s  Loading Cholesky factorization from file /Users/elina/Desktop/SURF2026/ibpm_py-main/results/cost/raw/python_nx300/run_02.cholesky...done
+   2.187s  Loading Cholesky factorization from file /Users/elina/Desktop/SURF2026/ibpm_py-main/results/cost/raw/python_nx300/run_03.cholesky...done
+   2.190s  
+   2.190s  Initial timestep = 0
+   2.190s  
+   2.190s  Writing forces every 1 step(s)
+   2.190s  
+   2.192s  Integrating for 150 steps
+   2.192s  
+   2.192s  step 1
+   2.219s      x force:          8.56744, y force:      2.37681e-14
+   2.219s  
+   2.219s  
+   2.219s  step 2
+   2.246s      x force:          4.56637, y force:      9.28695e-15
+   2.246s  
+   2.246s  
+   2.246s  step 3
+   2.272s      x force:          3.64992, y force:     -6.75047e-15
+   2.272s  
+   2.272s  
+   2.272s  step 4
+   2.297s      x force:          3.15818, y force:     -5.65908e-15
+   2.297s  
+   2.297s  
+   2.297s  step 5
+   2.324s      x force:          2.84299, y force:     -1.08331e-14
+   2.324s  
+   2.324s  
+   2.324s  step 6
+   2.350s      x force:          2.62153, y force:     -3.55713e-15
+   2.350s  
+   2.350s  
+   2.350s  step 7
+   2.376s      x force:          2.45707, y force:      1.62496e-14
+   2.376s  
+   2.376s  
+   2.376s  step 8
+   2.401s      x force:          2.33042, y force:      1.53604e-15
+   2.401s  
+   2.401s  
+   2.401s  step 9
+   2.427s      x force:          2.23041, y force:      4.52726e-15
+   2.427s  
+   2.427s  
+   2.427s  step 10
+   2.452s      x force:          2.15004, y force:      1.20458e-14
+   2.452s  
+   2.452s  
+   2.452s  step 11
+   2.477s      x force:          2.08462, y force:      1.35009e-14
+   2.477s  
+   2.477s  
+   2.477s  step 12
+   2.501s      x force:          2.03088, y force:      -8.0844e-16
+   2.501s  
+   2.501s  
+   2.501s  step 13
+   2.528s      x force:          1.98647, y force:      2.82954e-15
+   2.528s  
+   2.528s  
+   2.528s  step 14
+   2.554s      x force:          1.94962, y force:      1.68155e-14
+   2.554s  
+   2.554s  
+   2.554s  step 15
+   2.581s      x force:          1.91895, y force:      1.05097e-14
+   2.581s  
+   2.581s  
+   2.581s  step 16
+   2.611s      x force:          1.89337, y force:     -3.63798e-15
+   2.611s  
+   2.611s  
+   2.611s  step 17
+   2.633s      x force:          1.87194, y force:      1.51178e-14
+   2.633s  
+   2.633s  
+   2.633s  step 18
+   2.660s      x force:          1.85385, y force:      1.47944e-14
+   2.660s  
+   2.660s  
+   2.660s  step 19
+   2.686s      x force:          1.83831, y force:      1.00247e-14
+   2.686s  
+   2.686s  
+   2.686s  step 20
+   2.711s      x force:          1.82453, y force:      2.50616e-14
+   2.711s  
+   2.711s  
+   2.711s  step 21
+   2.735s      x force:          1.81155, y force:      1.89175e-14
+   2.735s  
+   2.735s  
+   2.735s  step 22
+   2.759s      x force:           1.7982, y force:      2.18279e-14
+   2.759s  
+   2.759s  
+   2.759s  step 23
+   2.784s      x force:          1.78246, y force:      1.87558e-14
+   2.784s  
+   2.784s  
+   2.784s  step 24
+   2.808s      x force:          1.76081, y force:      1.43902e-14
+   2.808s  
+   2.808s  
+   2.808s  step 25
+   2.832s      x force:          1.72548, y force:     -5.01233e-15
+   2.832s  
+   2.832s  
+   2.832s  step 26
+   2.856s      x force:          1.66247, y force:     -3.10441e-14
+   2.856s  
+   2.856s  
+   2.856s  step 27
+   2.881s      x force:          2.14187, y force:     -5.54913e-13
+   2.881s  
+   2.881s  
+   2.881s  step 28
+   2.909s      x force:          -345622, y force:      1.44619e-07
+   2.909s  
+   2.909s  
+   2.909s  step 29
+   2.930s      x force:     -1.17224e+48, y force:     -5.00829e+36
+   2.930s  
+   2.930s  
+   2.930s  step 30
+   2.949s  /Users/elina/Desktop/SURF2026/ibpm_py-main/py/scalar.py:277: RuntimeWarning: overflow encountered in multiply
+   2.949s    self._data *= other._data
+   2.950s  /Users/elina/Desktop/SURF2026/ibpm_py-main/py/vector_operations.py:470: RuntimeWarning: invalid value encountered in add
+   2.950s    X[0][1:nx, 1:ny - 1] = (U[0][0:nx - 1, 0:ny - 2] + U[0][0:nx - 1, 1:ny - 1]) * 0.5 * dx
+   2.951s  /Users/elina/Desktop/SURF2026/ibpm_py-main/py/vector_operations.py:560: RuntimeWarning: invalid value encountered in add
+   2.951s    Y[0][1:nx - 1, 1:ny] = (V[0][0:nx - 2, 0:ny - 1] + V[0][1:nx - 1, 0:ny - 1]) * 0.5 * dx
+   2.951s  /Users/elina/Desktop/SURF2026/ibpm_py-main/py/vector_operations.py:114: RuntimeWarning: invalid value encountered in subtract
+   2.951s    Y_arr[1:nx, 1:ny] - Y_arr[0:nx - 1, 1:ny] + X_arr[1:nx, 0:ny - 1] - X_arr[1:nx, 1:ny]
+   2.964s      x force:              nan, y force:              nan
+   2.964s  
+   2.964s  
+   2.964s  step 31
+   2.987s      x force:              nan, y force:              nan
+   2.987s  
+   2.987s  
+   2.987s  step 32
+   3.014s      x force:              nan, y force:              nan
+   3.014s  
+   3.014s  
+   3.014s  step 33
+   3.042s      x force:              nan, y force:              nan
+   3.042s  
+   3.042s  
+   3.042s  step 34
+   3.068s      x force:              nan, y force:              nan
+   3.068s  
+   3.068s  
+   3.068s  step 35
+   3.094s      x force:              nan, y force:              nan
+   3.094s  
+   3.094s  
+   3.094s  step 36
+   3.120s      x force:              nan, y force:              nan
+   3.120s  
+   3.121s  
+   3.121s  step 37
+   3.147s      x force:              nan, y force:              nan
+   3.147s  
+   3.147s  
+   3.147s  step 38
+   3.174s      x force:              nan, y force:              nan
+   3.174s  
+   3.174s  
+   3.174s  step 39
+   3.199s      x force:              nan, y force:              nan
+   3.199s  
+   3.199s  
+   3.199s  step 40
+   3.224s      x force:              nan, y force:              nan
+   3.224s  
+   3.224s  
+   3.224s  step 41
+   3.248s      x force:              nan, y force:              nan
+   3.248s  
+   3.248s  
+   3.248s  step 42
+   3.273s      x force:              nan, y force:              nan
+   3.273s  
+   3.273s  
+   3.273s  step 43
+   3.297s      x force:              nan, y force:              nan
+   3.297s  
+   3.297s  
+   3.297s  step 44
+   3.321s      x force:              nan, y force:              nan
+   3.321s  
+   3.321s  
+   3.321s  step 45
+   3.346s      x force:              nan, y force:              nan
+   3.346s  
+   3.346s  
+   3.346s  step 46
+   3.370s      x force:              nan, y force:              nan
+   3.370s  
+   3.370s  
+   3.370s  step 47
+   3.394s      x force:              nan, y force:              nan
+   3.394s  
+   3.394s  
+   3.394s  step 48
+   3.418s      x force:              nan, y force:              nan
+   3.418s  
+   3.418s  
+   3.418s  step 49
+   3.444s      x force:              nan, y force:              nan
+   3.444s  
+   3.444s  
+   3.444s  step 50
+   3.471s      x force:              nan, y force:              nan
+   3.471s  
+   3.471s  
+   3.471s  step 51
+   3.498s      x force:              nan, y force:              nan
+   3.498s  
+   3.498s  
+   3.498s  step 52
+   3.524s      x force:              nan, y force:              nan
+   3.525s  
+   3.525s  
+   3.525s  step 53
+   3.551s      x force:              nan, y force:              nan
+   3.551s  
+   3.551s  
+   3.551s  step 54
+   3.576s      x force:              nan, y force:              nan
+   3.576s  
+   3.576s  
+   3.576s  step 55
+   3.600s      x force:              nan, y force:              nan
+   3.600s  
+   3.600s  
+   3.600s  step 56
+   3.625s      x force:              nan, y force:              nan
+   3.625s  
+   3.625s  
+   3.625s  step 57
+   3.649s      x force:              nan, y force:              nan
+   3.649s  
+   3.649s  
+   3.649s  step 58
+   3.673s      x force:              nan, y force:              nan
+   3.673s  
+   3.673s  
+   3.673s  step 59
+   3.698s      x force:              nan, y force:              nan
+   3.698s  
+   3.698s  
+   3.698s  step 60
+   3.725s      x force:              nan, y force:              nan
+   3.725s  
+   3.725s  
+   3.725s  step 61
+   3.749s      x force:              nan, y force:              nan
+   3.749s  
+   3.749s  
+   3.749s  step 62
+   3.775s      x force:              nan, y force:              nan
+   3.775s  
+   3.775s  
+   3.775s  step 63
+   3.802s      x force:              nan, y force:              nan
+   3.802s  
+   3.802s  
+   3.802s  step 64
+   3.828s      x force:              nan, y force:              nan
+   3.828s  
+   3.828s  
+   3.828s  step 65
+   3.853s      x force:              nan, y force:              nan
+   3.853s  
+   3.853s  
+   3.853s  step 66
+   3.879s      x force:              nan, y force:              nan
+   3.879s  
+   3.879s  
+   3.879s  step 67
+   3.904s      x force:              nan, y force:              nan
+   3.904s  
+   3.904s  
+   3.904s  step 68
+   3.930s      x force:              nan, y force:              nan
+   3.930s  
+   3.930s  
+   3.930s  step 69
+   3.955s      x force:              nan, y force:              nan
+   3.955s  
+   3.955s  
+   3.955s  step 70
+   3.980s      x force:              nan, y force:              nan
+   3.980s  
+   3.980s  
+   3.980s  step 71
+   4.005s      x force:              nan, y force:              nan
+   4.005s  
+   4.006s  
+   4.006s  step 72
+   4.031s      x force:              nan, y force:              nan
+   4.031s  
+   4.031s  
+   4.031s  step 73
+   4.056s      x force:              nan, y force:              nan
+   4.056s  
+   4.056s  
+   4.056s  step 74
+   4.082s      x force:              nan, y force:              nan
+   4.082s  
+   4.082s  
+   4.082s  step 75
+   4.105s      x force:              nan, y force:              nan
+   4.105s  
+   4.105s  
+   4.105s  step 76
+   4.129s      x force:              nan, y force:              nan
+   4.129s  
+   4.129s  
+   4.129s  step 77
+   4.156s      x force:              nan, y force:              nan
+   4.156s  
+   4.156s  
+   4.156s  step 78
+   4.182s      x force:              nan, y force:              nan
+   4.182s  
+   4.182s  
+   4.182s  step 79
+   4.208s      x force:              nan, y force:              nan
+   4.208s  
+   4.208s  
+   4.208s  step 80
+   4.234s      x force:              nan, y force:              nan
+   4.234s  
+   4.234s  
+   4.234s  step 81
+   4.260s      x force:              nan, y force:              nan
+   4.260s  
+   4.260s  
+   4.260s  step 82
+   4.286s      x force:              nan, y force:              nan
+   4.286s  
+   4.286s  
+   4.286s  step 83
+   4.315s      x force:              nan, y force:              nan
+   4.315s  
+   4.315s  
+   4.315s  step 84
+   4.337s      x force:              nan, y force:              nan
+   4.337s  
+   4.337s  
+   4.337s  step 85
+   4.364s      x force:              nan, y force:              nan
+   4.364s  
+   4.364s  
+   4.364s  step 86
+   4.389s      x force:              nan, y force:              nan
+   4.389s  
+   4.389s  
+   4.389s  step 87
+   4.415s      x force:              nan, y force:              nan
+   4.415s  
+   4.415s  
+   4.415s  step 88
+   4.441s      x force:              nan, y force:              nan
+   4.441s  
+   4.441s  
+   4.441s  step 89
+   4.466s      x force:              nan, y force:              nan
+   4.466s  
+   4.466s  
+   4.466s  step 90
+   4.493s      x force:              nan, y force:              nan
+   4.493s  
+   4.493s  
+   4.493s  step 91
+   4.518s      x force:              nan, y force:              nan
+   4.518s  
+   4.518s  
+   4.518s  step 92
+   4.543s      x force:              nan, y force:              nan
+   4.543s  
+   4.543s  
+   4.543s  step 93
+   4.568s      x force:              nan, y force:              nan
+   4.568s  
+   4.568s  
+   4.568s  step 94
+   4.594s      x force:              nan, y force:              nan
+   4.594s  
+   4.595s  
+   4.595s  step 95
+   4.619s      x force:              nan, y force:              nan
+   4.619s  
+   4.619s  
+   4.619s  step 96
+   4.646s      x force:              nan, y force:              nan
+   4.646s  
+   4.646s  
+   4.646s  step 97
+   4.671s      x force:              nan, y force:              nan
+   4.671s  
+   4.671s  
+   4.671s  step 98
+   4.696s      x force:              nan, y force:              nan
+   4.696s  
+   4.696s  
+   4.696s  step 99
+   4.721s      x force:              nan, y force:              nan
+   4.721s  
+   4.721s  
+   4.721s  step 100
+   4.747s      x force:              nan, y force:              nan
+   4.747s  
+   4.747s  
+   4.747s  step 101
+   4.774s      x force:              nan, y force:              nan
+   4.774s  
+   4.774s  
+   4.774s  step 102
+   4.801s      x force:              nan, y force:              nan
+   4.801s  
+   4.801s  
+   4.801s  step 103
+   4.828s      x force:              nan, y force:              nan
+   4.828s  
+   4.828s  
+   4.828s  step 104
+   4.855s      x force:              nan, y force:              nan
+   4.855s  
+   4.855s  
+   4.855s  step 105
+   4.882s      x force:              nan, y force:              nan
+   4.882s  
+   4.882s  
+   4.882s  step 106
+   4.908s      x force:              nan, y force:              nan
+   4.908s  
+   4.908s  
+   4.908s  step 107
+   4.930s      x force:              nan, y force:              nan
+   4.930s  
+   4.930s  
+   4.930s  step 108
+   4.954s      x force:              nan, y force:              nan
+   4.954s  
+   4.954s  
+   4.954s  step 109
+   4.979s      x force:              nan, y force:              nan
+   4.979s  
+   4.979s  
+   4.979s  step 110
+   5.003s      x force:              nan, y force:              nan
+   5.003s  
+   5.003s  
+   5.003s  step 111
+   5.027s      x force:              nan, y force:              nan
+   5.027s  
+   5.027s  
+   5.027s  step 112
+   5.051s      x force:              nan, y force:              nan
+   5.051s  
+   5.051s  
+   5.051s  step 113
+   5.076s      x force:              nan, y force:              nan
+   5.076s  
+   5.076s  
+   5.076s  step 114
+   5.100s      x force:              nan, y force:              nan
+   5.100s  
+   5.100s  
+   5.100s  step 115
+   5.130s      x force:              nan, y force:              nan
+   5.130s  
+   5.130s  
+   5.130s  step 116
+   5.160s      x force:              nan, y force:              nan
+   5.160s  
+   5.161s  
+   5.161s  step 117
+   5.191s      x force:              nan, y force:              nan
+   5.191s  
+   5.191s  
+   5.191s  step 118
+   5.218s      x force:              nan, y force:              nan
+   5.218s  
+   5.218s  
+   5.218s  step 119
+   5.242s      x force:              nan, y force:              nan
+   5.242s  
+   5.242s  
+   5.242s  step 120
+   5.267s      x force:              nan, y force:              nan
+   5.267s  
+   5.267s  
+   5.267s  step 121
+   5.291s      x force:              nan, y force:              nan
+   5.291s  
+   5.291s  
+   5.291s  step 122
+   5.316s      x force:              nan, y force:              nan
+   5.316s  
+   5.316s  
+   5.316s  step 123
+   5.340s      x force:              nan, y force:              nan
+   5.340s  
+   5.340s  
+   5.340s  step 124
+   5.364s      x force:              nan, y force:              nan
+   5.365s  
+   5.365s  
+   5.365s  step 125
+   5.389s      x force:              nan, y force:              nan
+   5.389s  
+   5.389s  
+   5.389s  step 126
+   5.413s      x force:              nan, y force:              nan
+   5.413s  
+   5.413s  
+   5.413s  step 127
+   5.438s      x force:              nan, y force:              nan
+   5.438s  
+   5.438s  
+   5.438s  step 128
+   5.462s      x force:              nan, y force:              nan
+   5.462s  
+   5.462s  
+   5.462s  step 129
+   5.486s      x force:              nan, y force:              nan
+   5.486s  
+   5.486s  
+   5.486s  step 130
+   5.511s      x force:              nan, y force:              nan
+   5.511s  
+   5.511s  
+   5.511s  step 131
+   5.539s      x force:              nan, y force:              nan
+   5.539s  
+   5.539s  
+   5.539s  step 132
+   5.566s      x force:              nan, y force:              nan
+   5.566s  
+   5.566s  
+   5.566s  step 133
+   5.591s      x force:              nan, y force:              nan
+   5.591s  
+   5.591s  
+   5.591s  step 134
+   5.617s      x force:              nan, y force:              nan
+   5.617s  
+   5.617s  
+   5.617s  step 135
+   5.644s      x force:              nan, y force:              nan
+   5.644s  
+   5.644s  
+   5.644s  step 136
+   5.669s      x force:              nan, y force:              nan
+   5.669s  
+   5.669s  
+   5.669s  step 137
+   5.694s      x force:              nan, y force:              nan
+   5.694s  
+   5.694s  
+   5.694s  step 138
+   5.721s      x force:              nan, y force:              nan
+   5.721s  
+   5.721s  
+   5.721s  step 139
+   5.745s      x force:              nan, y force:              nan
+   5.745s  
+   5.745s  
+   5.745s  step 140
+   5.770s      x force:              nan, y force:              nan
+   5.770s  
+   5.770s  
+   5.770s  step 141
+   5.795s      x force:              nan, y force:              nan
+   5.795s  
+   5.795s  
+   5.795s  step 142
+   5.819s      x force:              nan, y force:              nan
+   5.819s  
+   5.819s  
+   5.819s  step 143
+   5.844s      x force:              nan, y force:              nan
+   5.844s  
+   5.844s  
+   5.844s  step 144
+   5.869s      x force:              nan, y force:              nan
+   5.869s  
+   5.869s  
+   5.869s  step 145
+   5.896s      x force:              nan, y force:              nan
+   5.896s  
+   5.896s  
+   5.896s  step 146
+   5.919s      x force:              nan, y force:              nan
+   5.919s  
+   5.919s  
+   5.919s  step 147
+   5.944s      x force:              nan, y force:              nan
+   5.944s  
+   5.944s  
+   5.944s  step 148
+   5.970s      x force:              nan, y force:              nan
+   5.970s  
+   5.970s  
+   5.970s  step 149
+   5.999s      x force:              nan, y force:              nan
+   5.999s  
+   5.999s  
+   5.999s  step 150
+   6.031s      x force:              nan, y force:              nan
+   6.031s  
