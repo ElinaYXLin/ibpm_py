@@ -6,7 +6,8 @@ The raw UIUC coordinate files have highly non-uniform point spacing
 them directly into py/ibpm.py causes the projection matrix to be
 singular ('over-resolved boundary' -- points spaced far closer together
 than the grid, a documented degeneracy in this codebase, see
-py/cholesky_solver.py's module docstring / results/README.md). Standard
+py/cholesky_solver.py's module docstring / SURF_test/built_in_tests/README.md).
+Standard
 practice for immersed-boundary methods is to keep the boundary point
 spacing close to dx (roughly 0.8-1.2 dx); this module re-parametrizes
 the airfoil boundary by arc length and resamples at that spacing.

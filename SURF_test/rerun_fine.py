@@ -27,7 +27,7 @@ for name, cfg in CASES.items():
     geom_path = GEOMDIR / f"{name.lower()}_dx{FINE['dx']:.4f}.geom"
     geom_path.write_text(f"body {name}\n  raw {raw_path}\n  center 0.25 0.0\nend\n")
 
-    outdir = REPO / "results" / name / "_run_data" / "conv_fine_dt0005"
+    outdir = REPO / "SURF_test" / name / "_run_data" / "conv_fine_dt0005"
     fpath, elapsed = run_case(
         geom=geom_path, name="run", outdir=outdir, alpha=cfg["conv_alpha"],
         nx=FINE["nx"], ny=FINE["ny"], Re=cfg["Re"], dt=DT, nsteps=NSTEPS, **DOMAIN,
