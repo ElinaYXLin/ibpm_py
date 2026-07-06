@@ -9,12 +9,12 @@ __pycache__/
 *.pyc
 .DS_Store
 
-# raw output from results/generate_validation_report.py (regenerable;
-# see results/README.md)
-results/_run_data/
+# raw output from SURF_test/built_in_tests/generate_validation_report.py
+# (regenerable; see SURF_test/built_in_tests/README.md)
+SURF_test/built_in_tests/_run_data/
 
 # large raw reference dataset (98MB); not something to bloat repo
-# history with -- see results/vortall/README.md for how it's used.
+# history with -- see SURF_test/vortall/README.md for how it's used.
 # gen_vortall_report.py/gen_three_way.py load this from the repo root;
 # download from http://databookuw.com/DATA.zip (DATA/VORTALL.mat inside)
 # to regenerate it locally.

@@ -56,7 +56,7 @@ def main():
         results["polar"][name] = []
         for alpha in cfg["polar_alphas"]:
             t0 = time.time()
-            outdir = REPO / "results" / name / "_run_data" / f"polar_a{alpha:+.2f}"
+            outdir = REPO / "SURF_test" / name / "_run_data" / f"polar_a{alpha:+.2f}"
             fpath, elapsed = run_case(
                 geom=geom_path, name="run", outdir=outdir, alpha=alpha,
                 nx=POLAR_LEVEL["nx"], ny=POLAR_LEVEL["ny"], Re=cfg["Re"],
@@ -73,7 +73,7 @@ def main():
         results["convergence"][name] = []
         for lvl in CONV_LEVELS:
             geom_path, npts, perim = geom_for_dx(name, cfg["dat"], lvl["dx"])
-            outdir = REPO / "results" / name / "_run_data" / f"conv_{lvl['tag']}"
+            outdir = REPO / "SURF_test" / name / "_run_data" / f"conv_{lvl['tag']}"
             fpath, elapsed = run_case(
                 geom=geom_path, name="run", outdir=outdir, alpha=cfg["conv_alpha"],
                 nx=lvl["nx"], ny=lvl["ny"], Re=cfg["Re"],

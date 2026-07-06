@@ -1,1 +1,0 @@
-py.ibpm -name vortall -outdir results/vortall/_run_data -tecplot 0 -restart 100 -force 1 -nx 450 -ny 200 -ngrid 1 -length 9.0 -xoffset -1.0 -yoffset -2.0 -geom examples/cylinder.geom -Re 100.0 -dt 0.02 -nsteps 14000
