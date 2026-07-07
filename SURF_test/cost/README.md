@@ -132,22 +132,35 @@ here for the mundane reason that a Python-level nested loop (even with
 interpreter overhead than compiled C++ -- not a data-structure or
 algorithmic difference.
 
-### RAM: the headline finding
+### RAM: fixed -- was the headline finding, now close to parity
 
-**Peak RAM usage diverges sharply between the two implementations**
-(`peak_ram_vs_gridsize.png`): C++ grows from 14MB (nx=100) to 143MB
-(nx=400) -- modest, roughly tracking the O(nx*ny) grid field sizes
-(the Cholesky factor itself is tiny in both implementations, see
-below). Python grows from 170MB to **3.5GB** over the same range -- a ~21x
-larger footprint at the finest grid tested, and growing faster with
-resolution (Python's RAM ratio to C++ grows from 12x at nx=100 to 25x
-at nx=400, per `tables/cost_ratio_python_vs_cpp.md`).
+**Update:** the finding below (Python's RAM diverging sharply from
+C++, a real O(numPoints x nx x ny) blowup in `Regularizer.update()`)
+was accurate as of the run that produced the numbers originally quoted
+here, and has since been **fixed** in `py/regularizer.py`. The
+figures/tables in this directory now reflect a rerun against the fixed
+code. What follows first is the current (fixed) result; the original
+diagnosis is kept below it since the mechanism explanation is still
+correct background and the fix directly addresses it.
 
-**Why (verified by direct profiling, not guessed)**: it is *not* the
-Cholesky solver (see above -- that's a faithful, small-footprint port
-of the C++ algorithm). Instrumenting a standalone nx=400 run with
-`resource.getrusage(RUSAGE_SELF)` at each setup stage pins the jump to
-one specific call:
+**Peak RAM usage is now close to parity** (`peak_ram_vs_gridsize.png`):
+C++ grows from 13.0MB (nx=100) to 148.7MB (nx=400); Python grows from
+148.7MB (nx=100-300, essentially flat) to 197.6MB (nx=400). Python's
+RAM ratio to C++ (`tables/cost_ratio_python_vs_cpp.md`) is now
+**1.33x at nx=400**, down from 24.73x before the fix -- and at nx=300
+and nx=200 the ratio is 1.72x and 3.49x (down from 19.13x and 12.94x).
+Python's *flat* ~148.7MB across nx=100-300 is a fixed baseline (Python
+interpreter + numpy/scipy import footprint) that now dominates at
+these sizes, exactly like a compiled binary's fixed overhead would --
+only at the finest grid tested (nx=400) does the grid-dependent part
+become large enough to show up above that floor, and even there it's
+close to C++'s own O(nx*ny) grid-field cost, not a multi-GB outlier.
+
+**The original diagnosis (verified by direct profiling, not guessed),
+kept for context:** it was *not* the Cholesky solver (that's a
+faithful, small-footprint port of the C++ algorithm). Instrumenting a
+standalone nx=400 run with `resource.getrusage(RUSAGE_SELF)` at each
+setup stage pinned the jump to one specific call:
 
 ```
 after imports              57 MB
@@ -159,51 +172,69 @@ after solver.init()      3530 MB   (3x Cholesky substeps, +75MB only)
 `Regularizer.update()` (`py/regularizer.py`), which builds the
 boundary<->grid coupling (the discrete delta-function weights used to
 spread/interpolate between Lagrangian boundary points and the Eulerian
-grid). Its "NOTE(port)" comment explains the change explicitly: the
-C++ version builds this association list with nested loops, touching
-only the handful of grid cells within each boundary point's compact
-delta-function support (radius `deltaSupportRadius`, a small constant);
-the Python port instead **vectorizes this with numpy broadcasting**
+grid). The version of this method that produced the 3.5GB number
+vectorized the C++ nested loop with numpy broadcasting
 (`dx = np.abs(x_cells_flat[None, :] - bx[:, None]) / h`, and similarly
-for `dy`/`weight`/`mask`) to avoid a slow Python-level double loop --
-but that broadcast is over *every* boundary point against *every* flux
-cell in the grid, materializing several dense
+for `dy`/`weight`/`mask`) over *every* boundary point against *every*
+flux cell in the grid, materializing several dense
 `(numPoints, num_flux_cells)` arrays before masking down to the sparse
-result. At nx=400 (`numPoints=314`, `num_flux_cells~1.6e5` per
-direction), a single one of those intermediate arrays is
-`314 x 160400 x 8 bytes ~ 403 MB`, and several such arrays (`dx`, `dy`,
-`weight`, plus a boolean `mask`) coexist per direction across 2
-directions -- matching the observed multi-GB peak. **This memory
-scales as O(numPoints x nx x ny)** (all boundary points against the
-*entire* grid), rather than O(numPoints x support_width&sup2;) (each
-boundary point against only its own local neighborhood, what the
-compact delta-function support actually requires) -- a real,
-structural cost of trading a Python loop for a numpy broadcast, not a
-bug, and not related to the Cholesky/dense-vs-sparse question at all.
-It means **the Python port's memory use does not scale gracefully to
-fine grids/large boundary point counts**, independent of the (much
-better-behaved) Cholesky factorization cost (e.g. the SD7003/SD8000
-airfoil studies in `SURF_test/SD7003/`, `SURF_test/SD8000/` were kept to
-nx<=600 partly for this reason).
+result -- at nx=400 (`numPoints=314`, `num_flux_cells~1.6e5` per
+direction), a single one of those intermediate arrays was
+`314 x 160400 x 8 bytes ~ 403 MB`, with several such arrays coexisting
+per direction across 2 directions, matching the observed multi-GB peak.
+That was O(numPoints x nx x ny) (all boundary points against the
+*entire* grid) instead of O(numPoints x support_width&sup2;) (each
+boundary point against only its own local neighborhood, which is all
+the compact delta-function support actually requires).
+
+**The fix**: since the grid is uniform, the small window of cells that
+could possibly be within `deltaSupportRadius` of a given point can be
+computed directly by arithmetic (nearest integer cell +- a small fixed
+margin), without ever scanning or materializing an array sized by the
+whole grid -- matching how the C++ loop, which also visits every
+(point, cell) pair, only ever keeps the small number of associations
+that pass the distance test rather than a dense intermediate. Verified
+to produce bit-identical `(boundaryIndex, fluxIndex, weight)`
+associations to the old implementation on 6 real geometries (including
+the non-circular SD7003 airfoil), and confirmed by direct measurement:
+`Regularizer.update()`'s own peak traced memory at nx=400 dropped from
+3330.77 MB to 0.55 MB. This means **the SD7003/SD8000 airfoil studies'
+nx<=600 cap** (`SURF_test/SD7003/`, `SURF_test/SD8000/`) **was
+conservative for a reason that no longer applies** -- it was sized
+around the old O(numPoints x nx x ny) blowup, not the (much smaller)
+O(nx*ny) grid-field memory that remains.
 
 ### CPU usage / parallelism
 
 `cpu_usage_vs_gridsize.png` (right panel): C++ stays flat at ~99% CPU
 efficiency across every grid size -- fully single-threaded, exactly as
 expected from `FFTW`'s default single-threaded plan and no other
-parallel code path in `src/`. Python starts at 214% (nx=100) and
-decays toward 107% (nx=400) -- consistent with the sharp, brief
-~750% CPU spike visible right at the very start of the nx=400 run in
-`timeseries_largest_case.png`'s right panel (timing matches the fast
-`Regularizer.update()` call discussed above: numpy's own internal
-multithreading for large elementwise broadcasts/reductions, plus
-`scipy.fft`'s multi-threaded pocketfft backend used by the DST-based
-Poisson solve, both opportunistically use multiple cores). The
-Cholesky factorization that follows is a serial Python loop and holds
-close to 100% (one core) for the next several seconds, and the
-per-step timestepping loop is single-threaded throughout -- so the
-multi-core spike shrinks as a fraction of total work at larger grid
-sizes, where the serial phases dominate more of the total time.
+parallel code path in `src/`. Python starts at ~187% (nx=100) and
+decays toward ~110% (nx=400), with a sharp, brief spike (now ~875%,
+per `timeseries_largest_case.png`'s right panel) right at the very
+start of the run.
+
+**Update -- the previous explanation for this spike was wrong, and the
+`Regularizer.update()` fix above provided direct evidence of that:** an
+earlier version of this README attributed the spike to
+`Regularizer.update()`'s (then dense-broadcast) numpy call. That call
+has since been rewritten to do a tiny fraction of the work (a
+`(numPoints, 7, 7)`-sized computation instead of a
+`(numPoints, num_flux_cells)` one) -- and the spike is still there,
+same magnitude, in the rerun that produced the current figures. Checking
+`raw/cost_results.json`'s timestamped samples directly: the spike
+(428%-875% CPU) occurs in the first ~0.35s of the process, while RSS is
+still only 16-32MB -- well before the grid-sized arrays (the ~140MB
+plateau reached by t~0.75s) are even allocated. That timing points to
+Python/numpy/scipy's own import and startup cost (loading the
+interpreter, numpy, and scipy, and spinning up their BLAS/pocketfft
+thread pools) as the actual cause, not anything in this codebase's own
+model-construction logic. The Cholesky factorization that follows is a
+serial Python loop and holds close to 100% (one core) for the next
+several seconds, and the per-step timestepping loop is single-threaded
+throughout -- so the multi-core spike shrinks as a fraction of total
+work at larger grid sizes, where the serial phases dominate more of the
+total time.
 
 ## Takeaway
 
@@ -217,10 +248,14 @@ summary has (at least) three parts:
    Cholesky factorization in Python -- same dense algorithm as C++,
    just slower per-iteration), each scaling differently with grid
    size -- don't quote "total runtime" without saying which phase.
-3. **Memory**: this is where the port structurally diverges from the
-   original -- `Regularizer.update()`'s numpy-broadcast vectorization
-   (dense over *every* boundary-point/grid-cell pair, instead of each
-   point's local delta-function neighborhood) costs a ~12-25x larger
-   peak RSS, and that ratio is still growing at the largest grid
-   tested here. This is unrelated to the (comparatively minor) cost
-   difference in the Cholesky solver.
+3. **Memory**: previously the one place the port structurally diverged
+   from the original -- `Regularizer.update()`'s numpy-broadcast
+   vectorization (dense over *every* boundary-point/grid-cell pair,
+   instead of each point's local delta-function neighborhood) cost a
+   ~12-25x larger peak RSS, growing with grid size. **Fixed** (see "RAM"
+   above): the same association list is now built via a per-point local
+   window computed by arithmetic instead of a whole-grid dense
+   broadcast, verified to give bit-identical results, and peak RSS is
+   now within 1.3x-3.5x of C++ across the grid sizes tested (vs.
+   12x-25x before) -- this is unrelated to the (comparatively minor)
+   cost difference in the Cholesky solver.
