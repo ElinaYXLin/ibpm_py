@@ -90,12 +90,39 @@ class Regularizer:
     def update(self) -> None:
         """Update list of relationships between boundary points and cells,
         and the corresponding weights. Checks only the finest grid level,
-        level=0."""
+        level=0.
+
+        NOTE(port) -- fix for a documented RAM regression (see
+        SURF_test/cost/README.md, "RAM: the headline finding"): an earlier
+        version of this method computed the distance from EVERY boundary
+        point to EVERY flux cell in the entire grid (a dense
+        `(numPoints, num_flux_cells)` array per direction) and only
+        afterward masked out everything outside `deltaSupportRadius`.
+        Re-reading src/Regularizer.cc closely: the C++ loop *also* visits
+        every (point, cell) pair -- same O(numPoints * grid_cells) time
+        complexity -- but it never materializes an array of that size. It
+        computes each pair's distance one at a time and only
+        `_neighbors.push_back(a)`s when the pair is within
+        `deltaSupportRadius`, so its peak memory is O(number of pairs kept),
+        not O(numPoints * grid_cells).
+
+        This version reproduces that same memory behavior. Since the grid
+        is uniform, the small set of cells that could possibly be within
+        `deltaSupportRadius` of a given point can be computed directly by
+        arithmetic (the point's fractional cell-index position, rounded to
+        the nearest integer cell, plus a small fixed margin) instead of by
+        scanning the whole grid -- so only a `(numPoints, small constant)`
+        array is ever built. The exact same deltaFunction/threshold test as
+        C++ (and as the previous version of this file) is then applied to
+        that small candidate set, which yields the identical set of
+        (boundaryIndex, fluxIndex, weight) associations (verified against
+        the previous dense-array version on real geometries; see the
+        development note this replaces).
+        """
         h = self._grid.Dx()  # mesh spacing
 
         # Get the coordinates of the body
         bodyCoords = self._geometry.getPoints()
-        numPoints = bodyCoords.getNumPoints()
 
         # NOTE(port): access to `bodyCoords._data` (rather than only the
         # public `BoundaryVector.__call__` interface) mirrors the existing
@@ -109,6 +136,16 @@ class Regularizer:
         fluxIndex_parts = []
         weight_parts = []
 
+        # Candidate cell-index offsets, relative to each point's nearest
+        # cell, in one dimension. deltaSupportRadius = 1.5, so any cell
+        # within the support lies within +-1.5 cells of the point's exact
+        # (real-valued) cell position; the nearest *integer* cell is itself
+        # at most 0.5 away from that position, so +-3 is a generous,
+        # constant-size superset of the cells that can possibly qualify --
+        # the exact distance test below (identical to C++'s) then narrows
+        # it down to the true, possibly smaller, set.
+        offsets = np.arange(-3, 4)
+
         # For each direction (x and y) -- matches the `for (dir = X; dir <= Y; ++dir)`
         # loop in the C++ implementation.
         for dir_ in (Direction.X, Direction.Y):
@@ -116,54 +153,67 @@ class Regularizer:
             ny = self._grid.Ny()
             if dir_ == Direction.X:
                 # X fluxes: i in 0..nx, j in 0..ny-1
-                i_vals = np.arange(nx + 1)
-                j_vals = np.arange(ny)
+                i_min, i_max = 0, nx
+                j_min, j_max = 0, ny - 1
                 x0 = self._grid.getXEdge(0, 0)
                 y0 = self._grid.getYCenter(0, 0)
-                x_cells = x0 + i_vals * h
-                y_cells = y0 + j_vals * h
                 ny_stride = ny  # getIndex(X,i,j) = i*(ny+0)+j
+                index_offset = 0
             else:
                 # Y fluxes: i in 0..nx-1, j in 0..ny
-                i_vals = np.arange(nx)
-                j_vals = np.arange(ny + 1)
+                i_min, i_max = 0, nx - 1
+                j_min, j_max = 0, ny
                 x0 = self._grid.getXCenter(0, 0)
                 y0 = self._grid.getYEdge(0, 0)
-                x_cells = x0 + i_vals * h
-                y_cells = y0 + j_vals * h
                 ny_stride = ny + 1  # getIndex(Y,i,j) = numXFluxes + i*(ny+1)+j
+                index_offset = nx * ny + ny  # Flux.begin(Y) == numXFluxes
 
-            # Build the (i,j) grid of cell coordinates and the corresponding
-            # flat Flux index for each cell, matching Flux.getIndex(dir,i,j).
-            X_cell, Y_cell = np.meshgrid(x_cells, y_cells, indexing="ij")
-            I_idx, J_idx = np.meshgrid(i_vals, j_vals, indexing="ij")
-            flux_index_grid = I_idx * ny_stride + J_idx
-            if dir_ == Direction.Y:
-                # Flux.begin(Y) == numXFluxes == nx*ny + ny (see Flux.resize)
-                flux_index_grid = flux_index_grid + (nx * ny + ny)
+            # Real-valued (fractional) cell-index position of each boundary
+            # point, i.e. the (possibly non-integer) i/j such that
+            # x0 + i*h == bx[k].
+            center_i = (bx - x0) / h
+            center_j = (by - y0) / h
 
-            x_cells_flat = X_cell.ravel()
-            y_cells_flat = Y_cell.ravel()
-            flux_index_flat = flux_index_grid.ravel()
+            # Small, fixed-width (numPoints, 7) window of candidate integer
+            # cell indices per point, in each dimension -- this is what
+            # keeps the computation local (O(numPoints) per direction)
+            # instead of O(numPoints * nx * ny).
+            i_candidates = np.round(center_i)[:, None].astype(np.int64) + offsets[None, :]
+            j_candidates = np.round(center_j)[:, None].astype(np.int64) + offsets[None, :]
 
-            # Pairwise distances (in units of cells) between every boundary
-            # point and every cell in this direction -- this is the
-            # vectorized equivalent of the innermost two loops
-            # ("for each point on the boundary" / "for each cell") in the
-            # C++ `update()`.
-            dx = np.abs(x_cells_flat[None, :] - bx[:, None]) / h
-            dy = np.abs(y_cells_flat[None, :] - by[:, None]) / h
+            # Distance in cells from each point to each of its own candidate
+            # cells, in x and y separately -- the same per-pair computation
+            # as the C++ loop body, just restricted to the small candidate
+            # window instead of the whole grid.
+            dx_1d = np.abs(x0 + i_candidates * h - bx[:, None]) / h  # (numPoints, 7)
+            dy_1d = np.abs(y0 + j_candidates * h - by[:, None]) / h  # (numPoints, 7)
 
-            mask = (dx < deltaSupportRadius) & (dy < deltaSupportRadius)
-            weight = deltaFunction(dx) * deltaFunction(dy)
+            in_range_i = (i_candidates >= i_min) & (i_candidates <= i_max)
+            in_range_j = (j_candidates >= j_min) & (j_candidates <= j_max)
 
-            point_idx, cell_idx = np.nonzero(mask)
+            # Combine the i- and j-conditions (each (numPoints, 7)) into the
+            # full (numPoints, 7, 7) per-point-per-candidate-pair mask via
+            # broadcasting -- this small (numPoints * 49) boolean array is
+            # the only thing here whose size depends on both dimensions at
+            # once, unlike the (numPoints, num_flux_cells) array it replaces.
+            mask = (
+                in_range_i[:, :, None] & in_range_j[:, None, :]
+                & (dx_1d[:, :, None] < deltaSupportRadius)
+                & (dy_1d[:, None, :] < deltaSupportRadius)
+            )
+
+            point_idx, di_idx, dj_idx = np.nonzero(mask)
             if point_idx.size == 0:
                 continue
 
+            i_sel = i_candidates[point_idx, di_idx]
+            j_sel = j_candidates[point_idx, dj_idx]
+            weight_sel = deltaFunction(dx_1d[point_idx, di_idx]) * deltaFunction(dy_1d[point_idx, dj_idx])
+            flux_index_sel = i_sel * ny_stride + j_sel + index_offset
+
             boundaryIndex_parts.append(bodyCoords.getIndex(dir_, 0) + point_idx)
-            fluxIndex_parts.append(flux_index_flat[cell_idx])
-            weight_parts.append(weight[point_idx, cell_idx])
+            fluxIndex_parts.append(flux_index_sel)
+            weight_parts.append(weight_sel)
 
         if boundaryIndex_parts:
             self._boundaryIndex = np.concatenate(boundaryIndex_parts).astype(np.int64)

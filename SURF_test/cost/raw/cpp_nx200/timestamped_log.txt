@@ -1,488 +1,497 @@
-   0.000s  Immersed Boundary Projection Method (IBPM), version 1.0
-   0.000s  
-   0.000s  Command:
-   0.000s  /Users/elina/Desktop/SURF2026/ibpm_py-main/build/ibpm -name run -outdir /Users/elina/Desktop/SURF2026/ibpm_py-main/results/cost/raw/cpp_nx200 -tecplot 0 -restart 0 -force 1 -nx 200 -ny 200 -ngrid 1 -length 4 -xoffset -2 -yoffset -2 -geom /Users/elina/Desktop/SURF2026/ibpm_py-main/results/cost/geom/cylinder_dx0.02000.geom -Re 100 -dt 0.02 -nsteps 150 -scheme rk3
-   0.000s  
-   0.000s  Run name: run
-   0.000s  
-   0.000s  Grid parameters:
-   0.000s      nx      200
-   0.000s      ny      200
-   0.000s      ngrid   1
-   0.000s      length  4
-   0.000s      xoffset -2
-   0.000s      yoffset -2
-   0.000s      xshift  0
-   0.000s      yshift  0
-   0.000s  
-   0.000s  Reading geometry from file /Users/elina/Desktop/SURF2026/ibpm_py-main/results/cost/geom/cylinder_dx0.02000.geom
-   0.000s      157 points on the boundary
-   0.000s  
-   0.000s  Reynolds number = 100
-   0.000s  
-   9.127s  Setting up Immersed Boundary Solver...Using Cholesky solver for projection step
-   9.128s  Using Cholesky solver for projection step
-   9.128s  Using Cholesky solver for projection step
-   9.129s  Using zero initial condition
-   9.180s  using 3rd-order Runge Kutta (3-step) timestepper
-   9.180s      dt = 0.02
-   9.180s  
-   9.233s  Loading Cholesky factorization from file /Users/elina/Desktop/SURF2026/ibpm_py-main/results/cost/raw/cpp_nx200/run_01.cholesky...done
-   9.265s  Loading Cholesky factorization from file /Users/elina/Desktop/SURF2026/ibpm_py-main/results/cost/raw/cpp_nx200/run_02.cholesky...done
-   9.296s  Loading Cholesky factorization from file /Users/elina/Desktop/SURF2026/ibpm_py-main/results/cost/raw/cpp_nx200/run_03.cholesky...done
-   9.297s  
-   9.297s  Initial timestep = 0
-   9.297s  
-   9.297s  Writing forces every 1 step(s)
-   9.297s  
-   9.298s  Integrating for 150 steps
-   9.298s  
-   9.298s  step 1
-   9.310s      x force:          7.05552, y force:     -1.49612e-14
-   9.310s  
-   9.310s  step 2
-   9.321s      x force:          4.43725, y force:      4.19789e-15
-   9.321s  
-   9.321s  step 3
-   9.333s      x force:          3.57708, y force:     -8.59757e-16
-   9.333s  
-   9.333s  step 4
-   9.344s      x force:          3.11216, y force:     -1.14682e-15
-   9.344s  
-   9.344s  step 5
-   9.355s      x force:          2.81214, y force:     -1.89431e-15
-   9.355s  
-   9.355s  step 6
-   9.366s      x force:          2.60002, y force:      3.94635e-15
-   9.366s  
-   9.366s  step 7
-   9.378s      x force:          2.44171, y force:     -1.68939e-14
-   9.378s  
-   9.378s  step 8
-   9.390s      x force:          2.31934, y force:      -1.2551e-14
-   9.390s  
-   9.390s  step 9
-   9.401s      x force:          2.22242, y force:     -1.26334e-14
-   9.401s  
-   9.401s  step 10
-   9.413s      x force:          2.14436, y force:      1.01544e-14
-   9.413s  
-   9.413s  step 11
-   9.425s      x force:          2.08072, y force:      2.44427e-15
-   9.425s  
-   9.425s  step 12
-   9.436s      x force:          2.02841, y force:     -9.09495e-15
-   9.436s  
-   9.436s  step 13
-   9.448s      x force:          1.98519, y force:     -3.36549e-15
-   9.448s  
-   9.448s  step 14
-   9.459s      x force:          1.94938, y force:     -9.23812e-15
-   9.459s  
-   9.459s  step 15
-   9.470s      x force:          1.91972, y force:      1.17105e-14
-   9.470s  
-   9.470s  step 16
-   9.485s      x force:          1.89519, y force:     -3.99574e-15
-   9.485s  
-   9.485s  step 17
-   9.493s      x force:            1.875, y force:     -1.29203e-14
-   9.493s  
-   9.493s  step 18
-   9.504s      x force:          1.85852, y force:      1.88596e-15
-   9.504s  
-   9.504s  step 19
-   9.515s      x force:          1.84522, y force:     -1.74589e-15
-   9.515s  
-   9.515s  step 20
-   9.527s      x force:          1.83465, y force:     -1.65032e-15
-   9.527s  
-   9.527s  step 21
-   9.538s      x force:          1.82646, y force:      1.09924e-14
-   9.538s  
-   9.538s  step 22
-   9.550s      x force:          1.82032, y force:     -3.23263e-15
-   9.550s  
-   9.550s  step 23
-   9.562s      x force:          1.81598, y force:      1.22423e-14
-   9.562s  
-   9.562s  step 24
-   9.573s      x force:          1.81321, y force:      -1.3447e-16
-   9.573s  
-   9.573s  step 25
-   9.585s      x force:          1.81181, y force:     -1.03868e-14
-   9.585s  
-   9.585s  step 26
-   9.596s      x force:           1.8116, y force:     -4.11653e-15
-   9.596s  
-   9.596s  step 27
-   9.607s      x force:          1.81244, y force:     -7.99592e-15
-   9.607s  
-   9.607s  step 28
-   9.619s      x force:          1.81418, y force:     -1.72005e-15
-   9.619s  
-   9.619s  step 29
-   9.631s      x force:          1.81671, y force:      1.02656e-14
-   9.631s  
-   9.631s  step 30
-   9.642s      x force:          1.81993, y force:     -4.54499e-15
-   9.642s  
-   9.642s  step 31
-   9.653s      x force:          1.82373, y force:      1.30278e-14
-   9.653s  
-   9.653s  step 32
-   9.664s      x force:          1.82804, y force:     -9.60583e-15
-   9.664s  
-   9.664s  step 33
-   9.676s      x force:          1.83277, y force:     -8.13962e-15
-   9.676s  
-   9.676s  step 34
-   9.687s      x force:          1.83787, y force:      3.58042e-15
-   9.687s  
-   9.687s  step 35
-   9.698s      x force:          1.84326, y force:      4.29168e-16
-   9.698s  
-   9.698s  step 36
-   9.710s      x force:           1.8489, y force:      7.38076e-15
-   9.710s  
-   9.710s  step 37
-   9.722s      x force:          1.85473, y force:     -1.06297e-15
-   9.722s  
-   9.722s  step 38
-   9.733s      x force:          1.86071, y force:      7.05498e-15
-   9.733s  
-   9.733s  step 39
-   9.744s      x force:           1.8668, y force:     -9.85168e-16
-   9.744s  
-   9.744s  step 40
-   9.755s      x force:          1.87297, y force:     -9.60654e-16
-   9.755s  
-   9.755s  step 41
-   9.767s      x force:          1.87917, y force:      8.91163e-15
-   9.767s  
-   9.767s  step 42
-   9.781s      x force:          1.88539, y force:       5.6346e-16
-   9.781s  
-   9.781s  step 43
-   9.789s      x force:           1.8916, y force:     -1.45661e-17
-   9.789s  
-   9.789s  step 44
-   9.800s      x force:          1.89777, y force:     -7.72715e-15
-   9.800s  
-   9.800s  step 45
-   9.812s      x force:          1.90389, y force:     -1.28111e-15
-   9.812s  
-   9.812s  step 46
-   9.824s      x force:          1.90993, y force:      4.80327e-16
-   9.824s  
-   9.824s  step 47
-   9.838s      x force:          1.91588, y force:      8.62244e-15
-   9.838s  
-   9.838s  step 48
-   9.846s      x force:          1.92173, y force:       7.5346e-15
-   9.846s  
-   9.846s  step 49
-   9.859s      x force:          1.92746, y force:     -5.54223e-16
-   9.859s  
-   9.859s  step 50
-   9.870s      x force:          1.93306, y force:      6.19806e-15
-   9.870s  
-   9.870s  step 51
-   9.881s      x force:          1.93853, y force:     -3.03189e-15
-   9.881s  
-   9.881s  step 52
-   9.892s      x force:          1.94386, y force:     -3.00773e-15
-   9.892s  
-   9.892s  step 53
-   9.904s      x force:          1.94903, y force:     -3.42979e-15
-   9.904s  
-   9.904s  step 54
-   9.915s      x force:          1.95406, y force:     -2.04281e-15
-   9.915s  
-   9.915s  step 55
-   9.927s      x force:          1.95892, y force:     -4.60858e-15
-   9.927s  
-   9.927s  step 56
-   9.938s      x force:          1.96363, y force:     -6.28688e-15
-   9.938s  
-   9.938s  step 57
-   9.954s      x force:          1.96817, y force:      1.03682e-14
-   9.954s  
-   9.954s  step 58
-   9.961s      x force:          1.97255, y force:      7.41878e-15
-   9.961s  
-   9.961s  step 59
-   9.973s      x force:          1.97676, y force:     -1.06084e-14
-   9.973s  
-   9.973s  step 60
-   9.984s      x force:          1.98081, y force:        1.058e-14
-   9.984s  
-   9.984s  step 61
-   9.996s      x force:           1.9847, y force:      1.00968e-15
-   9.996s  
-   9.996s  step 62
-  10.007s      x force:          1.98843, y force:     -1.09935e-14
-  10.007s  
-  10.007s  step 63
-  10.019s      x force:            1.992, y force:     -1.13708e-14
-  10.019s  
-  10.019s  step 64
-  10.030s      x force:          1.99542, y force:     -9.29958e-15
-  10.030s  
-  10.030s  step 65
-  10.041s      x force:          1.99868, y force:     -3.19034e-15
-  10.041s  
-  10.041s  step 66
-  10.053s      x force:          2.00179, y force:      3.28413e-15
-  10.053s  
-  10.053s  step 67
-  10.064s      x force:          2.00475, y force:       6.3288e-15
-  10.064s  
-  10.064s  step 68
-  10.076s      x force:          2.00758, y force:      4.13749e-15
-  10.076s  
-  10.076s  step 69
-  10.087s      x force:          2.01026, y force:     -8.88747e-15
-  10.087s  
-  10.087s  step 70
-  10.098s      x force:          2.01281, y force:     -1.16145e-14
-  10.098s  
-  10.098s  step 71
-  10.110s      x force:          2.01524, y force:     -2.07052e-15
-  10.110s  
-  10.110s  step 72
-  10.121s      x force:          2.01753, y force:      7.41665e-15
-  10.121s  
-  10.121s  step 73
-  10.133s      x force:          2.01971, y force:      6.14477e-15
-  10.133s  
-  10.133s  step 74
-  10.145s      x force:          2.02177, y force:     -1.46045e-14
-  10.145s  
-  10.145s  step 75
-  10.157s      x force:          2.02372, y force:      1.09317e-14
-  10.157s  
-  10.157s  step 76
-  10.168s      x force:          2.02557, y force:      4.92761e-15
-  10.168s  
-  10.168s  step 77
-  10.179s      x force:          2.02732, y force:      1.52106e-14
-  10.179s  
-  10.179s  step 78
-  10.191s      x force:          2.02896, y force:      3.45537e-15
-  10.191s  
-  10.191s  step 79
-  10.202s      x force:          2.03052, y force:      5.59766e-15
-  10.202s  
-  10.202s  step 80
-  10.214s      x force:          2.03199, y force:      -3.1811e-15
-  10.214s  
-  10.214s  step 81
-  10.225s      x force:          2.03338, y force:      1.18042e-14
-  10.225s  
-  10.225s  step 82
-  10.236s      x force:          2.03469, y force:       9.7323e-15
-  10.236s  
-  10.236s  step 83
-  10.249s      x force:          2.03593, y force:     -4.51053e-15
-  10.249s  
-  10.249s  step 84
-  10.260s      x force:          2.03709, y force:     -9.23137e-15
-  10.260s  
-  10.260s  step 85
-  10.271s      x force:          2.03819, y force:      6.13696e-15
-  10.271s  
-  10.271s  step 86
-  10.282s      x force:          2.03923, y force:     -1.89175e-14
-  10.282s  
-  10.282s  step 87
-  10.294s      x force:          2.04022, y force:     -6.99032e-15
-  10.294s  
-  10.294s  step 88
-  10.305s      x force:          2.04115, y force:      1.50258e-14
-  10.305s  
-  10.305s  step 89
-  10.317s      x force:          2.04203, y force:     -2.86349e-15
-  10.317s  
-  10.317s  step 90
-  10.328s      x force:          2.04286, y force:      1.21339e-14
-  10.328s  
-  10.328s  step 91
-  10.339s      x force:          2.04365, y force:      6.40199e-16
-  10.339s  
-  10.339s  step 92
-  10.351s      x force:          2.04439, y force:      7.60991e-15
-  10.351s  
-  10.351s  step 93
-  10.364s      x force:           2.0451, y force:      3.96767e-15
-  10.364s  
-  10.364s  step 94
-  10.373s      x force:          2.04578, y force:       7.0024e-15
-  10.373s  
-  10.373s  step 95
-  10.385s      x force:          2.04642, y force:      1.10525e-14
-  10.385s  
-  10.385s  step 96
-  10.396s      x force:          2.04704, y force:       5.2836e-15
-  10.396s  
-  10.396s  step 97
-  10.408s      x force:          2.04763, y force:      2.61053e-15
-  10.408s  
-  10.408s  step 98
-  10.424s      x force:          2.04819, y force:      7.03437e-17
-  10.424s  
-  10.424s  step 99
-  10.431s      x force:          2.04874, y force:      8.45688e-15
-  10.431s  
-  10.431s  step 100
-  10.443s      x force:          2.04926, y force:      5.44205e-15
-  10.443s  
-  10.443s  step 101
-  10.454s      x force:          2.04977, y force:     -2.22258e-15
-  10.454s  
-  10.454s  step 102
-  10.465s      x force:          2.05026, y force:      1.27805e-14
-  10.465s  
-  10.465s  step 103
-  10.481s      x force:          2.05074, y force:      1.01998e-14
-  10.481s  
-  10.481s  step 104
-  10.488s      x force:          2.05121, y force:      3.60245e-16
-  10.488s  
-  10.488s  step 105
-  10.499s      x force:          2.05166, y force:     -6.97469e-15
-  10.499s  
-  10.499s  step 106
-  10.511s      x force:          2.05211, y force:      -1.5703e-15
-  10.511s  
-  10.511s  step 107
-  10.522s      x force:          2.05255, y force:     -3.18323e-15
-  10.522s  
-  10.522s  step 108
-  10.536s      x force:          2.05299, y force:      3.52074e-15
-  10.536s  
-  10.536s  step 109
-  10.545s      x force:          2.05342, y force:      -1.0418e-14
-  10.545s  
-  10.545s  step 110
-  10.556s      x force:          2.05386, y force:      1.61293e-16
-  10.556s  
-  10.556s  step 111
-  10.567s      x force:          2.05428, y force:     -6.43325e-15
-  10.567s  
-  10.567s  step 112
-  10.578s      x force:          2.05471, y force:     -3.87743e-15
-  10.578s  
-  10.578s  step 113
-  10.590s      x force:          2.05514, y force:      4.97735e-15
-  10.590s  
-  10.590s  step 114
-  10.602s      x force:          2.05557, y force:     -4.98019e-15
-  10.602s  
-  10.602s  step 115
-  10.613s      x force:          2.05601, y force:      1.45576e-14
-  10.613s  
-  10.613s  step 116
-  10.625s      x force:          2.05644, y force:     -3.15907e-15
-  10.625s  
-  10.625s  step 117
-  10.636s      x force:          2.05688, y force:     -7.73568e-15
-  10.636s  
-  10.636s  step 118
-  10.648s      x force:          2.05732, y force:      5.47651e-15
-  10.648s  
-  10.648s  step 119
-  10.659s      x force:          2.05777, y force:      5.22924e-15
-  10.659s  
-  10.659s  step 120
-  10.670s      x force:          2.05822, y force:      5.90177e-15
-  10.670s  
-  10.670s  step 121
-  10.681s      x force:          2.05868, y force:      3.32427e-15
-  10.681s  
-  10.681s  step 122
-  10.693s      x force:          2.05914, y force:      3.88667e-16
-  10.693s  
-  10.693s  step 123
-  10.705s      x force:          2.05961, y force:      1.16962e-14
-  10.705s  
-  10.705s  step 124
-  10.716s      x force:          2.06008, y force:     -7.59037e-15
-  10.716s  
-  10.716s  step 125
-  10.727s      x force:          2.06056, y force:     -1.05739e-14
-  10.727s  
-  10.727s  step 126
-  10.739s      x force:          2.06104, y force:     -4.52971e-15
-  10.739s  
-  10.739s  step 127
-  10.750s      x force:          2.06153, y force:     -8.28457e-15
-  10.750s  
-  10.750s  step 128
-  10.762s      x force:          2.06202, y force:     -7.18323e-15
-  10.762s  
-  10.762s  step 129
-  10.774s      x force:          2.06252, y force:      1.42819e-15
-  10.774s  
-  10.774s  step 130
-  10.785s      x force:          2.06302, y force:     -7.93392e-15
-  10.785s  
-  10.785s  step 131
-  10.797s      x force:          2.06352, y force:      -1.3457e-14
-  10.797s  
-  10.797s  step 132
-  10.809s      x force:          2.06403, y force:     -9.25588e-15
-  10.809s  
-  10.809s  step 133
-  10.820s      x force:          2.06454, y force:       6.4226e-15
-  10.820s  
-  10.820s  step 134
-  10.831s      x force:          2.06506, y force:      1.41526e-14
-  10.831s  
-  10.831s  step 135
-  10.842s      x force:          2.06558, y force:      1.33436e-14
-  10.842s  
-  10.842s  step 136
-  10.855s      x force:          2.06609, y force:     -6.37819e-15
-  10.855s  
-  10.855s  step 137
-  10.866s      x force:          2.06662, y force:      4.60787e-16
-  10.866s  
-  10.866s  step 138
-  10.878s      x force:          2.06714, y force:     -3.51257e-15
-  10.878s  
-  10.878s  step 139
-  10.889s      x force:          2.06766, y force:     -8.42526e-15
-  10.889s  
-  10.889s  step 140
-  10.900s      x force:          2.06818, y force:      1.06816e-14
-  10.900s  
-  10.900s  step 141
-  10.911s      x force:           2.0687, y force:      6.22826e-15
-  10.911s  
-  10.911s  step 142
-  10.923s      x force:          2.06922, y force:     -1.45661e-14
-  10.923s  
-  10.923s  step 143
-  10.935s      x force:          2.06974, y force:      4.49774e-15
-  10.935s  
-  10.935s  step 144
-  10.946s      x force:          2.07025, y force:     -8.42206e-15
-  10.946s  
-  10.946s  step 145
-  10.958s      x force:          2.07076, y force:     -1.25841e-14
-  10.958s  
-  10.958s  step 146
-  10.969s      x force:          2.07127, y force:     -5.48859e-15
-  10.969s  
-  10.969s  step 147
-  10.980s      x force:          2.07178, y force:       2.3892e-15
-  10.980s  
-  10.980s  step 148
-  10.991s      x force:          2.07228, y force:      2.55405e-15
-  10.991s  
-  10.991s  step 149
-  11.006s      x force:          2.07277, y force:     -5.44098e-15
-  11.006s  
-  11.006s  step 150
-  11.015s      x force:          2.07326, y force:     -7.62306e-15
+   0.001s  Immersed Boundary Projection Method (IBPM), version 1.0
+   0.001s  
+   0.001s  Command:
+   0.001s  /Users/elina/Desktop/SURF2026/ibpm_py-main/build/ibpm -name run -outdir /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/cost/raw/cpp_nx200 -tecplot 0 -restart 0 -force 1 -nx 200 -ny 200 -ngrid 1 -length 4 -xoffset -2 -yoffset -2 -geom /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/cost/geom/cylinder_dx0.02000.geom -Re 100 -dt 0.02 -nsteps 150 -scheme rk3
+   0.001s  
+   0.001s  Run name: run
+   0.001s  
+   0.001s  Grid parameters:
+   0.001s      nx      200
+   0.001s      ny      200
+   0.001s      ngrid   1
+   0.001s      length  4
+   0.001s      xoffset -2
+   0.001s      yoffset -2
+   0.001s      xshift  0
+   0.001s      yshift  0
+   0.001s  
+   0.001s  Reading geometry from file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/cost/geom/cylinder_dx0.02000.geom
+   0.001s      157 points on the boundary
+   0.001s  
+   0.001s  Reynolds number = 100
+   0.001s  
+   9.043s  Setting up Immersed Boundary Solver...Using Cholesky solver for projection step
+   9.044s  Using Cholesky solver for projection step
+   9.044s  Using Cholesky solver for projection step
+   9.045s  Using zero initial condition
+   9.095s  using 3rd-order Runge Kutta (3-step) timestepper
+   9.095s      dt = 0.02
+   9.095s  
+   9.095s  Loading Cholesky factorization from file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/cost/raw/cpp_nx200/run_01.cholesky...(failed: could not open file)
+   9.095s  Loading Cholesky factorization from file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/cost/raw/cpp_nx200/run_02.cholesky...(failed: could not open file)
+   9.095s  Loading Cholesky factorization from file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/cost/raw/cpp_nx200/run_03.cholesky...(failed: could not open file)
+   9.626s  Computing the matrix for Cholesky factorization...done
+   9.629s  Computing Cholesky factorization...done
+  10.161s  Computing the matrix for Cholesky factorization...done
+  10.164s  Computing Cholesky factorization...done
+  10.693s  Computing the matrix for Cholesky factorization...done
+  10.696s  Computing Cholesky factorization...done
+  10.800s  Saving Cholesky factorization to file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/cost/raw/cpp_nx200/run_01.cholesky...done
+  10.910s  Saving Cholesky factorization to file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/cost/raw/cpp_nx200/run_02.cholesky...done
+  11.017s  Saving Cholesky factorization to file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/cost/raw/cpp_nx200/run_03.cholesky...done
+  11.023s  
+  11.023s  Initial timestep = 0
+  11.023s  
+  11.023s  Writing forces every 1 step(s)
+  11.023s  
+  11.023s  Integrating for 150 steps
+  11.023s  
+  11.023s  step 1
+  11.030s      x force:          7.05552, y force:     -1.49612e-14
+  11.030s  
+  11.030s  step 2
+  11.042s      x force:          4.43725, y force:      4.19789e-15
+  11.042s  
+  11.042s  step 3
+  11.053s      x force:          3.57708, y force:     -8.59757e-16
+  11.053s  
+  11.053s  step 4
+  11.064s      x force:          3.11216, y force:     -1.14682e-15
+  11.064s  
+  11.064s  step 5
+  11.076s      x force:          2.81214, y force:     -1.89431e-15
+  11.076s  
+  11.076s  step 6
+  11.087s      x force:          2.60002, y force:      3.94635e-15
+  11.087s  
+  11.087s  step 7
+  11.098s      x force:          2.44171, y force:     -1.68939e-14
+  11.098s  
+  11.098s  step 8
+  11.110s      x force:          2.31934, y force:      -1.2551e-14
+  11.110s  
+  11.110s  step 9
+  11.122s      x force:          2.22242, y force:     -1.26334e-14
+  11.122s  
+  11.122s  step 10
+  11.133s      x force:          2.14436, y force:      1.01544e-14
+  11.133s  
+  11.133s  step 11
+  11.147s      x force:          2.08072, y force:      2.44427e-15
+  11.147s  
+  11.147s  step 12
+  11.155s      x force:          2.02841, y force:     -9.09495e-15
+  11.155s  
+  11.155s  step 13
+  11.166s      x force:          1.98519, y force:     -3.36549e-15
+  11.166s  
+  11.166s  step 14
+  11.178s      x force:          1.94938, y force:     -9.23812e-15
+  11.178s  
+  11.178s  step 15
+  11.190s      x force:          1.91972, y force:      1.17105e-14
+  11.190s  
+  11.190s  step 16
+  11.201s      x force:          1.89519, y force:     -3.99574e-15
+  11.201s  
+  11.201s  step 17
+  11.212s      x force:            1.875, y force:     -1.29203e-14
+  11.212s  
+  11.212s  step 18
+  11.224s      x force:          1.85852, y force:      1.88596e-15
+  11.224s  
+  11.224s  step 19
+  11.235s      x force:          1.84522, y force:     -1.74589e-15
+  11.235s  
+  11.235s  step 20
+  11.246s      x force:          1.83465, y force:     -1.65032e-15
+  11.246s  
+  11.246s  step 21
+  11.257s      x force:          1.82646, y force:      1.09924e-14
+  11.257s  
+  11.257s  step 22
+  11.269s      x force:          1.82032, y force:     -3.23263e-15
+  11.269s  
+  11.269s  step 23
+  11.280s      x force:          1.81598, y force:      1.22423e-14
+  11.280s  
+  11.280s  step 24
+  11.292s      x force:          1.81321, y force:      -1.3447e-16
+  11.292s  
+  11.292s  step 25
+  11.304s      x force:          1.81181, y force:     -1.03868e-14
+  11.304s  
+  11.304s  step 26
+  11.316s      x force:           1.8116, y force:     -4.11653e-15
+  11.316s  
+  11.316s  step 27
+  11.328s      x force:          1.81244, y force:     -7.99592e-15
+  11.328s  
+  11.328s  step 28
+  11.339s      x force:          1.81418, y force:     -1.72005e-15
+  11.339s  
+  11.339s  step 29
+  11.351s      x force:          1.81671, y force:      1.02656e-14
+  11.351s  
+  11.351s  step 30
+  11.363s      x force:          1.81993, y force:     -4.54499e-15
+  11.363s  
+  11.363s  step 31
+  11.375s      x force:          1.82373, y force:      1.30278e-14
+  11.375s  
+  11.375s  step 32
+  11.386s      x force:          1.82804, y force:     -9.60583e-15
+  11.386s  
+  11.386s  step 33
+  11.398s      x force:          1.83277, y force:     -8.13962e-15
+  11.398s  
+  11.398s  step 34
+  11.409s      x force:          1.83787, y force:      3.58042e-15
+  11.409s  
+  11.409s  step 35
+  11.421s      x force:          1.84326, y force:      4.29168e-16
+  11.421s  
+  11.421s  step 36
+  11.432s      x force:           1.8489, y force:      7.38076e-15
+  11.432s  
+  11.432s  step 37
+  11.444s      x force:          1.85473, y force:     -1.06297e-15
+  11.444s  
+  11.444s  step 38
+  11.455s      x force:          1.86071, y force:      7.05498e-15
+  11.455s  
+  11.455s  step 39
+  11.466s      x force:           1.8668, y force:     -9.85168e-16
+  11.466s  
+  11.466s  step 40
+  11.478s      x force:          1.87297, y force:     -9.60654e-16
+  11.478s  
+  11.478s  step 41
+  11.490s      x force:          1.87917, y force:      8.91163e-15
+  11.490s  
+  11.490s  step 42
+  11.504s      x force:          1.88539, y force:       5.6346e-16
+  11.504s  
+  11.504s  step 43
+  11.512s      x force:           1.8916, y force:     -1.45661e-17
+  11.512s  
+  11.512s  step 44
+  11.523s      x force:          1.89777, y force:     -7.72715e-15
+  11.523s  
+  11.523s  step 45
+  11.535s      x force:          1.90389, y force:     -1.28111e-15
+  11.535s  
+  11.535s  step 46
+  11.547s      x force:          1.90993, y force:      4.80327e-16
+  11.547s  
+  11.547s  step 47
+  11.558s      x force:          1.91588, y force:      8.62244e-15
+  11.558s  
+  11.558s  step 48
+  11.570s      x force:          1.92173, y force:       7.5346e-15
+  11.570s  
+  11.570s  step 49
+  11.582s      x force:          1.92746, y force:     -5.54223e-16
+  11.582s  
+  11.582s  step 50
+  11.593s      x force:          1.93306, y force:      6.19806e-15
+  11.594s  
+  11.594s  step 51
+  11.605s      x force:          1.93853, y force:     -3.03189e-15
+  11.605s  
+  11.605s  step 52
+  11.617s      x force:          1.94386, y force:     -3.00773e-15
+  11.617s  
+  11.617s  step 53
+  11.629s      x force:          1.94903, y force:     -3.42979e-15
+  11.629s  
+  11.629s  step 54
+  11.640s      x force:          1.95406, y force:     -2.04281e-15
+  11.640s  
+  11.640s  step 55
+  11.652s      x force:          1.95892, y force:     -4.60858e-15
+  11.652s  
+  11.652s  step 56
+  11.664s      x force:          1.96363, y force:     -6.28688e-15
+  11.664s  
+  11.664s  step 57
+  11.676s      x force:          1.96817, y force:      1.03682e-14
+  11.676s  
+  11.676s  step 58
+  11.689s      x force:          1.97255, y force:      7.41878e-15
+  11.689s  
+  11.689s  step 59
+  11.699s      x force:          1.97676, y force:     -1.06084e-14
+  11.699s  
+  11.699s  step 60
+  11.710s      x force:          1.98081, y force:        1.058e-14
+  11.711s  
+  11.711s  step 61
+  11.722s      x force:           1.9847, y force:      1.00968e-15
+  11.722s  
+  11.722s  step 62
+  11.733s      x force:          1.98843, y force:     -1.09935e-14
+  11.733s  
+  11.733s  step 63
+  11.750s      x force:            1.992, y force:     -1.13708e-14
+  11.750s  
+  11.750s  step 64
+  11.757s      x force:          1.99542, y force:     -9.29958e-15
+  11.757s  
+  11.757s  step 65
+  11.768s      x force:          1.99868, y force:     -3.19034e-15
+  11.768s  
+  11.768s  step 66
+  11.780s      x force:          2.00179, y force:      3.28413e-15
+  11.780s  
+  11.780s  step 67
+  11.791s      x force:          2.00475, y force:       6.3288e-15
+  11.791s  
+  11.791s  step 68
+  11.803s      x force:          2.00758, y force:      4.13749e-15
+  11.803s  
+  11.803s  step 69
+  11.815s      x force:          2.01026, y force:     -8.88747e-15
+  11.815s  
+  11.815s  step 70
+  11.827s      x force:          2.01281, y force:     -1.16145e-14
+  11.827s  
+  11.827s  step 71
+  11.838s      x force:          2.01524, y force:     -2.07052e-15
+  11.838s  
+  11.838s  step 72
+  11.849s      x force:          2.01753, y force:      7.41665e-15
+  11.849s  
+  11.849s  step 73
+  11.861s      x force:          2.01971, y force:      6.14477e-15
+  11.861s  
+  11.861s  step 74
+  11.874s      x force:          2.02177, y force:     -1.46045e-14
+  11.874s  
+  11.874s  step 75
+  11.885s      x force:          2.02372, y force:      1.09317e-14
+  11.885s  
+  11.885s  step 76
+  11.896s      x force:          2.02557, y force:      4.92761e-15
+  11.896s  
+  11.896s  step 77
+  11.907s      x force:          2.02732, y force:      1.52106e-14
+  11.907s  
+  11.907s  step 78
+  11.919s      x force:          2.02896, y force:      3.45537e-15
+  11.919s  
+  11.919s  step 79
+  11.935s      x force:          2.03052, y force:      5.59766e-15
+  11.935s  
+  11.935s  step 80
+  11.941s      x force:          2.03199, y force:      -3.1811e-15
+  11.941s  
+  11.941s  step 81
+  11.953s      x force:          2.03338, y force:      1.18042e-14
+  11.953s  
+  11.953s  step 82
+  11.965s      x force:          2.03469, y force:       9.7323e-15
+  11.965s  
+  11.965s  step 83
+  11.976s      x force:          2.03593, y force:     -4.51053e-15
+  11.976s  
+  11.976s  step 84
+  11.988s      x force:          2.03709, y force:     -9.23137e-15
+  11.988s  
+  11.988s  step 85
+  11.999s      x force:          2.03819, y force:      6.13696e-15
+  11.999s  
+  11.999s  step 86
+  12.011s      x force:          2.03923, y force:     -1.89175e-14
+  12.011s  
+  12.011s  step 87
+  12.022s      x force:          2.04022, y force:     -6.99032e-15
+  12.022s  
+  12.022s  step 88
+  12.034s      x force:          2.04115, y force:      1.50258e-14
+  12.034s  
+  12.034s  step 89
+  12.045s      x force:          2.04203, y force:     -2.86349e-15
+  12.045s  
+  12.045s  step 90
+  12.059s      x force:          2.04286, y force:      1.21339e-14
+  12.059s  
+  12.059s  step 91
+  12.069s      x force:          2.04365, y force:      6.40199e-16
+  12.069s  
+  12.069s  step 92
+  12.081s      x force:          2.04439, y force:      7.60991e-15
+  12.081s  
+  12.081s  step 93
+  12.092s      x force:           2.0451, y force:      3.96767e-15
+  12.092s  
+  12.092s  step 94
+  12.104s      x force:          2.04578, y force:       7.0024e-15
+  12.104s  
+  12.104s  step 95
+  12.121s      x force:          2.04642, y force:      1.10525e-14
+  12.121s  
+  12.121s  step 96
+  12.127s      x force:          2.04704, y force:       5.2836e-15
+  12.127s  
+  12.127s  step 97
+  12.138s      x force:          2.04763, y force:      2.61053e-15
+  12.138s  
+  12.138s  step 98
+  12.150s      x force:          2.04819, y force:      7.03437e-17
+  12.150s  
+  12.150s  step 99
+  12.162s      x force:          2.04874, y force:      8.45688e-15
+  12.162s  
+  12.162s  step 100
+  12.173s      x force:          2.04926, y force:      5.44205e-15
+  12.173s  
+  12.173s  step 101
+  12.184s      x force:          2.04977, y force:     -2.22258e-15
+  12.184s  
+  12.184s  step 102
+  12.196s      x force:          2.05026, y force:      1.27805e-14
+  12.196s  
+  12.196s  step 103
+  12.207s      x force:          2.05074, y force:      1.01998e-14
+  12.207s  
+  12.207s  step 104
+  12.219s      x force:          2.05121, y force:      3.60245e-16
+  12.219s  
+  12.219s  step 105
+  12.230s      x force:          2.05166, y force:     -6.97469e-15
+  12.230s  
+  12.230s  step 106
+  12.242s      x force:          2.05211, y force:      -1.5703e-15
+  12.242s  
+  12.242s  step 107
+  12.254s      x force:          2.05255, y force:     -3.18323e-15
+  12.254s  
+  12.254s  step 108
+  12.265s      x force:          2.05299, y force:      3.52074e-15
+  12.265s  
+  12.265s  step 109
+  12.276s      x force:          2.05342, y force:      -1.0418e-14
+  12.276s  
+  12.276s  step 110
+  12.287s      x force:          2.05386, y force:      1.61293e-16
+  12.287s  
+  12.287s  step 111
+  12.302s      x force:          2.05428, y force:     -6.43325e-15
+  12.302s  
+  12.302s  step 112
+  12.311s      x force:          2.05471, y force:     -3.87743e-15
+  12.311s  
+  12.311s  step 113
+  12.322s      x force:          2.05514, y force:      4.97735e-15
+  12.322s  
+  12.322s  step 114
+  12.333s      x force:          2.05557, y force:     -4.98019e-15
+  12.333s  
+  12.333s  step 115
+  12.345s      x force:          2.05601, y force:      1.45576e-14
+  12.345s  
+  12.345s  step 116
+  12.357s      x force:          2.05644, y force:     -3.15907e-15
+  12.357s  
+  12.357s  step 117
+  12.369s      x force:          2.05688, y force:     -7.73568e-15
+  12.369s  
+  12.369s  step 118
+  12.381s      x force:          2.05732, y force:      5.47651e-15
+  12.381s  
+  12.381s  step 119
+  12.391s      x force:          2.05777, y force:      5.22924e-15
+  12.391s  
+  12.391s  step 120
+  12.403s      x force:          2.05822, y force:      5.90177e-15
+  12.403s  
+  12.403s  step 121
+  12.415s      x force:          2.05868, y force:      3.32427e-15
+  12.415s  
+  12.415s  step 122
+  12.426s      x force:          2.05914, y force:      3.88667e-16
+  12.426s  
+  12.426s  step 123
+  12.437s      x force:          2.05961, y force:      1.16962e-14
+  12.437s  
+  12.437s  step 124
+  12.449s      x force:          2.06008, y force:     -7.59037e-15
+  12.449s  
+  12.449s  step 125
+  12.461s      x force:          2.06056, y force:     -1.05739e-14
+  12.461s  
+  12.461s  step 126
+  12.472s      x force:          2.06104, y force:     -4.52971e-15
+  12.472s  
+  12.472s  step 127
+  12.483s      x force:          2.06153, y force:     -8.28457e-15
+  12.483s  
+  12.483s  step 128
+  12.495s      x force:          2.06202, y force:     -7.18323e-15
+  12.495s  
+  12.495s  step 129
+  12.507s      x force:          2.06252, y force:      1.42819e-15
+  12.507s  
+  12.507s  step 130
+  12.518s      x force:          2.06302, y force:     -7.93392e-15
+  12.518s  
+  12.518s  step 131
+  12.530s      x force:          2.06352, y force:      -1.3457e-14
+  12.530s  
+  12.530s  step 132
+  12.544s      x force:          2.06403, y force:     -9.25588e-15
+  12.544s  
+  12.544s  step 133
+  12.553s      x force:          2.06454, y force:       6.4226e-15
+  12.553s  
+  12.553s  step 134
+  12.565s      x force:          2.06506, y force:      1.41526e-14
+  12.565s  
+  12.565s  step 135
+  12.576s      x force:          2.06558, y force:      1.33436e-14
+  12.576s  
+  12.576s  step 136
+  12.587s      x force:          2.06609, y force:     -6.37819e-15
+  12.587s  
+  12.587s  step 137
+  12.605s      x force:          2.06662, y force:      4.60787e-16
+  12.605s  
+  12.605s  step 138
+  12.611s      x force:          2.06714, y force:     -3.51257e-15
+  12.611s  
+  12.611s  step 139
+  12.622s      x force:          2.06766, y force:     -8.42526e-15
+  12.622s  
+  12.622s  step 140
+  12.633s      x force:          2.06818, y force:      1.06816e-14
+  12.633s  
+  12.633s  step 141
+  12.644s      x force:           2.0687, y force:      6.22826e-15
+  12.644s  
+  12.644s  step 142
+  12.656s      x force:          2.06922, y force:     -1.45661e-14
+  12.656s  
+  12.656s  step 143
+  12.668s      x force:          2.06974, y force:      4.49774e-15
+  12.668s  
+  12.668s  step 144
+  12.679s      x force:          2.07025, y force:     -8.42206e-15
+  12.679s  
+  12.679s  step 145
+  12.690s      x force:          2.07076, y force:     -1.25841e-14
+  12.690s  
+  12.690s  step 146
+  12.701s      x force:          2.07127, y force:     -5.48859e-15
+  12.701s  
+  12.701s  step 147
+  12.713s      x force:          2.07178, y force:       2.3892e-15
+  12.713s  
+  12.713s  step 148
+  12.725s      x force:          2.07228, y force:      2.55405e-15
+  12.725s  
+  12.725s  step 149
+  12.736s      x force:          2.07277, y force:     -5.44098e-15
+  12.736s  
+  12.736s  step 150
+  12.747s      x force:          2.07326, y force:     -7.62306e-15
