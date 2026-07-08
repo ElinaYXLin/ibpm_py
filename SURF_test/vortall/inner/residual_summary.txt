@@ -1,0 +1,17 @@
+Residual summary, SURF_test/vortall/inner/data/residuals.csv
+  10001 recorded steps, t in [0.00, 200.00]
+
+  divergence L2   : max over run = 1.234e-18, median = 5.582e-19
+  divergence Linf : max over run = 6.939e-18, median = 6.939e-18
+  no-slip L2      : max over run = 3.168e-15, median = 1.962e-15
+  no-slip Linf    : max over run = 1.605e-14, median = 7.521e-15
+  poisson L2      : max over run = 7.318e-13, median = 6.227e-13
+  poisson Linf    : max over run = 5.463e-12, median = 3.740e-12
+
+  circulation: min=-2.096e+00, max=2.101e+00
+  enstrophy:   min=0.000e+00, max=2.449e+02
+
+  vs. archived vortall.force: max|dCd|=4.999e-06, max|dCl|=4.999e-07
+  (this max is fully explained by vortall.force's own "%.5e" text-print precision -- see output_force.py -- not a real trajectory divergence;
+   diff stays flat at this ceiling for the whole t=0-200 window instead of growing, i.e. this run and the archived one have NOT yet chaotically diverged)
+  |dCd| never exceeds 0.0001 over this run -- no real divergence from the archived trajectory within t=0-200

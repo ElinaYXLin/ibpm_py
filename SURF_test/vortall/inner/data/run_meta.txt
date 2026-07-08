@@ -1,0 +1,6 @@
+nx=450 ny=200 ngrid=1 length=9.0 xoffset=-1.0 yoffset=-2.0
+Re=100.0 dt=0.02 scheme=RK3 boundary_points=160
+nsteps=10000 every=1
+setup_time_s=4.04
+stepping_time_s=340.94
+ms_per_step=34.094
