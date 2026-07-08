@@ -1,0 +1,62 @@
+step,box,call,file,line
+1,Parse CLI arguments,ParmParser(argc argv),py/ibpm.py,166
+2,Build Grid,Grid(nx ny ngrid length xOffset yOffset xShift yShift),py/ibpm.py,280
+2,Build Geometry,geom.load(geomFile),py/ibpm.py,285
+2,Build BaseFlow,BaseFlow(grid magnitude alpha),py/ibpm.py,298
+3,Build model (nonlinear),NavierStokesModel(grid geom Reynolds q_potential),py/ibpm.py,318
+3,Build solver (nonlinear),NonlinearIBSolver(grid model dt schemeType),py/ibpm.py,319
+3,Build model (linear),NavierStokesModel(grid geom Reynolds),py/ibpm.py,324
+3,Build solver (linear),LinearizedIBSolver(grid model dt schemeType x00),py/ibpm.py,325
+3,Build solver (adjoint),AdjointIBSolver(grid model dt schemeType x00),py/ibpm.py,331
+3,Build solver (linearperiodic),LinearizedPeriodicIBSolver(grid model dt schemeType x0 period),py/ibpm.py,341
+3,Build solver (sfd),SFDSolver(grid model dt schemeType Delta chi),py/ibpm.py,347
+3,IBSolver ctor calls createAllSolvers,createAllSolvers(),py/ib_solver.py,104
+3,createAllSolvers loops substeps,createSolver(beta),py/ib_solver.py,141-145
+3,createSolver picks solver type,CholeskySolver or ConjugateGradientSolver,py/ib_solver.py,153-165
+4,Initialize model,model.init() -> regularizer.update(),py/ibpm.py,397
+4,Initialize model,model.init(),py/navier_stokes_model.py,66-72
+4,Load/init solver,solver.load(...) or solver.init()+save(...),py/ibpm.py,400-405
+4,ProjectionSolver per-substep init,IBSolver.init() loops ProjectionSolver.init(),py/ib_solver.py,112-114
+4,Update operators + flux,model.updateOperators(x.time); model.refreshState(x),py/ibpm.py,411-412
+5,Load initial condition,State(grid geom.getNumPoints()); x.load(icFile),py/ibpm.py,363-369
+5,Move bodies to initial time,geom.moveBodies(x.time),py/ibpm.py,394
+6,Setup outputs,"OutputTecplot/OutputRestart/OutputForce/OutputEnergy(...)",py/ibpm.py,417-426
+6,Register outputs,logger.addOutput(output numSkip),py/ibpm.py,432-443
+6,Initial output,logger.init(); logger.doOutput(q_potential x),py/ibpm.py,445-446
+7,Main time-step loop,for i in range(1 numSteps+1):,py/ibpm.py,449
+7,Advance one timestep,solver.advance(x),py/ibpm.py,452
+7,advance() substep loop,for i in range(self._scheme.nsteps()):,py/ib_solver.py,175
+7,Compute nonlinear term (polymorphic),nonlinear = self.N(x),py/ib_solver.py,177
+7,N() -- NonlinearIBSolver,Curl(CrossProduct(x.q x.omega)),py/ib_solver.py,241-244
+7,N() -- LinearizedIBSolver,Curl(CrossProduct(x0.q x.omega)+CrossProduct(x.q x0.omega)),py/ib_solver.py,261-265
+7,N() -- AdjointIBSolver,Laplacian(Curl(CrossProduct(x0.q x.q))) - Curl(CrossProduct(x.q x0.omega)),py/ib_solver.py,282-285
+7,N() -- LinearizedPeriodicIBSolver,as Linearized but indexed by x0periodic[timestep % period],py/ib_solver.py,311-317
+7,N() -- SFDSolver,Curl(CrossProduct(x.q x.omega)) - chi*(x.omega - xhat.omega),py/ib_solver.py,347-352
+7,Advance one substep,advanceSubstep(x nonlinear i),py/ib_solver.py,180
+7,Time-dependent operator update,model.updateOperators(x.time + cn(i)*dt),py/ib_solver.py,187-188
+7,updateOperators moves bodies,geometry.moveBodies(time); regularizer.update(),py/navier_stokes_model.py,110-116
+7,Build RHS a,a = Laplacian(x.omega)*coeffs + coeffs*nonlinear (+bn(i)*Nprev),py/ib_solver.py,191-203
+7,Build RHS b (constraints),b = model.getConstraints(),py/ib_solver.py,206
+7,getConstraints body velocities,geometry.getVelocities() - baseflow boundary velocities,py/navier_stokes_model.py,99-108
+7,Call ProjectionSolver,self._solver[i].solve(a b x.omega x.f),py/ib_solver.py,209
+7,ProjectionSolver.solve entry,solve(a b omega f),py/projection_solver.py,108
+7,Step 1: Ainv,Ainv(a omegaStar) -> HelmholtzSolver.solve,py/projection_solver.py,128
+7,HelmholtzSolver.solve,solve(b y),py/elliptic_solver.py,89-124
+7,Step 2: C,C(omegaStar rhs) -> model.C(omega f),py/projection_solver.py,132
+7,model.C body,computeFluxWithoutBaseFlow + regularizer.toBoundary,py/navier_stokes_model.py,132-143
+7,vorticityToStreamfunction,psi = -omega; poisson.solve(psi psi),py/navier_stokes_model.py,172-183
+7,Step 3: Minv,Minv(rhs f),py/projection_solver.py,134
+7,CholeskySolver.Minv,back-substitute precomputed factorization of M,py/cholesky_solver.py,270-290
+7,ConjugateGradientSolver.Minv,iterate calling M() -> B Ainv C each step,py/conjugate_gradient_solver.py,73-100
+7,Step 4: B,B(f c) -> model.B(f omega),py/projection_solver.py,138
+7,model.B body,regularizer.toFlux(f); Curl(q omega),py/navier_stokes_model.py,122-130
+7,Step 5: Ainv again,Ainv(c c) -> HelmholtzSolver.solve,py/projection_solver.py,139
+7,Step 6: combine,omega.assign(omegaStar - c),py/projection_solver.py,140
+7,Refresh state flux,model.refreshState(x) -> model.computeFlux(x.omega x.q),py/ib_solver.py,212
+7,computeFlux body,computeFluxWithoutBaseFlow(omega q) + baseFlow.getFlux(),py/navier_stokes_model.py,158-166
+7,SFD-only: advance filtered state,integrate _xhat used by N(),py/ib_solver.py,354-386
+7,Advance bookkeeping,x.time += dt; x.timestep += 1,py/ib_solver.py,182-183
+7,Compute net force,x.computeNetForce(),py/ibpm.py,453
+7,Per-step output,logger.doOutput(q_potential x) -> Output.doOutput(...) per registered output,py/ibpm.py,462
+7,SFD periodic checkpoint,SFDsolver.saveFilteredState(outdir name numDigitInFileName),py/ibpm.py,476
+8,Cleanup outputs,logger.cleanup(),py/ibpm.py,480
