@@ -1,0 +1,26 @@
+SD7003 vs. UIUC LSAT experiment (Re_exp=61100, Re_sim=61100)
+py/ibpm.py vs. C++ build/ibpm vs. UIUC LSAT experiment
+
+NOTE on the +/- figures below: these are the std. dev. of the instantaneous
+Cl/Cd trace over the last 60% of each run (this flow genuinely vortex-sheds at
+this Re/resolution, so this is a real oscillation amplitude, not measurement
+noise). The comparison figures in this folder plot the mean only, with no
+error-bar whiskers, to avoid that oscillation-amplitude number being misread as
+a confidence interval the way an experimental error bar would be -- see this
+script's module docstring for the full explanation.
+
+Polar sweep (dx=0.02, nx=300, ny=150):
+   alpha   Cl_exp          Cl_py         Cl_cpp   Cd_exp           Cd_py          Cd_cpp
+   -2.92   -0.147  -0.016±0.159  -0.012±0.159   0.0152   0.0226±0.0185   0.0223±0.0183
+   -0.09    0.108   0.126±0.233   0.140±0.270   0.0131   0.0155±0.0154   0.0122±0.0184
+    1.66    0.368   0.303±0.756   0.336±0.725   0.0130   0.0022±0.0569  -0.0050±0.0579
+    4.60    0.652   0.668±0.561   0.741±0.411   0.0168   0.0821±0.0436   0.0712±0.0376
+    7.72    0.920   0.906±0.523   0.976±0.248   0.0264   0.1401±0.0794   0.1349±0.0332
+
+Grid convergence at alpha=-0.09° (experiment closest alpha=-0.09°, Cl_exp=0.108, Cd_exp=0.0131):
+  dx=0.040 (coarse)  py:  Cl=+0.2246±0.7155  Cd=+0.0109±0.0853  (14s)
+  dx=0.040 (coarse)  cpp: Cl=+0.2502±0.9476  Cd=+0.0123±0.0817  (19s)
+  dx=0.020 (medium)  py:  Cl=+0.1256±0.2333  Cd=+0.0155±0.0154  (39s)
+  dx=0.020 (medium)  cpp: Cl=+0.1400±0.2698  Cd=+0.0122±0.0184  (69s)
+  dx=0.010 (fine  )  py:  Cl=+0.1174±0.2088  Cd=+0.0144±0.0137  (338s)
+  dx=0.010 (fine  )  cpp: Cl=+0.1256±0.1598  Cd=+0.0143±0.0100  (442s)
