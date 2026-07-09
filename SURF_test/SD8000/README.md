@@ -93,3 +93,57 @@ upstream `cwrowley/ibpm`" section for why this noise is expected
 behavior of the unmodified original solver in this configuration
 (`ngrid=1`, Re≈60800), not a porting or formulation bug -- same
 solver/algorithm, same explanation, applies verbatim here.
+
+## Two follow-up questions (and why neither indicates a faulty port)
+
+`new/port_fidelity_diagnostic.png`
+([`../gen_port_fidelity_diagnostic.py`](../gen_port_fidelity_diagnostic.py))
+answers two sharp questions directly from the committed `.force` traces.
+
+**Q1. Why does SD8000 (aerodynamically the easier airfoil) show the same
+chaotic vorticity as SD7003?** Because the broadband vorticity noise is a
+property of **solver + resolution + Reynolds number, not airfoil shape**.
+Both airfoils are run identically: Re≈60000, `ngrid=1` (single-domain,
+least-accurate far-field the method supports), dx=0.02, 2D laminar, no
+transition model, no subgrid dissipation. The grid-scale noise comes from
+the immersed-boundary delta-function regularization + explicit convection
+being under-resolved at this Re — that happens for *any* body in this
+configuration. "Easy" describes SD8000's aerodynamics (clean, attached,
+well-behaved integrated lift), not its numerical resolvability. So SD7003
+is not uniquely "the problem"; both airfoils hit the same wall, which is
+exactly why the caveat is identical for both.
+
+**Q2. At the coarse grid (dx=0.04) the SD8000 time-averaged $C_l$ for
+Python (−0.15) and C++ (+0.85) have opposite signs and are both far from
+experiment (+0.065). Is the port faulty?** No — and the "opposite signs"
+is largely a mirage:
+
+- **The coarse grid is numerically unstable.** The C++ trace ends in a
+  single-step **blow-up to $C_l$ ≈ 1973** at the very last timestep
+  (panel A). That one spike is what drags C++'s windowed mean to +0.85;
+  drop it (1 of 1801 points) and C++'s mean is **−0.24 — the same sign as
+  Python's −0.15.** They were never really "opposite"; a blow-up spike
+  polluted the average.
+- **Even without the spike, the mean is meaningless here:** at dx=0.04 the
+  oscillation std is 8× (py) to 55× (cpp) the mean, i.e. the "mean $C_l$"
+  is the residue of averaging a wildly-oscillating, near-unstable signal.
+  Its exact value — and sign — is set by roundoff-level chaos, so two
+  implementations landing in different places is *expected*, not a bug.
+- **The decisive evidence the port is faithful:** on the **converged fine
+  grid (dx=0.01)**, Python and C++ are **bit-for-bit identical**
+  ($|C_l^{py}-C_l^{cpp}| = 0$ to every digit) for the **first ~1000
+  timesteps** (panels B, C), and only then does the difference grow
+  exponentially from the floating-point floor — the textbook signature of
+  chaotic amplification of last-bit roundoff (from documented
+  summation-order differences, e.g. `np.dot` vs. C++'s sequential sum in
+  `cholesky_solver.py`), identical in mechanism to the vortall case
+  (`../vortall/README.md`). A genuine porting bug (wrong operator, sign,
+  or boundary condition) would disagree **from step 1 and at every
+  resolution, including the converged fine grid** — instead the two codes
+  agree exactly early, and their converged fine-grid means agree to ~6%
+  (py +0.163, cpp +0.154). The port reproduces the reference so faithfully
+  it even nearly blows up the same way on the unstable coarse grid.
+
+Bottom line: the coarse-grid sign flip is an artifact of time-averaging an
+unstable run, not a fault in the port; the port is validated to bit-level
+fidelity wherever the underlying flow is numerically well-posed.
