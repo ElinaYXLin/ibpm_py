@@ -35,31 +35,56 @@ during a run a `CholeskySolver` actually gets constructed or called.
 
 ### 2. `main_execution_flowchart.png` -- hand-traced runtime call sequence
 
-A strict left-to-right layered call graph. **Column 0 is every statement of
-interest in `py/ibpm.py`'s `main()`, top to bottom, in execution order** --
-so "where does `ibpm.py` call into X" is always answered by scanning
-straight down column 0 (e.g. `IBSolver` is reached from the
-`solver.advance(x)` box, `ibpm.py:452`, near the bottom of that column).
-Call depth increases left to right: column 1 is what a column-0 statement
-calls directly, column 2 is what column-1 code calls, and so on, out to
-column 5 (the innermost breakdown of `ProjectionSolver.solve()`). Two
-column-0 statements have real call depth worth expanding --
-"build model + solver" (`ibpm.py:318-347`, fans out into
-`IBSolver.__init__`/`createAllSolvers`/`createSolver`) and
-`solver.advance(x)` (`ibpm.py:452`, fans out into the full substep detail:
-nonlinear term, projection solve, Helmholtz/Poisson solves, state refresh);
-everything else in column 0 is a flat one-line call, so it has no rightward
-branch. This is a judgment call about which calls are "interesting" (it
-does not show every function call, e.g. it collapses `print(...)` progress
-messages and asserts).
+A strict left-to-right layered call graph, now expanded to trace essentially
+every non-trivial call, not just the two big branches ("build model +
+solver" and `solver.advance(x)`) an earlier version stopped at. **Column 0
+is every statement of interest in `py/ibpm.py`'s `main()`, top to bottom,
+in ACTUAL SOURCE ORDER** -- so "where does `ibpm.py` call into X" is always
+answered by scanning straight down column 0. (An earlier version of this
+diagram had `model.updateOperators()`/`model.refreshState()` listed
+*before* the initial-condition load in column 0, which was backwards --
+the source loads the IC and moves the bodies first, *then* initializes the
+model/solver, *then* calls `updateOperators`/`refreshState`; fixed.)
 
-**Every arrow is labeled with the `file:line` of the call site it leaves
-from** (i.e. the line in the *upstream* box's own code where the downstream
-box gets called -- not the line the downstream function is defined on).
-Box text itself is deliberately short (just the call/expression); look at
-the arrow feeding into a box to find out exactly where it's invoked. The
-same citations are also listed in `execution_flow_refs.csv` in execution
-order.
+Call depth increases **strictly** left to right: column 1 is what a
+column-0 statement calls directly, column 2 is what column-1 code calls,
+and so on, out to column 8 in the deepest branches (e.g.
+`model.updateOperators()` -> `geometry.moveBodies()` ->
+`RigidBody.moveBody()`, or `logger.doOutput()` -> each registered
+`Output.doOutput()`). Every call site that reaches into another function is
+expanded at least one layer -- including calls that appear twice at
+different points in the run (`model.updateOperators()`/`model.refreshState()`
+are each shown fully expanded both where `ibpm.py` calls them directly,
+*and* again where `IBSolver.advanceSubstep()` calls them every substep;
+`logger.doOutput()`'s expansion is likewise drawn twice, once for the
+initial pre-loop output and once for the in-loop output, since they're
+different call sites even though they reach the same code). The only
+things left un-expanded are true leaves: plain constructors that don't call
+back into other project code (`ParmParser`, `Grid`, `BaseFlow`), and
+`x.computeNetForce()` (a single vectorized reduction, confirmed by reading
+`state.py`).
+
+**Every rightward arrow is labeled with the `file:line` of the call site it
+leaves from** (i.e. the line in the *upstream* box's own code where the
+downstream box gets called -- not the line the downstream function is
+defined on). Box text itself is deliberately short (just the
+call/expression); look at the arrow feeding into a box to find out exactly
+where it's invoked. **Arrows only ever move left-to-right (a call) or
+straight down within one column (the next statement at the same call
+depth) -- the only backward-pointing arrows in the whole diagram are the
+two explicitly dashed loop-back arrows**, for the two real loops in this
+code (the outer `numSteps` loop and the inner RK/AB2 substep loop). An
+earlier version had a stray backward-pointing arrow for "after all
+substeps: `x.time += dt`" (it was drawn as if it were a deeper call out of
+the substep loop, when it's actually just the next statement in
+`IBSolver.advance()`'s own body after the loop finishes) -- fixed by
+routing it as a straight-down same-column arrow instead.
+
+The same citations are also listed in `execution_flow_refs.csv` in
+execution order (that file predates the full expansion below and covers
+the two original big branches; not every new box has a CSV row yet -- the
+arrow labels in the PNG are the authoritative citation for anything not in
+the CSV).
 
 ## How to check these against the code
 
