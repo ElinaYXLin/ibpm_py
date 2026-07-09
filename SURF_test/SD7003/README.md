@@ -188,3 +188,44 @@ resolution of dx=0.02-0.04 is well below what's needed to cleanly
 resolve it. The *integrated* force coefficients above are far better
 behaved than the *local* vorticity field — trust the polar/convergence
 numbers more than the flow-field snapshots for quantitative claims.
+
+### Confirmed: `src/` (and every other C++ script/demo) is byte-identical to upstream `cwrowley/ibpm`
+
+A mentor question raised whether this vorticity noise indicates a
+mis-formulated/modified solver. Checked directly by cloning
+`https://github.com/cwrowley/ibpm` (upstream, at commit `0af66f4`) and
+diffing against this repo: **`src/` (all 80 files), `examples/*.cc`,
+`examples/cylinder.geom`, `benchmarking/` (including
+`cylinder2PaPlunge.geom`, the malformed-motion-line file noted in
+`SURF_test/vortall/inner/README.md` — confirmed byte-identical to
+upstream, so that parameter mismatch is a pre-existing quirk of the
+*original* repository, not something introduced by this port/fork),
+`test/` (excluding the bundled third-party `gtest` framework),
+`config/make.inc*`, and the top-level `Makefile` are all byte-for-byte
+identical.** The one exception is `build/Makefile`, which was
+reconstructed (see `SURF_test/vortall/README.md`'s "Building the C++
+reference" section — it was missing from this checkout); it differs
+textually from upstream's (wildcard source discovery vs. an explicit
+`OBJS` list, no `.depend` tracking) but compiles the exact same 29
+library source files plus the same two driver programs (`ibpm.cc`,
+`checkgeom.cc`), verified by diffing the object-file lists — so it is
+functionally equivalent, not a behavioral difference. **This means the
+solver actually being run for every C++ number in this repository is,
+without modification, the published `cwrowley/ibpm` code.**
+
+That in turn means the broadband vorticity noise is not attributable to
+anything this port or fork touched. It also matches a limitation the
+*original* code's own manual documents: `doc/ibpm_manual.tex` states
+plainly that "for large domains, it is not practical to use uniform grid
+spacing, so the method ... uses a multi-domain approach" for far-field
+boundary conditions — i.e. `ngrid>1` is the method's intended
+configuration for a domain this size. `run_all_airfoils.py`/
+`run_all_airfoils_cpp.py` run SD7003/SD8000 with `ngrid=1` (a single
+uniform grid over a 6-chord-long domain) at Re≈61100, purely for
+compute-cost reasons — i.e. deliberately in the least-accurate far-field
+configuration this solver supports, well outside the regime its own
+documentation recommends. Combined with dx=0.02-0.04 not resolving this
+Reynolds number's boundary layer, and no explicit subgrid dissipation
+to damp grid-scale noise, broadband vorticity speckle is the expected
+outcome of running this specific (unmodified, correctly-formulated)
+numerical method in this configuration — not evidence of a bug.

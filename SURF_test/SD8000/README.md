@@ -87,4 +87,9 @@ way with `dt=0.005`) — see `SURF_test/rerun_fine_log.txt` (Python) and
 Identical caveat to SD7003: `new/flow_evolution.png` shows the same
 broadband grid-scale noise spreading through the domain at this
 Re/resolution, **in both `py/ibpm.py` and C++ `build/ibpm`** — trust the
-integrated force/convergence numbers over the flow-field snapshots.
+integrated force/convergence numbers over the flow-field snapshots. See
+`../SD7003/README.md`'s "Confirmed: `src/` ... is byte-identical to
+upstream `cwrowley/ibpm`" section for why this noise is expected
+behavior of the unmodified original solver in this configuration
+(`ngrid=1`, Re≈60800), not a porting or formulation bug -- same
+solver/algorithm, same explanation, applies verbatim here.
