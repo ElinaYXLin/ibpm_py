@@ -35,15 +35,31 @@ during a run a `CholeskySolver` actually gets constructed or called.
 
 ### 2. `main_execution_flowchart.png` -- hand-traced runtime call sequence
 
-Traces one actual simulation run through `py/ibpm.py`'s `main()`: argument
-parsing -> building the Grid/Geometry/model/solver -> the initial-condition
-and output setup -> the timestep loop -> `IBSolver.advance()` expanded into
-its full substep detail (nonlinear term, projection solve, Helmholtz/Poisson
-solves, state refresh) -> output/cleanup. This is a judgment call about which
-calls are "interesting" (it does not show every function call, e.g. it
-collapses `print(...)` progress messages and asserts). Every box's citation
-`[file:line]` is real and also listed in `execution_flow_refs.csv` in
-execution order.
+A strict left-to-right layered call graph. **Column 0 is every statement of
+interest in `py/ibpm.py`'s `main()`, top to bottom, in execution order** --
+so "where does `ibpm.py` call into X" is always answered by scanning
+straight down column 0 (e.g. `IBSolver` is reached from the
+`solver.advance(x)` box, `ibpm.py:452`, near the bottom of that column).
+Call depth increases left to right: column 1 is what a column-0 statement
+calls directly, column 2 is what column-1 code calls, and so on, out to
+column 5 (the innermost breakdown of `ProjectionSolver.solve()`). Two
+column-0 statements have real call depth worth expanding --
+"build model + solver" (`ibpm.py:318-347`, fans out into
+`IBSolver.__init__`/`createAllSolvers`/`createSolver`) and
+`solver.advance(x)` (`ibpm.py:452`, fans out into the full substep detail:
+nonlinear term, projection solve, Helmholtz/Poisson solves, state refresh);
+everything else in column 0 is a flat one-line call, so it has no rightward
+branch. This is a judgment call about which calls are "interesting" (it
+does not show every function call, e.g. it collapses `print(...)` progress
+messages and asserts).
+
+**Every arrow is labeled with the `file:line` of the call site it leaves
+from** (i.e. the line in the *upstream* box's own code where the downstream
+box gets called -- not the line the downstream function is defined on).
+Box text itself is deliberately short (just the call/expression); look at
+the arrow feeding into a box to find out exactly where it's invoked. The
+same citations are also listed in `execution_flow_refs.csv` in execution
+order.
 
 ## How to check these against the code
 
