@@ -47,8 +47,12 @@ COL_X = [3.0, 10.5, 18.3, 26.7, 35.2, 43.2]
 COL_W = [6.0, 6.6, 7.2, 7.8, 6.6, 6.2]
 
 
-def box(ax, col, y, lines, edgecolor, h=1.0, fontsize=8.0, facecolor="white",
+def box(ax, col, y, lines, edgecolor, file, h=1.0, fontsize=8.0, facecolor="white",
         linewidth=1.4, zorder=2, style="round,pad=0.02,rounding_size=0.07"):
+    """Draw one flowchart box. `file` is the py/ source file this box's code
+    belongs to; it's rendered as a small tag centered directly above the
+    box's top edge (drawn outside the box, so it never eats into body text
+    or collides with an incoming arrow, which always lands at top-center)."""
     x, w = COL_X[col], COL_W[col]
     b = FancyBboxPatch((x - w / 2, y - h / 2), w, h, boxstyle=style,
                          linewidth=linewidth, edgecolor=edgecolor,
@@ -56,6 +60,10 @@ def box(ax, col, y, lines, edgecolor, h=1.0, fontsize=8.0, facecolor="white",
     ax.add_patch(b)
     ax.text(x, y, "\n".join(lines), ha="center", va="center", fontsize=fontsize,
              color="#222222", zorder=zorder + 1, linespacing=1.25)
+    # file tag: upper-left, outside the box, so it never sits in the path of
+    # a straight vertical incoming arrow (which lands at top-center)
+    ax.text(x - w / 2 + 0.12, y + h / 2 + 0.07, file, ha="left", va="bottom",
+             fontsize=6.3, style="italic", color=edgecolor, zorder=zorder + 1)
     return (x, y, w, h)
 
 
@@ -126,44 +134,45 @@ def main() -> None:
     fig, ax = plt.subplots(figsize=(23, 18))
 
     # ===================== COLUMN 0: ibpm.py main(), in order =====================
+    IBPM = "ibpm.py"
     y = 45.0
-    dy = 1.55
-    n01 = box(ax, 0, y, ["ParmParser(argc, argv)", "[166]"], COLOR_DRIVER)
+    dy = 1.75
+    n01 = box(ax, 0, y, ["ParmParser(argc, argv)", "[166]"], COLOR_DRIVER, IBPM)
     y -= dy
-    n02 = box(ax, 0, y, ["Grid(nx, ny, ngrid, ...)", "[280]"], COLOR_DRIVER)
+    n02 = box(ax, 0, y, ["Grid(nx, ny, ngrid, ...)", "[280]"], COLOR_DRIVER, IBPM)
     y -= dy
-    n03 = box(ax, 0, y, ["geom.load(geomFile)", "[285]"], COLOR_DRIVER)
+    n03 = box(ax, 0, y, ["geom.load(geomFile)", "[285]"], COLOR_DRIVER, IBPM)
     y -= dy
-    n04 = box(ax, 0, y, ["BaseFlow(grid, mag, alpha)", "[298]"], COLOR_DRIVER)
+    n04 = box(ax, 0, y, ["BaseFlow(grid, mag, alpha)", "[298]"], COLOR_DRIVER, IBPM)
     y -= dy
     n05 = box(ax, 0, y, ["Build model + solver", "(branches on -model flag)", "[318-347]"],
-              COLOR_DRIVER, h=1.3)
-    y -= dy - 0.3
-    n06 = box(ax, 0, y, ["model.init()", "[397]"], COLOR_DRIVER)
+              COLOR_DRIVER, IBPM, h=1.3)
+    y -= dy - 0.1
+    n06 = box(ax, 0, y, ["model.init()", "[397]"], COLOR_DRIVER, IBPM)
     y -= dy
     n07 = box(ax, 0, y, ["solver.load(...) or", "solver.init()+save(...)", "[400-405]"],
-              COLOR_DRIVER, h=1.3)
-    y -= dy - 0.15
+              COLOR_DRIVER, IBPM, h=1.3)
+    y -= dy + 0.05
     n08 = box(ax, 0, y, ["model.updateOperators(t);", "model.refreshState(x)", "[411-412]"],
-              COLOR_DRIVER, h=1.3)
-    y -= dy - 0.15
-    n09 = box(ax, 0, y, ["x = State(...); x.load(icFile)", "[363-369]"], COLOR_DRIVER)
+              COLOR_DRIVER, IBPM, h=1.3)
+    y -= dy + 0.05
+    n09 = box(ax, 0, y, ["x = State(...); x.load(icFile)", "[363-369]"], COLOR_DRIVER, IBPM)
     y -= dy
-    n10 = box(ax, 0, y, ["geom.moveBodies(x.time)", "[394]"], COLOR_DRIVER)
+    n10 = box(ax, 0, y, ["geom.moveBodies(x.time)", "[394]"], COLOR_DRIVER, IBPM)
     y -= dy
     n11 = box(ax, 0, y, ["Register outputs w/ Logger;", "logger.init()/doOutput(...)", "[417-446]"],
-              COLOR_DRIVER, h=1.3)
-    y -= dy + 0.25
-    n12 = box(ax, 0, y, ["for i in 1..numSteps:", "[449]"], COLOR_DRIVER, facecolor="#fdf2ef")
+              COLOR_DRIVER, IBPM, h=1.3)
+    y -= dy + 0.35
+    n12 = box(ax, 0, y, ["for i in 1..numSteps:", "[449]"], COLOR_DRIVER, IBPM, facecolor="#fdf2ef")
     y -= dy
-    n13 = box(ax, 0, y, ["solver.advance(x)", "[452]"], COLOR_SOLVER, facecolor="#f5eefb")
+    n13 = box(ax, 0, y, ["solver.advance(x)", "[452]"], COLOR_SOLVER, IBPM, facecolor="#f5eefb")
     y -= dy
-    n14 = box(ax, 0, y, ["x.computeNetForce()", "[453]"], COLOR_DRIVER)
+    n14 = box(ax, 0, y, ["x.computeNetForce()", "[453]"], COLOR_DRIVER, IBPM)
     y -= dy
-    n15 = box(ax, 0, y, ["logger.doOutput(q_potential, x)", "[462]"], COLOR_DRIVER)
+    n15 = box(ax, 0, y, ["logger.doOutput(q_potential, x)", "[462]"], COLOR_DRIVER, IBPM)
     n15_loop_bottom = y
-    y -= dy + 0.3
-    n16 = box(ax, 0, y, ["logger.cleanup()", "[480]"], COLOR_DRIVER)
+    y -= dy + 0.4
+    n16 = box(ax, 0, y, ["logger.cleanup()", "[480]"], COLOR_DRIVER, IBPM)
 
     for p, q in [(n01, n02), (n02, n03), (n03, n04), (n04, n05), (n05, n06),
                  (n06, n07), (n07, n08), (n08, n09), (n09, n10), (n10, n11),
@@ -173,71 +182,81 @@ def main() -> None:
     loop_arrow(ax, n15, n12, COLOR_DRIVER, x_offset=-1.6, label="repeat\nnumSteps\ntimes")
 
     # ===================== BRANCH A: n05 "build model + solver" =====================
-    a1 = box(ax, 1, n05[1] + 0.85, ["NavierStokesModel", "(grid, geom, Re[, q_potential])"],
-             COLOR_MODEL, h=1.0, fontsize=7.6)
-    a2 = box(ax, 1, n05[1] - 0.85, ["<Solver>(grid, model, dt,", "scheme, ...) -- Nonlinear/", "Linearized/Adjoint/Periodic/SFD"],
-             COLOR_SOLVER, h=1.25, fontsize=7.3)
+    NSM = "navier_stokes_model.py"
+    IBS = "ib_solver.py"
+    PROJ = "projection_solver.py"
+    CHOL_CG = "cholesky_solver.py | conjugate_gradient_solver.py"
+
+    a1 = box(ax, 1, n05[1] + 0.9, ["NavierStokesModel", "(grid, geom, Re[, q_potential])"],
+             COLOR_MODEL, NSM, h=1.0, fontsize=7.6)
+    a2 = box(ax, 1, n05[1] - 0.9, ["<Solver>(grid, model, dt,", "scheme, ...) -- Nonlinear/", "Linearized/Adjoint/Periodic/SFD"],
+             COLOR_SOLVER, IBS, h=1.25, fontsize=7.3)
     call_arrow(ax, n05, a1, "318/324/\n330/340/346")
     call_arrow(ax, n05, a2, "319/325/\n331/341/347")
 
     a3 = box(ax, 2, a2[1], ["IBSolver.__init__", "-> self.createAllSolvers()"], COLOR_SOLVER,
-             h=1.0, fontsize=7.4)
+             IBS, h=1.0, fontsize=7.4)
     call_arrow(ax, a2, a3, "84-104")
 
     a4 = box(ax, 3, a2[1], ["createAllSolvers(): loop substeps", "-> createSolver(beta)"], COLOR_SOLVER,
-             h=1.0, fontsize=7.4)
+             IBS, h=1.0, fontsize=7.4)
     call_arrow(ax, a3, a4, "104")
 
     a5 = box(ax, 4, a2[1], ["CholeskySolver (stationary)", "ConjugateGradientSolver (moving)"],
-             COLOR_LOWLEVEL, h=1.0, fontsize=7.4)
+             COLOR_LOWLEVEL, CHOL_CG, h=1.0, fontsize=7.4)
     call_arrow(ax, a4, a5, "141-165")
 
     # ===================== BRANCH B: n13 "solver.advance(x)" =====================
     b1_y = n13[1]
-    b1 = box(ax, 1, b1_y, ["IBSolver.advance(x)"], COLOR_SOLVER, h=0.9, fontsize=7.8)
+    b1 = box(ax, 1, b1_y, ["IBSolver.advance(x)"], COLOR_SOLVER, IBS, h=0.9, fontsize=7.8)
     call_arrow(ax, n13, b1, "452", color=COLOR_SOLVER, lw=1.8, mutation_scale=15)
 
     b2 = box(ax, 2, b1_y, ["for i in range(nsteps):", "nonlinear = self.N(x)"], COLOR_SOLVER,
-             h=1.0, fontsize=7.5)
+             IBS, h=1.0, fontsize=7.5)
     call_arrow(ax, b1, b2, "175,177", color=COLOR_SOLVER)
 
-    b3 = box(ax, 3, b1_y + 1.35,
+    b3 = box(ax, 3, b1_y + 1.45,
              ["N(x) polymorphic override:", "Nonlinear: Curl(Cross(q,ω))  [241]",
               "Linearized: Curl(Cross(q0,ω)+Cross(q,ω0))  [261]",
               "Adjoint: Lap(Curl(Cross(q0,q)))-Curl(Cross(q,ω0))  [282]",
               "Periodic: as Linearized, ω0->ω0periodic[k]  [311]",
               "SFD: as Nonlinear, - chi*(ω-ωhat)  [347]"],
-             COLOR_NOTE, h=2.5, fontsize=6.7)
+             COLOR_NOTE, IBS, h=2.5, fontsize=6.7)
     call_arrow(ax, b2, b3, "177", color=COLOR_SOLVER, rad=0.12)
 
-    b4 = box(ax, 3, b1_y - 1.35, ["advanceSubstep(x, nonlinear, i)"], COLOR_SOLVER, h=0.9, fontsize=7.6)
+    b4 = box(ax, 3, b1_y - 1.45, ["advanceSubstep(x, nonlinear, i)"], COLOR_SOLVER, IBS, h=0.9, fontsize=7.6)
     call_arrow(ax, b2, b4, "180", color=COLOR_SOLVER, rad=-0.12)
 
-    b5 = box(ax, 4, b1_y + 1.55, ["if isTimeDependent():", "model.updateOperators(t)"], COLOR_MODEL,
-             h=1.0, fontsize=7.3)
+    b5 = box(ax, 4, b1_y + 1.65, ["if isTimeDependent():", "model.updateOperators(t)"], COLOR_SOLVER,
+             IBS, h=1.0, fontsize=7.3)
     call_arrow(ax, b4, b5, "187-188", color=COLOR_SOLVER, rad=0.28)
 
-    b6 = box(ax, 4, b1_y + 0.15,
+    b6 = box(ax, 4, b1_y + 0.2,
              ["a = Laplacian(ω)*coef", "+ coef*nonlinear (+bn*Nprev)"], COLOR_SOLVER,
-             h=1.0, fontsize=7.3)
+             IBS, h=1.0, fontsize=7.3)
     call_arrow(ax, b4, b6, "191-203", color=COLOR_SOLVER, rad=0.1)
 
-    b7 = box(ax, 4, b1_y - 1.15, ["b = model.getConstraints()"], COLOR_MODEL, h=0.85, fontsize=7.3)
+    b7 = box(ax, 4, b1_y - 1.25, ["b = model.getConstraints()"], COLOR_SOLVER, IBS, h=0.85, fontsize=7.3)
     call_arrow(ax, b4, b7, "206", color=COLOR_SOLVER, rad=-0.1)
 
-    b8 = box(ax, 4, b1_y - 2.35, ["self._solver[i].solve(", "a, b, x.omega, x.f)"], COLOR_PROJ,
-             h=1.0, fontsize=7.3)
+    b8 = box(ax, 4, b1_y - 2.5, ["self._solver[i].solve(", "a, b, x.omega, x.f)"], COLOR_SOLVER,
+             IBS, h=1.0, fontsize=7.3)
     call_arrow(ax, b4, b8, "209", color=COLOR_SOLVER, rad=-0.28)
 
-    b9 = box(ax, 4, b1_y - 3.7, ["model.refreshState(x)"], COLOR_MODEL, h=0.85, fontsize=7.3)
+    b9 = box(ax, 4, b1_y - 3.9, ["model.refreshState(x)"], COLOR_SOLVER, IBS, h=0.85, fontsize=7.3)
     call_arrow(ax, b4, b9, "212", color=COLOR_SOLVER, rad=-0.36)
 
-    b_sfd = box(ax, 4, b1_y - 4.85, ["[SFDSolver only] also", "integrates filtered state ωhat"],
-                COLOR_NOTE, h=1.0, fontsize=7.0)
+    b_sfd = box(ax, 4, b1_y - 5.1, ["[SFDSolver only] also", "integrates filtered state ωhat"],
+                COLOR_NOTE, IBS, h=1.0, fontsize=7.0)
     call_arrow(ax, b4, b_sfd, "354-386", color=COLOR_SOLVER, rad=-0.42)
 
-    # ProjectionSolver.solve() breakdown -- one layer deeper than b8
-    c_y = b8[1] + 1.85
+    # ProjectionSolver.solve() breakdown -- one layer deeper than b8. All six
+    # steps below are sequential lines inside ProjectionSolver.solve() itself
+    # (projection_solver.py), even though several delegate out to
+    # NavierStokesModel/HelmholtzSolver/CholeskySolver -- the "->" in each
+    # box's text names that delegate, but the line cited on the arrow (and
+    # the box's own file tag) is always projection_solver.py's.
+    c_y = b8[1] + 2.05
     c_labels_lines = [
         (["Ainv(a,ω*) ->", "HelmholtzSolver.solve"], "128"),
         (["C(ω*,rhs) -> model.C:", "Poisson.solve+Curl+toBoundary"], "132"),
@@ -246,15 +265,13 @@ def main() -> None:
         (["Ainv(c,c) ->", "HelmholtzSolver.solve"], "139"),
         (["ω.assign(ω* - c)"], "140"),
     ]
-    prev_c = None
     for lines, lbl in c_labels_lines:
-        cc = box(ax, 5, c_y, lines, COLOR_LOWLEVEL if "solve" in lines[0] or "Ainv" in lines[0] or "Minv" in lines[0] else COLOR_PROJ,
-                 h=0.95, fontsize=6.7)
+        cc = box(ax, 5, c_y, lines, COLOR_PROJ, PROJ, h=0.95, fontsize=6.7)
         call_arrow(ax, b8, cc, lbl, color=COLOR_PROJ, rad=0.0, fontsize=6.3, label_frac=0.4)
-        c_y -= 1.15
+        c_y -= 1.35
 
-    b10 = box(ax, 2, b1_y - 6.6, ["after all substeps:", "x.time += dt; x.timestep += 1"],
-              COLOR_SOLVER, h=1.0, fontsize=7.4)
+    b10 = box(ax, 2, b1_y - 7.2, ["after all substeps:", "x.time += dt; x.timestep += 1"],
+              COLOR_SOLVER, IBS, h=1.0, fontsize=7.4)
     call_arrow(ax, b2, b10, "182-183\n(after loop)", color=COLOR_SOLVER, rad=0.0, lw=1.0)
     loop_arrow(ax, b4, b2, COLOR_SOLVER, x_offset=1.55, label="repeat per\nsubstep i", fontsize=6.5)
 
