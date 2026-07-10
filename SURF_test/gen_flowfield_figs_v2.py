@@ -2,14 +2,14 @@
 gen_flowfield_figs_v2.py
 
 C++-vs-Python version of gen_flowfield_figs.py's vorticity evolution
-montage (original output now lives in SD7003/old, SD8000/old): same 7
+montage (original output now lives in SD7003/1-orig, SD8000/1-orig): same 7
 snapshots (t=0..30), but with a C++ build/ibpm row added underneath the
 py/ibpm.py row for a direct visual comparison, both read from their own
 _run_data{,_cpp}/flowfield/ restart files (see run_flowfield.py /
 run_flowfield_cpp.py).
 
 Usage: python3 SURF_test/gen_flowfield_figs_v2.py
-Output: SURF_test/{SD7003,SD8000}/new/flow_evolution.png
+Output: SURF_test/{SD7003,SD8000}/2-c++included/flow_evolution.png
 """
 import sys, types, pathlib
 import numpy as np
@@ -74,7 +74,7 @@ def draw_field(ax, field, title, airfoil_pts, alpha_deg):
 
 
 for name, cfg in CASES.items():
-    outdir = REPO / "SURF_test" / name / "new"
+    outdir = REPO / "SURF_test" / name / "2-c++included"
     outdir.mkdir(parents=True, exist_ok=True)
     py_rundir = REPO / "SURF_test" / name / "_run_data" / "flowfield"
     cpp_rundir = REPO / "SURF_test" / name / "_run_data_cpp" / "flowfield"

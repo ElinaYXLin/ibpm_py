@@ -1,0 +1,1 @@
+py.ibpm -name run -outdir /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/SD7003/_run_data_smalldt -tecplot 0 -restart 200 -force 1 -nx 300 -ny 150 -ngrid 1 -length 6.0 -xoffset -2.0 -yoffset -1.5 -alpha -0.09 -geom /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/geom/sd7003_dx0.0200.geom -Re 61100.0 -dt 0.001 -nsteps 2000

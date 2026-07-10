@@ -8,9 +8,9 @@ tested at UIUC. All figures/numbers here are generated purely by
 `py/ibpm.py` output and the `.DRG`/`.LFT` reference files in
 `SURF_test/SD7003/` — nothing is hand-drawn or AI-generated.
 
-## `new/` vs. `old/`
+## `2-c++included/` vs. `1-orig/`
 
-- **`new/`** — current figures. Three-way comparison
+- **`2-c++included/`** — current figures. Three-way comparison
   (`py/ibpm.py` vs. this repo's **C++ reference build**, `build/ibpm`, vs.
   the UIUC LSAT experiment) instead of the original two-way comparison, and
   **no error-bar whiskers** (see "About the error bars" below for why, and
@@ -21,14 +21,83 @@ tested at UIUC. All figures/numbers here are generated purely by
   [`../run_flowfield_cpp.py`](../run_flowfield_cpp.py) for the new C++ runs
   (Python-side data is unchanged, from the same `run_all_airfoils.py` /
   `run_flowfield.py` runs as before).
-- **`old/`** — the original two-way (Python vs. experiment only), error-barred
+- **`1-orig/`** — the original two-way (Python vs. experiment only), error-barred
   figures, kept for the record. Everything said about them below in
-  "Results"/"Limitations" still applies to their `new/` counterparts, plus
+  "Results"/"Limitations" still applies to their `2-c++included/` counterparts, plus
   now-added C++ agreement/disagreement notes.
+- **`3-small_dt/`** — a much-smaller-timestep (dt=0.001, 10x smaller than
+  the dt=0.01 used everywhere else in this directory) Python-vs-C++
+  validation, run *after* `py/elliptic_solver_2d.py` was changed to call
+  the real FFTW3 library (see "Port now calls the real FFTW3 library"
+  below). See that section for what's in this folder and why.
 
-## About the error bars (removed from `new/` -- what they meant)
+## Port now calls the real FFTW3 library (FFTW_EXHAUSTIVE), not scipy.fft
 
-The original figures (`old/`) plotted mean ± 1 std. dev. of the
+Per a mentor request, for full authenticity `py/elliptic_solver_2d.py` no
+longer uses `scipy.fft.dstn` for its discrete sine transform (DST-I /
+`FFTW_RODFT00`). It now calls the *actual* FFTW3 C library — the same one
+`build/ibpm` links against — via a small C shim
+([`py/_fftw_dst_shim.c`](../../py/_fftw_dst_shim.c), built on first use by
+[`py/_fftw_native.py`](../../py/_fftw_native.py)), issuing the exact same
+`fftw_plan_r2r_2d(..., FFTW_RODFT00, FFTW_RODFT00, FFTW_EXHAUSTIVE)` call
+`src/EllipticSolver2d.cc`'s constructor does. `FFTW_EXHAUSTIVE` means FFTW
+actually times every sine-transform algorithm ("codelet") it knows for the
+exact problem size and keeps whichever measured fastest on this machine —
+a real search, not a heuristic pick — and does this once per elliptic
+solver instance (matching the C++ `_FFTWPlan` member's lifetime: built in
+the constructor, reused for every solve, destroyed with the object).
+
+**This is intentionally slower for short/small runs** — the exhaustive
+search itself (~8s at the coarse dx=0.04 grid, ~20s at the production
+dx=0.02 grid, per solver instance; there are 4 instances per run: one
+`PoissonSolver` plus one `HelmholtzSolver` per RK3 substep) can dominate
+total wall-clock time for a short run, exactly as it does for the C++
+reference build. That tradeoff was accepted deliberately, for fidelity to
+`src/EllipticSolver2d.cc` over speed. See `py/elliptic_solver_2d.py`'s
+port-notes header for the full rationale, including why this does *not*
+fall back to scipy silently if FFTW3 isn't available on a machine.
+
+### `3-small_dt/` -- validating the change
+
+[`../run_small_dt_validation.py`](../run_small_dt_validation.py) runs both
+`py/ibpm.py` (now native-FFTW) and `build/ibpm` at the production grid
+(dx=0.02, nx=300, ny=150) but at dt=0.001 (10x smaller than the dt=0.01
+used for the polar sweep/convergence study above), writing restart
+snapshots every 200 steps. [`../gen_small_dt_report.py`](../gen_small_dt_report.py)
+then compares them two ways:
+
+- `small_dt_force_comparison.png` — $C_d(t)$, $C_l(t)$ overlaid, plus their
+  pointwise difference on a log scale (the same style of check used in
+  `2-c++included/port_fidelity_diagnostic.png`, now at 10x finer time
+  resolution).
+- `small_dt_field_comparison.png` / `small_dt_field_diff_summary.txt` —
+  **"intercepting intermediate values"**: rather than only comparing the
+  two integrated force numbers per step, this loads the actual vorticity
+  and flux *fields* both implementations wrote to their restart snapshots
+  and computes the pointwise max/RMS difference directly on the full
+  field, at every snapshot — a much stronger check than the force trace
+  alone, since two very different internal states could in principle
+  average to similar forces.
+
+**Result**: over the whole run (t=0 to 2.0), `|ΔCd|` and `|ΔCl|` never
+exceed 1e-18 (i.e. `max = 0.0` exactly — literally bit-for-bit identical
+force output at every recorded step), and the field-level difference stays
+at floating-point-roundoff level throughout: max `|Δω|` grows from 0 to
+only ~3e-11 (vs. a peak vorticity magnitude of ~170 — a relative
+difference of ~2e-13) by t=2, and max `|Δq|` similarly stays at ~1e-15.
+This is the strongest fidelity evidence in this whole test suite: with the
+Python port now using the identical FFTW3 planner/library C++ uses, the
+two implementations don't just agree in aggregate statistics — their full
+internal field state stays effectively identical for as long as this
+window covers (the chaotic divergence documented elsewhere in this
+directory needs the physical time this short, small-dt window doesn't
+reach; see `2-c++included/port_fidelity_diagnostic.png`, panel C, for
+where that divergence eventually shows up at the coarser dt this suite
+otherwise uses).
+
+## About the error bars (removed from `2-c++included/` -- what they meant)
+
+The original figures (`1-orig/`) plotted mean ± 1 std. dev. of the
 instantaneous `Cl`/`Cd` trace over the averaging window as an error-bar
 whisker. **That std. dev. is real** — this flow genuinely vortex-sheds and
 oscillates at this Re/resolution (see "Why the run needed to go out to
@@ -42,8 +111,8 @@ time-average of a periodic/quasi-periodic signal); the ± number is the
 *amplitude of that signal's own oscillation* around its mean, not a
 statement about how well the mean is known. Plotting it as a whisker
 conflates "this simulation is unsteady" with "this simulation is uncertain,"
-which are different claims. `new/`'s figures therefore plot the mean only;
-the std. dev. numbers are preserved in full in `new/summary.txt` for anyone
+which are different claims. `2-c++included/`'s figures therefore plot the mean only;
+the std. dev. numbers are preserved in full in `2-c++included/summary.txt` for anyone
 who wants the oscillation-amplitude information, just not drawn as a whisker.
 
 ## Data provenance (confirmed online)
@@ -101,16 +170,16 @@ resolution (more points at finer `dx`); see `SURF_test/geom/`.
 
 ## Files
 
-`new/` (current, 3-way, no error bars) and `old/` (original, 2-way,
+`2-c++included/` (current, 3-way, no error bars) and `1-orig/` (original, 2-way,
 error-barred) each contain:
 
 | File | What it is |
 |---|---|
-| `polar_comparison.png` | $C_l(\alpha)$, $C_d(\alpha)$: `py/ibpm.py` (dx=0.02) [+ C++ `build/ibpm` in `new/`] vs. UIUC LSAT experiment. |
+| `polar_comparison.png` | $C_l(\alpha)$, $C_d(\alpha)$: `py/ibpm.py` (dx=0.02) [+ C++ `build/ibpm` in `2-c++included/`] vs. UIUC LSAT experiment. |
 | `drag_polar.png` | Same data as a $C_l$-$C_d$ drag polar. |
 | `grid_convergence.png` | $C_l$, $C_d$ at fixed $\alpha=-0.09°$ across dx = 0.04, 0.02, 0.01, vs. the experimental value at that $\alpha$. |
-| `flow_evolution.png` | Vorticity field snapshots (t=0 to 30) at $\alpha=4.6°$, Re=61100, dx=0.02, from impulsive start (`new/` adds a second row for C++). |
-| `summary.txt` | Numeric table backing the comparison figures (`new/`'s also has the C++ columns and the still-computed but no-longer-plotted std. dev. numbers). |
+| `flow_evolution.png` | Vorticity field snapshots (t=0 to 30) at $\alpha=4.6°$, Re=61100, dx=0.02, from impulsive start (`2-c++included/` adds a second row for C++). |
+| `summary.txt` | Numeric table backing the comparison figures (`2-c++included/`'s also has the C++ columns and the still-computed but no-longer-plotted std. dev. numbers). |
 
 Also at the top level: `_run_data/` (Python) and `_run_data_cpp/` (C++, new)
 — per-case `.force`/`.cmd`/log files (raw `.bin` restarts deleted after
@@ -121,17 +190,17 @@ figure generation to save space, except `flowfield/` which backs
 
 **Lift matches well, for both implementations.** $C_l(\alpha)$ tracks the
 experimental polar closely across the whole tested range (-2.9° to 7.7°) for
-both `py/ibpm.py` and the C++ reference build — see `new/polar_comparison.png`,
+both `py/ibpm.py` and the C++ reference build — see `2-c++included/polar_comparison.png`,
 left panel. This is the headline result: a faithful 2D immersed-boundary
 Navier-Stokes solver, on a fairly coarse grid, reproduces the *integrated*
 lift of a real cambered airfoil to good engineering accuracy, and the two
 independent implementations agree with each other as closely as either
-agrees with experiment (see `new/summary.txt` for the per-$\alpha$ numbers).
+agrees with experiment (see `2-c++included/summary.txt` for the per-$\alpha$ numbers).
 
 **Drag is systematically overpredicted at higher $\alpha$, by both
 implementations, by a similar amount** (e.g. at $\alpha=7.72°$: py
 $C_d=0.140$, cpp $C_d=0.135$, both vs. exp $C_d=0.026$ — see
-`new/summary.txt`) — see `polar_comparison.png`, right panel, and
+`2-c++included/summary.txt`) — see `polar_comparison.png`, right panel, and
 `drag_polar.png`. This is
 a real, physically-explainable effect, not noise: $C_d$ is dominated
 by viscous/pressure drag from the (thin, low-Re) boundary layer and
@@ -143,13 +212,13 @@ any separation, and:
    separation extent (hence pressure drag) once loading increases.
 2. The std. dev. of the unsteady force trace is large at higher $\alpha$
    for both implementations (e.g. py ±0.079, cpp ±0.033 at 7.72° — see
-   `new/summary.txt`), showing the simulated flow is **genuinely far
+   `2-c++included/summary.txt`), showing the simulated flow is **genuinely far
    more unsteady** than the real (quasi-steady, LSB-stabilized)
    wind-tunnel flow — consistent with under-resolved transition physics.
    (These figures are no longer drawn as error-bar whiskers on the plots
    themselves — see "About the error bars" above for why.)
 
-**Grid convergence (`new/grid_convergence.png`)**: at the mild angle
+**Grid convergence (`2-c++included/grid_convergence.png`)**: at the mild angle
 $\alpha=-0.09°$, both $C_l$ and $C_d$ converge — for both `py/ibpm.py`
 *and* C++ `build/ibpm` — monotonically toward the experimental value as
 `dx` shrinks from 0.04 to 0.01, **and the unsteadiness (std. dev.) shrinks
@@ -157,7 +226,7 @@ by roughly 3-6x over the same range** for both implementations (py $C_l$
 std: 0.72 → 0.23 → 0.21; cpp $C_l$ std: 0.95 → 0.27 → 0.16, coarse to fine)
 — direct evidence, now doubly confirmed by an independent implementation,
 that much of the coarse-grid disagreement is a resolution artifact, not a
-fundamental modeling error. Full numbers in `new/summary.txt`.
+fundamental modeling error. Full numbers in `2-c++included/summary.txt`.
 
 **The finest grid level (dx=0.01) diverged to `NaN` at the polar
 sweep's `dt=0.01`, in BOTH implementations** — a real CFL-type finding
@@ -175,7 +244,7 @@ start rather than as a follow-up rerun).
 
 ## Limitations (read before quoting these numbers)
 
-The vorticity field itself (`new/flow_evolution.png`) shows **broadband,
+The vorticity field itself (`2-c++included/flow_evolution.png`) shows **broadband,
 grid-scale-speckled noise spreading through the whole domain**,
 including regions far from the body/wake that should be undisturbed
 uniform flow — **in both `py/ibpm.py` (top row) and C++ `build/ibpm`

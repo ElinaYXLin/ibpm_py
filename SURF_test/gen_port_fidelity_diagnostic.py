@@ -38,7 +38,7 @@ airfoils and both implementations; the coarse-grid sign flip is an unstable-
 run averaging artifact, not evidence of a bug.
 
 Usage:  python3 SURF_test/gen_port_fidelity_diagnostic.py
-Output: SURF_test/SD8000/new/port_fidelity_diagnostic.png
+Output: SURF_test/SD8000/2-c++included/port_fidelity_diagnostic.png
 """
 import pathlib
 import numpy as np
@@ -56,7 +56,7 @@ def load(p):
 
 
 def main():
-    outdir = SD8 / "new"
+    outdir = SD8 / "2-c++included"
     outdir.mkdir(parents=True, exist_ok=True)
 
     # coarse (unstable) and fine (converged) traces

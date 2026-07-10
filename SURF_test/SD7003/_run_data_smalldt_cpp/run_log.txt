@@ -1,0 +1,6059 @@
+Immersed Boundary Projection Method (IBPM), version 1.0
+
+Command:
+/Users/elina/Desktop/SURF2026/ibpm_py-main/build/ibpm -name run -outdir /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/SD7003/_run_data_smalldt_cpp -tecplot 0 -restart 200 -force 1 -nx 300 -ny 150 -ngrid 1 -length 6 -xoffset -2 -yoffset -1.5 -alpha -0.09 -geom /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/geom/sd7003_dx0.0200.geom -Re 61100 -dt 0.001 -nsteps 2000
+
+Run name: run
+
+Grid parameters:
+    nx      300
+    ny      150
+    ngrid   1
+    length  6
+    xoffset -2
+    yoffset -1.5
+    xshift  0
+    yshift  0
+
+Reading geometry from file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/geom/sd7003_dx0.0200.geom
+    101 points on the boundary
+
+Reynolds number = 61100
+
+Setting up Immersed Boundary Solver...Using Cholesky solver for projection step
+Using Cholesky solver for projection step
+Using Cholesky solver for projection step
+Using zero initial condition
+using 3rd-order Runge Kutta (3-step) timestepper
+    dt = 0.001
+
+Loading Cholesky factorization from file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/SD7003/_run_data_smalldt_cpp/run_01.cholesky...(failed: could not open file)
+Loading Cholesky factorization from file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/SD7003/_run_data_smalldt_cpp/run_02.cholesky...(failed: could not open file)
+Loading Cholesky factorization from file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/SD7003/_run_data_smalldt_cpp/run_03.cholesky...(failed: could not open file)
+Computing the matrix for Cholesky factorization...done
+Computing Cholesky factorization...done
+Computing the matrix for Cholesky factorization...done
+Computing Cholesky factorization...done
+Computing the matrix for Cholesky factorization...done
+Computing Cholesky factorization...done
+Saving Cholesky factorization to file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/SD7003/_run_data_smalldt_cpp/run_01.cholesky...done
+Saving Cholesky factorization to file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/SD7003/_run_data_smalldt_cpp/run_02.cholesky...done
+Saving Cholesky factorization to file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/SD7003/_run_data_smalldt_cpp/run_03.cholesky...done
+
+Initial timestep = 0
+
+Writing restart file every 200 step(s)
+Writing forces every 1 step(s)
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/SD7003/_run_data_smalldt_cpp/run00000.bin...done
+Integrating for 2000 steps
+
+step 1
+    x force:       0.00518381, y force:        0.0244179
+
+step 2
+    x force:       0.00573723, y force:        0.0251132
+
+step 3
+    x force:       0.00659232, y force:        0.0261883
+
+step 4
+    x force:       0.00744187, y force:        0.0272789
+
+step 5
+    x force:       0.00828545, y force:        0.0283841
+
+step 6
+    x force:       0.00912263, y force:        0.0295034
+
+step 7
+    x force:       0.00995301, y force:        0.0306361
+
+step 8
+    x force:        0.0107762, y force:        0.0317814
+
+step 9
+    x force:        0.0115918, y force:        0.0329385
+
+step 10
+    x force:        0.0123994, y force:        0.0341067
+
+step 11
+    x force:        0.0131987, y force:        0.0352853
+
+step 12
+    x force:        0.0139893, y force:        0.0364732
+
+step 13
+    x force:        0.0147708, y force:        0.0376698
+
+step 14
+    x force:        0.0155429, y force:         0.038874
+
+step 15
+    x force:        0.0163053, y force:        0.0400851
+
+step 16
+    x force:        0.0170576, y force:        0.0413021
+
+step 17
+    x force:        0.0177996, y force:         0.042524
+
+step 18
+    x force:        0.0185309, y force:          0.04375
+
+step 19
+    x force:        0.0192513, y force:         0.044979
+
+step 20
+    x force:        0.0199604, y force:        0.0462101
+
+step 21
+    x force:         0.020658, y force:        0.0474423
+
+step 22
+    x force:        0.0213438, y force:        0.0486748
+
+step 23
+    x force:        0.0220176, y force:        0.0499064
+
+step 24
+    x force:        0.0226792, y force:        0.0511363
+
+step 25
+    x force:        0.0233282, y force:        0.0523635
+
+step 26
+    x force:        0.0239646, y force:        0.0535871
+
+step 27
+    x force:         0.024588, y force:        0.0548063
+
+step 28
+    x force:        0.0251983, y force:        0.0560201
+
+step 29
+    x force:        0.0257954, y force:        0.0572277
+
+step 30
+    x force:         0.026379, y force:        0.0584283
+
+step 31
+    x force:        0.0269489, y force:        0.0596212
+
+step 32
+    x force:        0.0275052, y force:        0.0608057
+
+step 33
+    x force:        0.0280476, y force:         0.061981
+
+step 34
+    x force:        0.0285759, y force:        0.0631466
+
+step 35
+    x force:        0.0290903, y force:        0.0643019
+
+step 36
+    x force:        0.0295904, y force:        0.0654465
+
+step 37
+    x force:        0.0300763, y force:        0.0665798
+
+step 38
+    x force:         0.030548, y force:        0.0677016
+
+step 39
+    x force:        0.0310053, y force:        0.0688115
+
+step 40
+    x force:        0.0314484, y force:        0.0699093
+
+step 41
+    x force:         0.031877, y force:        0.0709947
+
+step 42
+    x force:        0.0322914, y force:        0.0720678
+
+step 43
+    x force:        0.0326915, y force:        0.0731285
+
+step 44
+    x force:        0.0330773, y force:        0.0741769
+
+step 45
+    x force:         0.033449, y force:        0.0752129
+
+step 46
+    x force:        0.0338066, y force:        0.0762369
+
+step 47
+    x force:        0.0341502, y force:         0.077249
+
+step 48
+    x force:        0.0344799, y force:        0.0782496
+
+step 49
+    x force:        0.0347959, y force:         0.079239
+
+step 50
+    x force:        0.0350983, y force:        0.0802176
+
+step 51
+    x force:        0.0353872, y force:        0.0811859
+
+step 52
+    x force:        0.0356629, y force:        0.0821444
+
+step 53
+    x force:        0.0359255, y force:        0.0830936
+
+step 54
+    x force:        0.0361752, y force:        0.0840343
+
+step 55
+    x force:        0.0364124, y force:        0.0849669
+
+step 56
+    x force:        0.0366371, y force:        0.0858922
+
+step 57
+    x force:        0.0368496, y force:        0.0868108
+
+step 58
+    x force:        0.0370502, y force:        0.0877234
+
+step 59
+    x force:        0.0372392, y force:        0.0886308
+
+step 60
+    x force:        0.0374169, y force:        0.0895336
+
+step 61
+    x force:        0.0375834, y force:        0.0904327
+
+step 62
+    x force:        0.0377393, y force:        0.0913286
+
+step 63
+    x force:        0.0378846, y force:        0.0922222
+
+step 64
+    x force:        0.0380198, y force:         0.093114
+
+step 65
+    x force:        0.0381451, y force:        0.0940048
+
+step 66
+    x force:        0.0382609, y force:        0.0948952
+
+step 67
+    x force:        0.0383675, y force:        0.0957859
+
+step 68
+    x force:        0.0384652, y force:        0.0966774
+
+step 69
+    x force:        0.0385544, y force:        0.0975702
+
+step 70
+    x force:        0.0386354, y force:        0.0984649
+
+step 71
+    x force:        0.0387085, y force:        0.0993619
+
+step 72
+    x force:        0.0387741, y force:         0.100262
+
+step 73
+    x force:        0.0388324, y force:         0.101164
+
+step 74
+    x force:        0.0388838, y force:         0.102071
+
+step 75
+    x force:        0.0389287, y force:         0.102981
+
+step 76
+    x force:        0.0389673, y force:         0.103894
+
+step 77
+    x force:        0.0389999, y force:         0.104812
+
+step 78
+    x force:         0.039027, y force:         0.105734
+
+step 79
+    x force:        0.0390487, y force:          0.10666
+
+step 80
+    x force:        0.0390653, y force:          0.10759
+
+step 81
+    x force:        0.0390772, y force:         0.108524
+
+step 82
+    x force:        0.0390847, y force:         0.109463
+
+step 83
+    x force:         0.039088, y force:         0.110405
+
+step 84
+    x force:        0.0390874, y force:          0.11135
+
+step 85
+    x force:        0.0390831, y force:         0.112299
+
+step 86
+    x force:        0.0390755, y force:         0.113251
+
+step 87
+    x force:        0.0390647, y force:         0.114205
+
+step 88
+    x force:        0.0390509, y force:         0.115162
+
+step 89
+    x force:        0.0390345, y force:          0.11612
+
+step 90
+    x force:        0.0390156, y force:          0.11708
+
+step 91
+    x force:        0.0389944, y force:          0.11804
+
+step 92
+    x force:        0.0389712, y force:         0.119001
+
+step 93
+    x force:        0.0389461, y force:         0.119962
+
+step 94
+    x force:        0.0389193, y force:         0.120922
+
+step 95
+    x force:        0.0388909, y force:          0.12188
+
+step 96
+    x force:        0.0388612, y force:         0.122837
+
+step 97
+    x force:        0.0388303, y force:         0.123791
+
+step 98
+    x force:        0.0387984, y force:         0.124742
+
+step 99
+    x force:        0.0387655, y force:         0.125689
+
+step 100
+    x force:        0.0387318, y force:         0.126632
+
+step 101
+    x force:        0.0386974, y force:         0.127569
+
+step 102
+    x force:        0.0386625, y force:         0.128501
+
+step 103
+    x force:        0.0386271, y force:         0.129427
+
+step 104
+    x force:        0.0385913, y force:         0.130346
+
+step 105
+    x force:        0.0385553, y force:         0.131257
+
+step 106
+    x force:         0.038519, y force:         0.132161
+
+step 107
+    x force:        0.0384826, y force:         0.133055
+
+step 108
+    x force:        0.0384461, y force:          0.13394
+
+step 109
+    x force:        0.0384096, y force:         0.134816
+
+step 110
+    x force:        0.0383732, y force:         0.135681
+
+step 111
+    x force:        0.0383368, y force:         0.136536
+
+step 112
+    x force:        0.0383005, y force:         0.137379
+
+step 113
+    x force:        0.0382644, y force:          0.13821
+
+step 114
+    x force:        0.0382284, y force:         0.139029
+
+step 115
+    x force:        0.0381926, y force:         0.139835
+
+step 116
+    x force:        0.0381569, y force:         0.140628
+
+step 117
+    x force:        0.0381214, y force:         0.141407
+
+step 118
+    x force:        0.0380862, y force:         0.142172
+
+step 119
+    x force:         0.038051, y force:         0.142923
+
+step 120
+    x force:        0.0380161, y force:          0.14366
+
+step 121
+    x force:        0.0379812, y force:         0.144381
+
+step 122
+    x force:        0.0379464, y force:         0.145087
+
+step 123
+    x force:        0.0379118, y force:         0.145777
+
+step 124
+    x force:        0.0378771, y force:         0.146451
+
+step 125
+    x force:        0.0378425, y force:         0.147109
+
+step 126
+    x force:        0.0378077, y force:         0.147751
+
+step 127
+    x force:        0.0377729, y force:         0.148377
+
+step 128
+    x force:         0.037738, y force:         0.148986
+
+step 129
+    x force:        0.0377028, y force:         0.149577
+
+step 130
+    x force:        0.0376674, y force:         0.150152
+
+step 131
+    x force:        0.0376317, y force:          0.15071
+
+step 132
+    x force:        0.0375955, y force:         0.151251
+
+step 133
+    x force:         0.037559, y force:         0.151775
+
+step 134
+    x force:        0.0375219, y force:         0.152281
+
+step 135
+    x force:        0.0374843, y force:          0.15277
+
+step 136
+    x force:         0.037446, y force:         0.153242
+
+step 137
+    x force:         0.037407, y force:         0.153697
+
+step 138
+    x force:        0.0373673, y force:         0.154135
+
+step 139
+    x force:        0.0373267, y force:         0.154556
+
+step 140
+    x force:        0.0372853, y force:          0.15496
+
+step 141
+    x force:        0.0372429, y force:         0.155347
+
+step 142
+    x force:        0.0371995, y force:         0.155718
+
+step 143
+    x force:         0.037155, y force:         0.156073
+
+step 144
+    x force:        0.0371094, y force:         0.156411
+
+step 145
+    x force:        0.0370626, y force:         0.156734
+
+step 146
+    x force:        0.0370146, y force:         0.157041
+
+step 147
+    x force:        0.0369654, y force:         0.157333
+
+step 148
+    x force:        0.0369148, y force:          0.15761
+
+step 149
+    x force:        0.0368629, y force:         0.157873
+
+step 150
+    x force:        0.0368096, y force:         0.158122
+
+step 151
+    x force:         0.036755, y force:         0.158357
+
+step 152
+    x force:        0.0366989, y force:         0.158579
+
+step 153
+    x force:        0.0366413, y force:         0.158787
+
+step 154
+    x force:        0.0365823, y force:         0.158984
+
+step 155
+    x force:        0.0365219, y force:         0.159169
+
+step 156
+    x force:        0.0364599, y force:         0.159342
+
+step 157
+    x force:        0.0363966, y force:         0.159505
+
+step 158
+    x force:        0.0363317, y force:         0.159658
+
+step 159
+    x force:        0.0362655, y force:         0.159801
+
+step 160
+    x force:        0.0361978, y force:         0.159934
+
+step 161
+    x force:        0.0361287, y force:          0.16006
+
+step 162
+    x force:        0.0360583, y force:         0.160178
+
+step 163
+    x force:        0.0359865, y force:         0.160288
+
+step 164
+    x force:        0.0359135, y force:         0.160392
+
+step 165
+    x force:        0.0358392, y force:          0.16049
+
+step 166
+    x force:        0.0357637, y force:         0.160583
+
+step 167
+    x force:        0.0356871, y force:         0.160671
+
+step 168
+    x force:        0.0356094, y force:         0.160755
+
+step 169
+    x force:        0.0355307, y force:         0.160836
+
+step 170
+    x force:        0.0354511, y force:         0.160914
+
+step 171
+    x force:        0.0353706, y force:          0.16099
+
+step 172
+    x force:        0.0352893, y force:         0.161065
+
+step 173
+    x force:        0.0352073, y force:         0.161139
+
+step 174
+    x force:        0.0351246, y force:         0.161213
+
+step 175
+    x force:        0.0350414, y force:         0.161287
+
+step 176
+    x force:        0.0349578, y force:         0.161362
+
+step 177
+    x force:        0.0348738, y force:         0.161438
+
+step 178
+    x force:        0.0347895, y force:         0.161517
+
+step 179
+    x force:         0.034705, y force:         0.161598
+
+step 180
+    x force:        0.0346204, y force:         0.161683
+
+step 181
+    x force:        0.0345359, y force:         0.161771
+
+step 182
+    x force:        0.0344514, y force:         0.161862
+
+step 183
+    x force:        0.0343671, y force:         0.161959
+
+step 184
+    x force:        0.0342831, y force:          0.16206
+
+step 185
+    x force:        0.0341995, y force:         0.162166
+
+step 186
+    x force:        0.0341164, y force:         0.162278
+
+step 187
+    x force:        0.0340338, y force:         0.162396
+
+step 188
+    x force:        0.0339519, y force:          0.16252
+
+step 189
+    x force:        0.0338708, y force:         0.162651
+
+step 190
+    x force:        0.0337905, y force:         0.162788
+
+step 191
+    x force:         0.033711, y force:         0.162932
+
+step 192
+    x force:        0.0336326, y force:         0.163083
+
+step 193
+    x force:        0.0335553, y force:         0.163241
+
+step 194
+    x force:        0.0334791, y force:         0.163406
+
+step 195
+    x force:        0.0334042, y force:         0.163579
+
+step 196
+    x force:        0.0333305, y force:         0.163759
+
+step 197
+    x force:        0.0332581, y force:         0.163947
+
+step 198
+    x force:        0.0331872, y force:         0.164142
+
+step 199
+    x force:        0.0331177, y force:         0.164344
+
+step 200
+    x force:        0.0330498, y force:         0.164554
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/SD7003/_run_data_smalldt_cpp/run00200.bin...done
+
+step 201
+    x force:        0.0329834, y force:         0.164771
+
+step 202
+    x force:        0.0329186, y force:         0.164995
+
+step 203
+    x force:        0.0328554, y force:         0.165227
+
+step 204
+    x force:        0.0327939, y force:         0.165466
+
+step 205
+    x force:         0.032734, y force:         0.165711
+
+step 206
+    x force:        0.0326759, y force:         0.165963
+
+step 207
+    x force:        0.0326194, y force:         0.166222
+
+step 208
+    x force:        0.0325647, y force:         0.166487
+
+step 209
+    x force:        0.0325118, y force:         0.166758
+
+step 210
+    x force:        0.0324605, y force:         0.167035
+
+step 211
+    x force:         0.032411, y force:         0.167318
+
+step 212
+    x force:        0.0323631, y force:         0.167607
+
+step 213
+    x force:         0.032317, y force:         0.167901
+
+step 214
+    x force:        0.0322725, y force:           0.1682
+
+step 215
+    x force:        0.0322296, y force:         0.168504
+
+step 216
+    x force:        0.0321884, y force:         0.168813
+
+step 217
+    x force:        0.0321487, y force:         0.169126
+
+step 218
+    x force:        0.0321106, y force:         0.169444
+
+step 219
+    x force:         0.032074, y force:         0.169765
+
+step 220
+    x force:        0.0320388, y force:         0.170091
+
+step 221
+    x force:         0.032005, y force:          0.17042
+
+step 222
+    x force:        0.0319726, y force:         0.170752
+
+step 223
+    x force:        0.0319414, y force:         0.171088
+
+step 224
+    x force:        0.0319115, y force:         0.171427
+
+step 225
+    x force:        0.0318828, y force:         0.171769
+
+step 226
+    x force:        0.0318551, y force:         0.172113
+
+step 227
+    x force:        0.0318285, y force:          0.17246
+
+step 228
+    x force:        0.0318029, y force:          0.17281
+
+step 229
+    x force:        0.0317781, y force:         0.173161
+
+step 230
+    x force:        0.0317542, y force:         0.173515
+
+step 231
+    x force:        0.0317311, y force:         0.173871
+
+step 232
+    x force:        0.0317086, y force:         0.174228
+
+step 233
+    x force:        0.0316868, y force:         0.174588
+
+step 234
+    x force:        0.0316655, y force:         0.174949
+
+step 235
+    x force:        0.0316447, y force:         0.175311
+
+step 236
+    x force:        0.0316243, y force:         0.175675
+
+step 237
+    x force:        0.0316042, y force:          0.17604
+
+step 238
+    x force:        0.0315844, y force:         0.176406
+
+step 239
+    x force:        0.0315648, y force:         0.176773
+
+step 240
+    x force:        0.0315454, y force:         0.177142
+
+step 241
+    x force:         0.031526, y force:         0.177511
+
+step 242
+    x force:        0.0315066, y force:         0.177882
+
+step 243
+    x force:        0.0314871, y force:         0.178253
+
+step 244
+    x force:        0.0314676, y force:         0.178625
+
+step 245
+    x force:        0.0314478, y force:         0.178998
+
+step 246
+    x force:        0.0314278, y force:         0.179371
+
+step 247
+    x force:        0.0314076, y force:         0.179746
+
+step 248
+    x force:         0.031387, y force:          0.18012
+
+step 249
+    x force:         0.031366, y force:         0.180496
+
+step 250
+    x force:        0.0313447, y force:         0.180872
+
+step 251
+    x force:        0.0313228, y force:         0.181248
+
+step 252
+    x force:        0.0313005, y force:         0.181625
+
+step 253
+    x force:        0.0312776, y force:         0.182003
+
+step 254
+    x force:        0.0312541, y force:         0.182381
+
+step 255
+    x force:        0.0312301, y force:         0.182759
+
+step 256
+    x force:        0.0312054, y force:         0.183137
+
+step 257
+    x force:        0.0311801, y force:         0.183516
+
+step 258
+    x force:        0.0311541, y force:         0.183895
+
+step 259
+    x force:        0.0311274, y force:         0.184275
+
+step 260
+    x force:           0.0311, y force:         0.184655
+
+step 261
+    x force:         0.031072, y force:         0.185034
+
+step 262
+    x force:        0.0310432, y force:         0.185415
+
+step 263
+    x force:        0.0310137, y force:         0.185795
+
+step 264
+    x force:        0.0309835, y force:         0.186175
+
+step 265
+    x force:        0.0309526, y force:         0.186556
+
+step 266
+    x force:        0.0309209, y force:         0.186936
+
+step 267
+    x force:        0.0308886, y force:         0.187317
+
+step 268
+    x force:        0.0308556, y force:         0.187697
+
+step 269
+    x force:        0.0308219, y force:         0.188078
+
+step 270
+    x force:        0.0307876, y force:         0.188459
+
+step 271
+    x force:        0.0307526, y force:         0.188839
+
+step 272
+    x force:         0.030717, y force:          0.18922
+
+step 273
+    x force:        0.0306809, y force:           0.1896
+
+step 274
+    x force:        0.0306441, y force:         0.189981
+
+step 275
+    x force:        0.0306068, y force:         0.190361
+
+step 276
+    x force:        0.0305691, y force:         0.190741
+
+step 277
+    x force:        0.0305308, y force:         0.191121
+
+step 278
+    x force:        0.0304921, y force:         0.191501
+
+step 279
+    x force:         0.030453, y force:         0.191881
+
+step 280
+    x force:        0.0304136, y force:          0.19226
+
+step 281
+    x force:        0.0303738, y force:          0.19264
+
+step 282
+    x force:        0.0303337, y force:         0.193019
+
+step 283
+    x force:        0.0302934, y force:         0.193398
+
+step 284
+    x force:        0.0302529, y force:         0.193777
+
+step 285
+    x force:        0.0302122, y force:         0.194155
+
+step 286
+    x force:        0.0301714, y force:         0.194533
+
+step 287
+    x force:        0.0301305, y force:         0.194911
+
+step 288
+    x force:        0.0300896, y force:         0.195289
+
+step 289
+    x force:        0.0300487, y force:         0.195667
+
+step 290
+    x force:        0.0300078, y force:         0.196044
+
+step 291
+    x force:         0.029967, y force:          0.19642
+
+step 292
+    x force:        0.0299264, y force:         0.196797
+
+step 293
+    x force:        0.0298859, y force:         0.197173
+
+step 294
+    x force:        0.0298456, y force:         0.197549
+
+step 295
+    x force:        0.0298056, y force:         0.197924
+
+step 296
+    x force:        0.0297659, y force:         0.198298
+
+step 297
+    x force:        0.0297265, y force:         0.198672
+
+step 298
+    x force:        0.0296874, y force:         0.199046
+
+step 299
+    x force:        0.0296488, y force:         0.199419
+
+step 300
+    x force:        0.0296105, y force:         0.199791
+
+step 301
+    x force:        0.0295728, y force:         0.200163
+
+step 302
+    x force:        0.0295354, y force:         0.200534
+
+step 303
+    x force:        0.0294986, y force:         0.200903
+
+step 304
+    x force:        0.0294623, y force:         0.201272
+
+step 305
+    x force:        0.0294266, y force:          0.20164
+
+step 306
+    x force:        0.0293914, y force:         0.202007
+
+step 307
+    x force:        0.0293568, y force:         0.202373
+
+step 308
+    x force:        0.0293228, y force:         0.202737
+
+step 309
+    x force:        0.0292893, y force:           0.2031
+
+step 310
+    x force:        0.0292565, y force:         0.203461
+
+step 311
+    x force:        0.0292243, y force:         0.203821
+
+step 312
+    x force:        0.0291927, y force:         0.204179
+
+step 313
+    x force:        0.0291617, y force:         0.204535
+
+step 314
+    x force:        0.0291313, y force:         0.204889
+
+step 315
+    x force:        0.0291014, y force:         0.205241
+
+step 316
+    x force:        0.0290722, y force:         0.205591
+
+step 317
+    x force:        0.0290436, y force:         0.205939
+
+step 318
+    x force:        0.0290155, y force:         0.206284
+
+step 319
+    x force:        0.0289879, y force:         0.206626
+
+step 320
+    x force:        0.0289609, y force:         0.206966
+
+step 321
+    x force:        0.0289344, y force:         0.207302
+
+step 322
+    x force:        0.0289083, y force:         0.207636
+
+step 323
+    x force:        0.0288827, y force:         0.207966
+
+step 324
+    x force:        0.0288576, y force:         0.208293
+
+step 325
+    x force:        0.0288328, y force:         0.208616
+
+step 326
+    x force:        0.0288084, y force:         0.208935
+
+step 327
+    x force:        0.0287844, y force:         0.209251
+
+step 328
+    x force:        0.0287606, y force:         0.209563
+
+step 329
+    x force:        0.0287371, y force:         0.209871
+
+step 330
+    x force:        0.0287139, y force:         0.210174
+
+step 331
+    x force:        0.0286908, y force:         0.210473
+
+step 332
+    x force:        0.0286679, y force:         0.210768
+
+step 333
+    x force:        0.0286452, y force:         0.211058
+
+step 334
+    x force:        0.0286225, y force:         0.211343
+
+step 335
+    x force:        0.0285999, y force:         0.211623
+
+step 336
+    x force:        0.0285773, y force:         0.211899
+
+step 337
+    x force:        0.0285547, y force:         0.212169
+
+step 338
+    x force:        0.0285321, y force:         0.212434
+
+step 339
+    x force:        0.0285094, y force:         0.212694
+
+step 340
+    x force:        0.0284865, y force:         0.212949
+
+step 341
+    x force:        0.0284635, y force:         0.213198
+
+step 342
+    x force:        0.0284404, y force:         0.213442
+
+step 343
+    x force:         0.028417, y force:         0.213681
+
+step 344
+    x force:        0.0283934, y force:         0.213914
+
+step 345
+    x force:        0.0283695, y force:         0.214141
+
+step 346
+    x force:        0.0283454, y force:         0.214363
+
+step 347
+    x force:        0.0283209, y force:         0.214579
+
+step 348
+    x force:        0.0282961, y force:         0.214789
+
+step 349
+    x force:         0.028271, y force:         0.214994
+
+step 350
+    x force:        0.0282455, y force:         0.215193
+
+step 351
+    x force:        0.0282196, y force:         0.215387
+
+step 352
+    x force:        0.0281933, y force:         0.215575
+
+step 353
+    x force:        0.0281667, y force:         0.215758
+
+step 354
+    x force:        0.0281396, y force:         0.215935
+
+step 355
+    x force:         0.028112, y force:         0.216106
+
+step 356
+    x force:        0.0280841, y force:         0.216272
+
+step 357
+    x force:        0.0280557, y force:         0.216433
+
+step 358
+    x force:        0.0280269, y force:         0.216589
+
+step 359
+    x force:        0.0279977, y force:         0.216739
+
+step 360
+    x force:        0.0279681, y force:         0.216884
+
+step 361
+    x force:         0.027938, y force:         0.217024
+
+step 362
+    x force:        0.0279075, y force:         0.217159
+
+step 363
+    x force:        0.0278767, y force:          0.21729
+
+step 364
+    x force:        0.0278454, y force:         0.217415
+
+step 365
+    x force:        0.0278138, y force:         0.217536
+
+step 366
+    x force:        0.0277818, y force:         0.217652
+
+step 367
+    x force:        0.0277495, y force:         0.217764
+
+step 368
+    x force:        0.0277169, y force:         0.217871
+
+step 369
+    x force:         0.027684, y force:         0.217974
+
+step 370
+    x force:        0.0276508, y force:         0.218073
+
+step 371
+    x force:        0.0276174, y force:         0.218168
+
+step 372
+    x force:        0.0275837, y force:          0.21826
+
+step 373
+    x force:        0.0275498, y force:         0.218347
+
+step 374
+    x force:        0.0275158, y force:         0.218431
+
+step 375
+    x force:        0.0274816, y force:         0.218511
+
+step 376
+    x force:        0.0274474, y force:         0.218588
+
+step 377
+    x force:         0.027413, y force:         0.218662
+
+step 378
+    x force:        0.0273786, y force:         0.218732
+
+step 379
+    x force:        0.0273442, y force:           0.2188
+
+step 380
+    x force:        0.0273098, y force:         0.218865
+
+step 381
+    x force:        0.0272755, y force:         0.218927
+
+step 382
+    x force:        0.0272413, y force:         0.218986
+
+step 383
+    x force:        0.0272072, y force:         0.219043
+
+step 384
+    x force:        0.0271733, y force:         0.219098
+
+step 385
+    x force:        0.0271396, y force:          0.21915
+
+step 386
+    x force:        0.0271062, y force:           0.2192
+
+step 387
+    x force:         0.027073, y force:         0.219249
+
+step 388
+    x force:        0.0270402, y force:         0.219295
+
+step 389
+    x force:        0.0270077, y force:          0.21934
+
+step 390
+    x force:        0.0269756, y force:         0.219383
+
+step 391
+    x force:         0.026944, y force:         0.219425
+
+step 392
+    x force:        0.0269128, y force:         0.219465
+
+step 393
+    x force:        0.0268822, y force:         0.219504
+
+step 394
+    x force:        0.0268521, y force:         0.219542
+
+step 395
+    x force:        0.0268226, y force:         0.219579
+
+step 396
+    x force:        0.0267937, y force:         0.219615
+
+step 397
+    x force:        0.0267655, y force:          0.21965
+
+step 398
+    x force:         0.026738, y force:         0.219684
+
+step 399
+    x force:        0.0267112, y force:         0.219718
+
+step 400
+    x force:        0.0266852, y force:         0.219751
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/SD7003/_run_data_smalldt_cpp/run00400.bin...done
+
+step 401
+    x force:          0.02666, y force:         0.219784
+
+step 402
+    x force:        0.0266356, y force:         0.219816
+
+step 403
+    x force:        0.0266121, y force:         0.219848
+
+step 404
+    x force:        0.0265895, y force:          0.21988
+
+step 405
+    x force:        0.0265677, y force:         0.219912
+
+step 406
+    x force:         0.026547, y force:         0.219944
+
+step 407
+    x force:        0.0265271, y force:         0.219976
+
+step 408
+    x force:        0.0265083, y force:         0.220008
+
+step 409
+    x force:        0.0264905, y force:         0.220041
+
+step 410
+    x force:        0.0264738, y force:         0.220074
+
+step 411
+    x force:         0.026458, y force:         0.220107
+
+step 412
+    x force:        0.0264434, y force:         0.220141
+
+step 413
+    x force:        0.0264298, y force:         0.220175
+
+step 414
+    x force:        0.0264173, y force:          0.22021
+
+step 415
+    x force:         0.026406, y force:         0.220245
+
+step 416
+    x force:        0.0263957, y force:         0.220282
+
+step 417
+    x force:        0.0263866, y force:         0.220319
+
+step 418
+    x force:        0.0263786, y force:         0.220357
+
+step 419
+    x force:        0.0263717, y force:         0.220396
+
+step 420
+    x force:        0.0263659, y force:         0.220436
+
+step 421
+    x force:        0.0263613, y force:         0.220477
+
+step 422
+    x force:        0.0263578, y force:         0.220519
+
+step 423
+    x force:        0.0263555, y force:         0.220562
+
+step 424
+    x force:        0.0263542, y force:         0.220606
+
+step 425
+    x force:        0.0263541, y force:         0.220651
+
+step 426
+    x force:        0.0263551, y force:         0.220698
+
+step 427
+    x force:        0.0263571, y force:         0.220746
+
+step 428
+    x force:        0.0263602, y force:         0.220796
+
+step 429
+    x force:        0.0263644, y force:         0.220847
+
+step 430
+    x force:        0.0263696, y force:         0.220899
+
+step 431
+    x force:        0.0263758, y force:         0.220952
+
+step 432
+    x force:         0.026383, y force:         0.221008
+
+step 433
+    x force:        0.0263912, y force:         0.221064
+
+step 434
+    x force:        0.0264003, y force:         0.221122
+
+step 435
+    x force:        0.0264103, y force:         0.221182
+
+step 436
+    x force:        0.0264212, y force:         0.221244
+
+step 437
+    x force:        0.0264329, y force:         0.221307
+
+step 438
+    x force:        0.0264455, y force:         0.221372
+
+step 439
+    x force:        0.0264589, y force:         0.221438
+
+step 440
+    x force:         0.026473, y force:         0.221506
+
+step 441
+    x force:        0.0264879, y force:         0.221576
+
+step 442
+    x force:        0.0265034, y force:         0.221648
+
+step 443
+    x force:        0.0265196, y force:         0.221722
+
+step 444
+    x force:        0.0265363, y force:         0.221798
+
+step 445
+    x force:        0.0265537, y force:         0.221875
+
+step 446
+    x force:        0.0265715, y force:         0.221954
+
+step 447
+    x force:        0.0265899, y force:         0.222036
+
+step 448
+    x force:        0.0266087, y force:         0.222119
+
+step 449
+    x force:        0.0266279, y force:         0.222204
+
+step 450
+    x force:        0.0266475, y force:         0.222292
+
+step 451
+    x force:        0.0266673, y force:         0.222381
+
+step 452
+    x force:        0.0266875, y force:         0.222473
+
+step 453
+    x force:        0.0267079, y force:         0.222566
+
+step 454
+    x force:        0.0267285, y force:         0.222662
+
+step 455
+    x force:        0.0267493, y force:          0.22276
+
+step 456
+    x force:        0.0267702, y force:          0.22286
+
+step 457
+    x force:        0.0267911, y force:         0.222963
+
+step 458
+    x force:        0.0268121, y force:         0.223068
+
+step 459
+    x force:        0.0268331, y force:         0.223174
+
+step 460
+    x force:         0.026854, y force:         0.223284
+
+step 461
+    x force:        0.0268749, y force:         0.223395
+
+step 462
+    x force:        0.0268957, y force:         0.223509
+
+step 463
+    x force:        0.0269163, y force:         0.223625
+
+step 464
+    x force:        0.0269368, y force:         0.223743
+
+step 465
+    x force:         0.026957, y force:         0.223864
+
+step 466
+    x force:         0.026977, y force:         0.223987
+
+step 467
+    x force:        0.0269967, y force:         0.224113
+
+step 468
+    x force:        0.0270162, y force:          0.22424
+
+step 469
+    x force:        0.0270353, y force:         0.224371
+
+step 470
+    x force:         0.027054, y force:         0.224503
+
+step 471
+    x force:        0.0270724, y force:         0.224638
+
+step 472
+    x force:        0.0270904, y force:         0.224775
+
+step 473
+    x force:        0.0271079, y force:         0.224914
+
+step 474
+    x force:        0.0271251, y force:         0.225055
+
+step 475
+    x force:        0.0271418, y force:         0.225199
+
+step 476
+    x force:         0.027158, y force:         0.225345
+
+step 477
+    x force:        0.0271737, y force:         0.225493
+
+step 478
+    x force:         0.027189, y force:         0.225643
+
+step 479
+    x force:        0.0272037, y force:         0.225795
+
+step 480
+    x force:        0.0272179, y force:         0.225949
+
+step 481
+    x force:        0.0272316, y force:         0.226105
+
+step 482
+    x force:        0.0272447, y force:         0.226263
+
+step 483
+    x force:        0.0272574, y force:         0.226423
+
+step 484
+    x force:        0.0272694, y force:         0.226584
+
+step 485
+    x force:         0.027281, y force:         0.226747
+
+step 486
+    x force:         0.027292, y force:         0.226912
+
+step 487
+    x force:        0.0273024, y force:         0.227078
+
+step 488
+    x force:        0.0273123, y force:         0.227245
+
+step 489
+    x force:        0.0273217, y force:         0.227414
+
+step 490
+    x force:        0.0273305, y force:         0.227584
+
+step 491
+    x force:        0.0273388, y force:         0.227755
+
+step 492
+    x force:        0.0273466, y force:         0.227927
+
+step 493
+    x force:        0.0273539, y force:           0.2281
+
+step 494
+    x force:        0.0273607, y force:         0.228273
+
+step 495
+    x force:         0.027367, y force:         0.228447
+
+step 496
+    x force:        0.0273727, y force:         0.228622
+
+step 497
+    x force:        0.0273781, y force:         0.228797
+
+step 498
+    x force:         0.027383, y force:         0.228972
+
+step 499
+    x force:        0.0273874, y force:         0.229148
+
+step 500
+    x force:        0.0273914, y force:         0.229323
+
+step 501
+    x force:         0.027395, y force:         0.229498
+
+step 502
+    x force:        0.0273982, y force:         0.229673
+
+step 503
+    x force:        0.0274011, y force:         0.229847
+
+step 504
+    x force:        0.0274035, y force:          0.23002
+
+step 505
+    x force:        0.0274057, y force:         0.230193
+
+step 506
+    x force:        0.0274075, y force:         0.230365
+
+step 507
+    x force:        0.0274091, y force:         0.230535
+
+step 508
+    x force:        0.0274104, y force:         0.230705
+
+step 509
+    x force:        0.0274114, y force:         0.230873
+
+step 510
+    x force:        0.0274122, y force:         0.231039
+
+step 511
+    x force:        0.0274128, y force:         0.231203
+
+step 512
+    x force:        0.0274132, y force:         0.231366
+
+step 513
+    x force:        0.0274135, y force:         0.231526
+
+step 514
+    x force:        0.0274136, y force:         0.231684
+
+step 515
+    x force:        0.0274137, y force:         0.231839
+
+step 516
+    x force:        0.0274136, y force:         0.231992
+
+step 517
+    x force:        0.0274135, y force:         0.232142
+
+step 518
+    x force:        0.0274133, y force:         0.232289
+
+step 519
+    x force:        0.0274131, y force:         0.232433
+
+step 520
+    x force:        0.0274129, y force:         0.232574
+
+step 521
+    x force:        0.0274128, y force:         0.232711
+
+step 522
+    x force:        0.0274126, y force:         0.232844
+
+step 523
+    x force:        0.0274126, y force:         0.232973
+
+step 524
+    x force:        0.0274126, y force:         0.233098
+
+step 525
+    x force:        0.0274127, y force:          0.23322
+
+step 526
+    x force:         0.027413, y force:         0.233336
+
+step 527
+    x force:        0.0274133, y force:         0.233448
+
+step 528
+    x force:        0.0274139, y force:         0.233556
+
+step 529
+    x force:        0.0274145, y force:         0.233658
+
+step 530
+    x force:        0.0274154, y force:         0.233756
+
+step 531
+    x force:        0.0274164, y force:         0.233848
+
+step 532
+    x force:        0.0274177, y force:         0.233935
+
+step 533
+    x force:        0.0274191, y force:         0.234017
+
+step 534
+    x force:        0.0274208, y force:         0.234093
+
+step 535
+    x force:        0.0274227, y force:         0.234163
+
+step 536
+    x force:        0.0274248, y force:         0.234227
+
+step 537
+    x force:        0.0274271, y force:         0.234286
+
+step 538
+    x force:        0.0274297, y force:         0.234338
+
+step 539
+    x force:        0.0274324, y force:         0.234384
+
+step 540
+    x force:        0.0274355, y force:         0.234424
+
+step 541
+    x force:        0.0274387, y force:         0.234457
+
+step 542
+    x force:        0.0274421, y force:         0.234484
+
+step 543
+    x force:        0.0274458, y force:         0.234504
+
+step 544
+    x force:        0.0274497, y force:         0.234518
+
+step 545
+    x force:        0.0274537, y force:         0.234525
+
+step 546
+    x force:         0.027458, y force:         0.234525
+
+step 547
+    x force:        0.0274624, y force:         0.234518
+
+step 548
+    x force:         0.027467, y force:         0.234504
+
+step 549
+    x force:        0.0274718, y force:         0.234484
+
+step 550
+    x force:        0.0274767, y force:         0.234456
+
+step 551
+    x force:        0.0274817, y force:         0.234422
+
+step 552
+    x force:        0.0274868, y force:          0.23438
+
+step 553
+    x force:         0.027492, y force:         0.234332
+
+step 554
+    x force:        0.0274974, y force:         0.234277
+
+step 555
+    x force:        0.0275027, y force:         0.234215
+
+step 556
+    x force:        0.0275082, y force:         0.234146
+
+step 557
+    x force:        0.0275136, y force:          0.23407
+
+step 558
+    x force:        0.0275191, y force:         0.233988
+
+step 559
+    x force:        0.0275246, y force:         0.233899
+
+step 560
+    x force:        0.0275301, y force:         0.233803
+
+step 561
+    x force:        0.0275355, y force:         0.233701
+
+step 562
+    x force:        0.0275409, y force:         0.233592
+
+step 563
+    x force:        0.0275462, y force:         0.233477
+
+step 564
+    x force:        0.0275515, y force:         0.233356
+
+step 565
+    x force:        0.0275566, y force:         0.233228
+
+step 566
+    x force:        0.0275616, y force:         0.233095
+
+step 567
+    x force:        0.0275665, y force:         0.232956
+
+step 568
+    x force:        0.0275713, y force:         0.232811
+
+step 569
+    x force:        0.0275759, y force:          0.23266
+
+step 570
+    x force:        0.0275804, y force:         0.232504
+
+step 571
+    x force:        0.0275847, y force:         0.232343
+
+step 572
+    x force:        0.0275888, y force:         0.232177
+
+step 573
+    x force:        0.0275927, y force:         0.232006
+
+step 574
+    x force:        0.0275964, y force:         0.231831
+
+step 575
+    x force:        0.0275999, y force:          0.23165
+
+step 576
+    x force:        0.0276032, y force:         0.231466
+
+step 577
+    x force:        0.0276062, y force:         0.231277
+
+step 578
+    x force:        0.0276091, y force:         0.231085
+
+step 579
+    x force:        0.0276117, y force:         0.230889
+
+step 580
+    x force:        0.0276141, y force:         0.230689
+
+step 581
+    x force:        0.0276162, y force:         0.230487
+
+step 582
+    x force:        0.0276181, y force:         0.230281
+
+step 583
+    x force:        0.0276197, y force:         0.230072
+
+step 584
+    x force:        0.0276211, y force:         0.229861
+
+step 585
+    x force:        0.0276223, y force:         0.229648
+
+step 586
+    x force:        0.0276232, y force:         0.229432
+
+step 587
+    x force:        0.0276239, y force:         0.229215
+
+step 588
+    x force:        0.0276243, y force:         0.228995
+
+step 589
+    x force:        0.0276245, y force:         0.228775
+
+step 590
+    x force:        0.0276245, y force:         0.228553
+
+step 591
+    x force:        0.0276242, y force:         0.228331
+
+step 592
+    x force:        0.0276237, y force:         0.228107
+
+step 593
+    x force:        0.0276229, y force:         0.227883
+
+step 594
+    x force:         0.027622, y force:         0.227659
+
+step 595
+    x force:        0.0276208, y force:         0.227435
+
+step 596
+    x force:        0.0276194, y force:         0.227211
+
+step 597
+    x force:        0.0276177, y force:         0.226988
+
+step 598
+    x force:        0.0276159, y force:         0.226765
+
+step 599
+    x force:        0.0276138, y force:         0.226543
+
+step 600
+    x force:        0.0276115, y force:         0.226322
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/SD7003/_run_data_smalldt_cpp/run00600.bin...done
+
+step 601
+    x force:         0.027609, y force:         0.226103
+
+step 602
+    x force:        0.0276063, y force:         0.225884
+
+step 603
+    x force:        0.0276034, y force:         0.225668
+
+step 604
+    x force:        0.0276003, y force:         0.225453
+
+step 605
+    x force:         0.027597, y force:         0.225241
+
+step 606
+    x force:        0.0275935, y force:         0.225031
+
+step 607
+    x force:        0.0275899, y force:         0.224823
+
+step 608
+    x force:         0.027586, y force:         0.224618
+
+step 609
+    x force:        0.0275819, y force:         0.224415
+
+step 610
+    x force:        0.0275777, y force:         0.224216
+
+step 611
+    x force:        0.0275732, y force:         0.224019
+
+step 612
+    x force:        0.0275686, y force:         0.223826
+
+step 613
+    x force:        0.0275638, y force:         0.223637
+
+step 614
+    x force:        0.0275588, y force:          0.22345
+
+step 615
+    x force:        0.0275536, y force:         0.223268
+
+step 616
+    x force:        0.0275482, y force:          0.22309
+
+step 617
+    x force:        0.0275427, y force:         0.222915
+
+step 618
+    x force:        0.0275369, y force:         0.222744
+
+step 619
+    x force:         0.027531, y force:         0.222578
+
+step 620
+    x force:         0.027525, y force:         0.222416
+
+step 621
+    x force:        0.0275187, y force:         0.222258
+
+step 622
+    x force:        0.0275123, y force:         0.222105
+
+step 623
+    x force:        0.0275056, y force:         0.221956
+
+step 624
+    x force:        0.0274988, y force:         0.221812
+
+step 625
+    x force:        0.0274919, y force:         0.221673
+
+step 626
+    x force:        0.0274847, y force:         0.221538
+
+step 627
+    x force:        0.0274774, y force:         0.221408
+
+step 628
+    x force:        0.0274699, y force:         0.221283
+
+step 629
+    x force:        0.0274622, y force:         0.221163
+
+step 630
+    x force:        0.0274543, y force:         0.221048
+
+step 631
+    x force:        0.0274463, y force:         0.220937
+
+step 632
+    x force:        0.0274381, y force:         0.220832
+
+step 633
+    x force:        0.0274297, y force:         0.220732
+
+step 634
+    x force:        0.0274211, y force:         0.220637
+
+step 635
+    x force:        0.0274123, y force:         0.220546
+
+step 636
+    x force:        0.0274034, y force:         0.220461
+
+step 637
+    x force:        0.0273942, y force:         0.220381
+
+step 638
+    x force:        0.0273849, y force:         0.220305
+
+step 639
+    x force:        0.0273754, y force:         0.220235
+
+step 640
+    x force:        0.0273657, y force:         0.220169
+
+step 641
+    x force:        0.0273558, y force:         0.220109
+
+step 642
+    x force:        0.0273458, y force:         0.220053
+
+step 643
+    x force:        0.0273355, y force:         0.220002
+
+step 644
+    x force:         0.027325, y force:         0.219956
+
+step 645
+    x force:        0.0273143, y force:         0.219914
+
+step 646
+    x force:        0.0273034, y force:         0.219877
+
+step 647
+    x force:        0.0272923, y force:         0.219844
+
+step 648
+    x force:         0.027281, y force:         0.219816
+
+step 649
+    x force:        0.0272695, y force:         0.219793
+
+step 650
+    x force:        0.0272577, y force:         0.219774
+
+step 651
+    x force:        0.0272458, y force:         0.219758
+
+step 652
+    x force:        0.0272335, y force:         0.219748
+
+step 653
+    x force:        0.0272211, y force:         0.219741
+
+step 654
+    x force:        0.0272084, y force:         0.219738
+
+step 655
+    x force:        0.0271955, y force:         0.219739
+
+step 656
+    x force:        0.0271823, y force:         0.219743
+
+step 657
+    x force:        0.0271689, y force:         0.219752
+
+step 658
+    x force:        0.0271552, y force:         0.219764
+
+step 659
+    x force:        0.0271413, y force:         0.219779
+
+step 660
+    x force:        0.0271271, y force:         0.219798
+
+step 661
+    x force:        0.0271127, y force:          0.21982
+
+step 662
+    x force:         0.027098, y force:         0.219845
+
+step 663
+    x force:         0.027083, y force:         0.219873
+
+step 664
+    x force:        0.0270678, y force:         0.219904
+
+step 665
+    x force:        0.0270523, y force:         0.219937
+
+step 666
+    x force:        0.0270365, y force:         0.219974
+
+step 667
+    x force:        0.0270205, y force:         0.220013
+
+step 668
+    x force:        0.0270042, y force:         0.220054
+
+step 669
+    x force:        0.0269877, y force:         0.220098
+
+step 670
+    x force:        0.0269709, y force:         0.220144
+
+step 671
+    x force:        0.0269538, y force:         0.220192
+
+step 672
+    x force:        0.0269366, y force:         0.220242
+
+step 673
+    x force:        0.0269191, y force:         0.220294
+
+step 674
+    x force:        0.0269014, y force:         0.220348
+
+step 675
+    x force:        0.0268834, y force:         0.220404
+
+step 676
+    x force:        0.0268653, y force:         0.220461
+
+step 677
+    x force:         0.026847, y force:         0.220519
+
+step 678
+    x force:        0.0268285, y force:         0.220579
+
+step 679
+    x force:        0.0268098, y force:         0.220641
+
+step 680
+    x force:         0.026791, y force:         0.220703
+
+step 681
+    x force:         0.026772, y force:         0.220767
+
+step 682
+    x force:        0.0267529, y force:         0.220832
+
+step 683
+    x force:        0.0267337, y force:         0.220898
+
+step 684
+    x force:        0.0267145, y force:         0.220964
+
+step 685
+    x force:        0.0266951, y force:         0.221032
+
+step 686
+    x force:        0.0266757, y force:           0.2211
+
+step 687
+    x force:        0.0266563, y force:         0.221169
+
+step 688
+    x force:        0.0266369, y force:         0.221238
+
+step 689
+    x force:        0.0266175, y force:         0.221308
+
+step 690
+    x force:        0.0265981, y force:         0.221378
+
+step 691
+    x force:        0.0265788, y force:         0.221449
+
+step 692
+    x force:        0.0265595, y force:          0.22152
+
+step 693
+    x force:        0.0265404, y force:         0.221592
+
+step 694
+    x force:        0.0265213, y force:         0.221663
+
+step 695
+    x force:        0.0265024, y force:         0.221735
+
+step 696
+    x force:        0.0264837, y force:         0.221807
+
+step 697
+    x force:        0.0264652, y force:         0.221879
+
+step 698
+    x force:        0.0264468, y force:         0.221951
+
+step 699
+    x force:        0.0264287, y force:         0.222024
+
+step 700
+    x force:        0.0264108, y force:         0.222096
+
+step 701
+    x force:        0.0263932, y force:         0.222168
+
+step 702
+    x force:        0.0263759, y force:         0.222239
+
+step 703
+    x force:        0.0263589, y force:         0.222311
+
+step 704
+    x force:        0.0263422, y force:         0.222383
+
+step 705
+    x force:        0.0263258, y force:         0.222454
+
+step 706
+    x force:        0.0263098, y force:         0.222525
+
+step 707
+    x force:        0.0262942, y force:         0.222596
+
+step 708
+    x force:        0.0262789, y force:         0.222666
+
+step 709
+    x force:        0.0262641, y force:         0.222737
+
+step 710
+    x force:        0.0262497, y force:         0.222807
+
+step 711
+    x force:        0.0262356, y force:         0.222876
+
+step 712
+    x force:        0.0262221, y force:         0.222945
+
+step 713
+    x force:        0.0262089, y force:         0.223014
+
+step 714
+    x force:        0.0261962, y force:         0.223082
+
+step 715
+    x force:         0.026184, y force:         0.223149
+
+step 716
+    x force:        0.0261722, y force:         0.223216
+
+step 717
+    x force:         0.026161, y force:         0.223283
+
+step 718
+    x force:        0.0261502, y force:         0.223349
+
+step 719
+    x force:        0.0261398, y force:         0.223415
+
+step 720
+    x force:          0.02613, y force:         0.223479
+
+step 721
+    x force:        0.0261206, y force:         0.223544
+
+step 722
+    x force:        0.0261118, y force:         0.223607
+
+step 723
+    x force:        0.0261034, y force:          0.22367
+
+step 724
+    x force:        0.0260955, y force:         0.223732
+
+step 725
+    x force:        0.0260881, y force:         0.223794
+
+step 726
+    x force:        0.0260812, y force:         0.223854
+
+step 727
+    x force:        0.0260747, y force:         0.223914
+
+step 728
+    x force:        0.0260688, y force:         0.223973
+
+step 729
+    x force:        0.0260633, y force:         0.224032
+
+step 730
+    x force:        0.0260583, y force:         0.224089
+
+step 731
+    x force:        0.0260537, y force:         0.224146
+
+step 732
+    x force:        0.0260496, y force:         0.224201
+
+step 733
+    x force:         0.026046, y force:         0.224256
+
+step 734
+    x force:        0.0260428, y force:          0.22431
+
+step 735
+    x force:          0.02604, y force:         0.224363
+
+step 736
+    x force:        0.0260377, y force:         0.224415
+
+step 737
+    x force:        0.0260358, y force:         0.224467
+
+step 738
+    x force:        0.0260343, y force:         0.224517
+
+step 739
+    x force:        0.0260332, y force:         0.224566
+
+step 740
+    x force:        0.0260325, y force:         0.224614
+
+step 741
+    x force:        0.0260321, y force:         0.224662
+
+step 742
+    x force:        0.0260322, y force:         0.224708
+
+step 743
+    x force:        0.0260326, y force:         0.224753
+
+step 744
+    x force:        0.0260333, y force:         0.224797
+
+step 745
+    x force:        0.0260344, y force:         0.224841
+
+step 746
+    x force:        0.0260358, y force:         0.224883
+
+step 747
+    x force:        0.0260376, y force:         0.224924
+
+step 748
+    x force:        0.0260396, y force:         0.224965
+
+step 749
+    x force:        0.0260419, y force:         0.225004
+
+step 750
+    x force:        0.0260445, y force:         0.225042
+
+step 751
+    x force:        0.0260474, y force:          0.22508
+
+step 752
+    x force:        0.0260505, y force:         0.225116
+
+step 753
+    x force:        0.0260539, y force:         0.225152
+
+step 754
+    x force:        0.0260574, y force:         0.225187
+
+step 755
+    x force:        0.0260612, y force:          0.22522
+
+step 756
+    x force:        0.0260652, y force:         0.225253
+
+step 757
+    x force:        0.0260694, y force:         0.225285
+
+step 758
+    x force:        0.0260738, y force:         0.225316
+
+step 759
+    x force:        0.0260783, y force:         0.225347
+
+step 760
+    x force:         0.026083, y force:         0.225376
+
+step 761
+    x force:        0.0260878, y force:         0.225405
+
+step 762
+    x force:        0.0260927, y force:         0.225433
+
+step 763
+    x force:        0.0260977, y force:         0.225461
+
+step 764
+    x force:        0.0261029, y force:         0.225487
+
+step 765
+    x force:        0.0261081, y force:         0.225513
+
+step 766
+    x force:        0.0261133, y force:         0.225539
+
+step 767
+    x force:        0.0261187, y force:         0.225563
+
+step 768
+    x force:        0.0261241, y force:         0.225587
+
+step 769
+    x force:        0.0261295, y force:         0.225611
+
+step 770
+    x force:        0.0261349, y force:         0.225634
+
+step 771
+    x force:        0.0261404, y force:         0.225656
+
+step 772
+    x force:        0.0261458, y force:         0.225678
+
+step 773
+    x force:        0.0261513, y force:         0.225699
+
+step 774
+    x force:        0.0261567, y force:          0.22572
+
+step 775
+    x force:        0.0261621, y force:         0.225741
+
+step 776
+    x force:        0.0261675, y force:          0.22576
+
+step 777
+    x force:        0.0261728, y force:          0.22578
+
+step 778
+    x force:        0.0261781, y force:         0.225799
+
+step 779
+    x force:        0.0261833, y force:         0.225817
+
+step 780
+    x force:        0.0261885, y force:         0.225835
+
+step 781
+    x force:        0.0261936, y force:         0.225853
+
+step 782
+    x force:        0.0261986, y force:          0.22587
+
+step 783
+    x force:        0.0262036, y force:         0.225886
+
+step 784
+    x force:        0.0262084, y force:         0.225902
+
+step 785
+    x force:        0.0262132, y force:         0.225918
+
+step 786
+    x force:        0.0262179, y force:         0.225933
+
+step 787
+    x force:        0.0262225, y force:         0.225948
+
+step 788
+    x force:         0.026227, y force:         0.225962
+
+step 789
+    x force:        0.0262314, y force:         0.225975
+
+step 790
+    x force:        0.0262357, y force:         0.225988
+
+step 791
+    x force:        0.0262399, y force:            0.226
+
+step 792
+    x force:        0.0262441, y force:         0.226012
+
+step 793
+    x force:        0.0262481, y force:         0.226023
+
+step 794
+    x force:        0.0262521, y force:         0.226033
+
+step 795
+    x force:         0.026256, y force:         0.226043
+
+step 796
+    x force:        0.0262598, y force:         0.226052
+
+step 797
+    x force:        0.0262635, y force:          0.22606
+
+step 798
+    x force:        0.0262671, y force:         0.226067
+
+step 799
+    x force:        0.0262707, y force:         0.226073
+
+step 800
+    x force:        0.0262742, y force:         0.226079
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/SD7003/_run_data_smalldt_cpp/run00800.bin...done
+
+step 801
+    x force:        0.0262776, y force:         0.226083
+
+step 802
+    x force:         0.026281, y force:         0.226087
+
+step 803
+    x force:        0.0262843, y force:          0.22609
+
+step 804
+    x force:        0.0262876, y force:         0.226091
+
+step 805
+    x force:        0.0262908, y force:         0.226092
+
+step 806
+    x force:         0.026294, y force:         0.226092
+
+step 807
+    x force:        0.0262971, y force:          0.22609
+
+step 808
+    x force:        0.0263002, y force:         0.226088
+
+step 809
+    x force:        0.0263033, y force:         0.226084
+
+step 810
+    x force:        0.0263063, y force:         0.226079
+
+step 811
+    x force:        0.0263094, y force:         0.226073
+
+step 812
+    x force:        0.0263124, y force:         0.226065
+
+step 813
+    x force:        0.0263154, y force:         0.226056
+
+step 814
+    x force:        0.0263183, y force:         0.226046
+
+step 815
+    x force:        0.0263213, y force:         0.226035
+
+step 816
+    x force:        0.0263243, y force:         0.226022
+
+step 817
+    x force:        0.0263272, y force:         0.226008
+
+step 818
+    x force:        0.0263302, y force:         0.225993
+
+step 819
+    x force:        0.0263331, y force:         0.225976
+
+step 820
+    x force:         0.026336, y force:         0.225958
+
+step 821
+    x force:        0.0263389, y force:         0.225938
+
+step 822
+    x force:        0.0263419, y force:         0.225917
+
+step 823
+    x force:        0.0263448, y force:         0.225894
+
+step 824
+    x force:        0.0263477, y force:          0.22587
+
+step 825
+    x force:        0.0263505, y force:         0.225845
+
+step 826
+    x force:        0.0263534, y force:         0.225818
+
+step 827
+    x force:        0.0263562, y force:         0.225789
+
+step 828
+    x force:        0.0263591, y force:         0.225759
+
+step 829
+    x force:        0.0263618, y force:         0.225728
+
+step 830
+    x force:        0.0263646, y force:         0.225695
+
+step 831
+    x force:        0.0263673, y force:          0.22566
+
+step 832
+    x force:          0.02637, y force:         0.225625
+
+step 833
+    x force:        0.0263726, y force:         0.225587
+
+step 834
+    x force:        0.0263751, y force:         0.225548
+
+step 835
+    x force:        0.0263775, y force:         0.225508
+
+step 836
+    x force:        0.0263799, y force:         0.225466
+
+step 837
+    x force:        0.0263822, y force:         0.225423
+
+step 838
+    x force:        0.0263844, y force:         0.225379
+
+step 839
+    x force:        0.0263865, y force:         0.225333
+
+step 840
+    x force:        0.0263884, y force:         0.225285
+
+step 841
+    x force:        0.0263903, y force:         0.225237
+
+step 842
+    x force:         0.026392, y force:         0.225187
+
+step 843
+    x force:        0.0263935, y force:         0.225135
+
+step 844
+    x force:        0.0263948, y force:         0.225083
+
+step 845
+    x force:         0.026396, y force:         0.225029
+
+step 846
+    x force:         0.026397, y force:         0.224973
+
+step 847
+    x force:        0.0263978, y force:         0.224917
+
+step 848
+    x force:        0.0263984, y force:         0.224859
+
+step 849
+    x force:        0.0263987, y force:           0.2248
+
+step 850
+    x force:        0.0263988, y force:          0.22474
+
+step 851
+    x force:        0.0263986, y force:         0.224679
+
+step 852
+    x force:        0.0263982, y force:         0.224617
+
+step 853
+    x force:        0.0263975, y force:         0.224554
+
+step 854
+    x force:        0.0263964, y force:          0.22449
+
+step 855
+    x force:        0.0263951, y force:         0.224425
+
+step 856
+    x force:        0.0263934, y force:         0.224359
+
+step 857
+    x force:        0.0263914, y force:         0.224292
+
+step 858
+    x force:        0.0263891, y force:         0.224225
+
+step 859
+    x force:        0.0263863, y force:         0.224157
+
+step 860
+    x force:        0.0263832, y force:         0.224088
+
+step 861
+    x force:        0.0263797, y force:         0.224018
+
+step 862
+    x force:        0.0263757, y force:         0.223949
+
+step 863
+    x force:        0.0263714, y force:         0.223878
+
+step 864
+    x force:        0.0263666, y force:         0.223807
+
+step 865
+    x force:        0.0263613, y force:         0.223736
+
+step 866
+    x force:        0.0263556, y force:         0.223664
+
+step 867
+    x force:        0.0263494, y force:         0.223593
+
+step 868
+    x force:        0.0263427, y force:         0.223521
+
+step 869
+    x force:        0.0263355, y force:         0.223449
+
+step 870
+    x force:        0.0263278, y force:         0.223377
+
+step 871
+    x force:        0.0263196, y force:         0.223305
+
+step 872
+    x force:        0.0263109, y force:         0.223234
+
+step 873
+    x force:        0.0263016, y force:         0.223162
+
+step 874
+    x force:        0.0262917, y force:         0.223091
+
+step 875
+    x force:        0.0262813, y force:          0.22302
+
+step 876
+    x force:        0.0262703, y force:          0.22295
+
+step 877
+    x force:        0.0262587, y force:         0.222881
+
+step 878
+    x force:        0.0262465, y force:         0.222811
+
+step 879
+    x force:        0.0262338, y force:         0.222743
+
+step 880
+    x force:        0.0262204, y force:         0.222675
+
+step 881
+    x force:        0.0262064, y force:         0.222609
+
+step 882
+    x force:        0.0261918, y force:         0.222543
+
+step 883
+    x force:        0.0261766, y force:         0.222478
+
+step 884
+    x force:        0.0261608, y force:         0.222414
+
+step 885
+    x force:        0.0261443, y force:         0.222351
+
+step 886
+    x force:        0.0261273, y force:          0.22229
+
+step 887
+    x force:        0.0261096, y force:          0.22223
+
+step 888
+    x force:        0.0260913, y force:         0.222171
+
+step 889
+    x force:        0.0260723, y force:         0.222113
+
+step 890
+    x force:        0.0260527, y force:         0.222057
+
+step 891
+    x force:        0.0260325, y force:         0.222003
+
+step 892
+    x force:        0.0260117, y force:          0.22195
+
+step 893
+    x force:        0.0259903, y force:         0.221898
+
+step 894
+    x force:        0.0259682, y force:         0.221848
+
+step 895
+    x force:        0.0259456, y force:           0.2218
+
+step 896
+    x force:        0.0259223, y force:         0.221754
+
+step 897
+    x force:        0.0258985, y force:         0.221709
+
+step 898
+    x force:         0.025874, y force:         0.221666
+
+step 899
+    x force:         0.025849, y force:         0.221625
+
+step 900
+    x force:        0.0258234, y force:         0.221585
+
+step 901
+    x force:        0.0257973, y force:         0.221548
+
+step 902
+    x force:        0.0257706, y force:         0.221512
+
+step 903
+    x force:        0.0257433, y force:         0.221478
+
+step 904
+    x force:        0.0257155, y force:         0.221446
+
+step 905
+    x force:        0.0256872, y force:         0.221415
+
+step 906
+    x force:        0.0256584, y force:         0.221387
+
+step 907
+    x force:        0.0256291, y force:          0.22136
+
+step 908
+    x force:        0.0255993, y force:         0.221335
+
+step 909
+    x force:         0.025569, y force:         0.221312
+
+step 910
+    x force:        0.0255382, y force:         0.221291
+
+step 911
+    x force:        0.0255071, y force:         0.221272
+
+step 912
+    x force:        0.0254754, y force:         0.221254
+
+step 913
+    x force:        0.0254434, y force:         0.221238
+
+step 914
+    x force:         0.025411, y force:         0.221223
+
+step 915
+    x force:        0.0253781, y force:         0.221211
+
+step 916
+    x force:        0.0253449, y force:           0.2212
+
+step 917
+    x force:        0.0253114, y force:          0.22119
+
+step 918
+    x force:        0.0252774, y force:         0.221182
+
+step 919
+    x force:        0.0252432, y force:         0.221176
+
+step 920
+    x force:        0.0252086, y force:         0.221171
+
+step 921
+    x force:        0.0251738, y force:         0.221167
+
+step 922
+    x force:        0.0251386, y force:         0.221165
+
+step 923
+    x force:        0.0251032, y force:         0.221164
+
+step 924
+    x force:        0.0250675, y force:         0.221164
+
+step 925
+    x force:        0.0250316, y force:         0.221165
+
+step 926
+    x force:        0.0249954, y force:         0.221168
+
+step 927
+    x force:         0.024959, y force:         0.221172
+
+step 928
+    x force:        0.0249225, y force:         0.221177
+
+step 929
+    x force:        0.0248857, y force:         0.221183
+
+step 930
+    x force:        0.0248488, y force:          0.22119
+
+step 931
+    x force:        0.0248117, y force:         0.221197
+
+step 932
+    x force:        0.0247744, y force:         0.221206
+
+step 933
+    x force:        0.0247371, y force:         0.221215
+
+step 934
+    x force:        0.0246996, y force:         0.221226
+
+step 935
+    x force:         0.024662, y force:         0.221236
+
+step 936
+    x force:        0.0246243, y force:         0.221248
+
+step 937
+    x force:        0.0245865, y force:          0.22126
+
+step 938
+    x force:        0.0245486, y force:         0.221273
+
+step 939
+    x force:        0.0245107, y force:         0.221286
+
+step 940
+    x force:        0.0244728, y force:         0.221299
+
+step 941
+    x force:        0.0244348, y force:         0.221313
+
+step 942
+    x force:        0.0243967, y force:         0.221328
+
+step 943
+    x force:        0.0243587, y force:         0.221342
+
+step 944
+    x force:        0.0243206, y force:         0.221357
+
+step 945
+    x force:        0.0242826, y force:         0.221372
+
+step 946
+    x force:        0.0242445, y force:         0.221387
+
+step 947
+    x force:        0.0242065, y force:         0.221403
+
+step 948
+    x force:        0.0241685, y force:         0.221418
+
+step 949
+    x force:        0.0241306, y force:         0.221433
+
+step 950
+    x force:        0.0240927, y force:         0.221449
+
+step 951
+    x force:        0.0240549, y force:         0.221464
+
+step 952
+    x force:        0.0240171, y force:         0.221479
+
+step 953
+    x force:        0.0239794, y force:         0.221494
+
+step 954
+    x force:        0.0239418, y force:         0.221509
+
+step 955
+    x force:        0.0239042, y force:         0.221524
+
+step 956
+    x force:        0.0238668, y force:         0.221538
+
+step 957
+    x force:        0.0238294, y force:         0.221552
+
+step 958
+    x force:        0.0237922, y force:         0.221566
+
+step 959
+    x force:         0.023755, y force:         0.221579
+
+step 960
+    x force:         0.023718, y force:         0.221592
+
+step 961
+    x force:        0.0236811, y force:         0.221604
+
+step 962
+    x force:        0.0236443, y force:         0.221616
+
+step 963
+    x force:        0.0236077, y force:         0.221627
+
+step 964
+    x force:        0.0235712, y force:         0.221638
+
+step 965
+    x force:        0.0235348, y force:         0.221649
+
+step 966
+    x force:        0.0234986, y force:         0.221658
+
+step 967
+    x force:        0.0234625, y force:         0.221667
+
+step 968
+    x force:        0.0234266, y force:         0.221676
+
+step 969
+    x force:        0.0233908, y force:         0.221684
+
+step 970
+    x force:        0.0233553, y force:         0.221691
+
+step 971
+    x force:        0.0233198, y force:         0.221697
+
+step 972
+    x force:        0.0232846, y force:         0.221703
+
+step 973
+    x force:        0.0232495, y force:         0.221708
+
+step 974
+    x force:        0.0232146, y force:         0.221712
+
+step 975
+    x force:        0.0231798, y force:         0.221715
+
+step 976
+    x force:        0.0231453, y force:         0.221718
+
+step 977
+    x force:        0.0231109, y force:          0.22172
+
+step 978
+    x force:        0.0230767, y force:         0.221721
+
+step 979
+    x force:        0.0230427, y force:         0.221721
+
+step 980
+    x force:        0.0230089, y force:         0.221721
+
+step 981
+    x force:        0.0229753, y force:          0.22172
+
+step 982
+    x force:        0.0229419, y force:         0.221718
+
+step 983
+    x force:        0.0229087, y force:         0.221715
+
+step 984
+    x force:        0.0228757, y force:         0.221712
+
+step 985
+    x force:        0.0228429, y force:         0.221707
+
+step 986
+    x force:        0.0228103, y force:         0.221702
+
+step 987
+    x force:        0.0227779, y force:         0.221696
+
+step 988
+    x force:        0.0227457, y force:          0.22169
+
+step 989
+    x force:        0.0227138, y force:         0.221682
+
+step 990
+    x force:         0.022682, y force:         0.221675
+
+step 991
+    x force:        0.0226505, y force:         0.221666
+
+step 992
+    x force:        0.0226192, y force:         0.221657
+
+step 993
+    x force:        0.0225881, y force:         0.221647
+
+step 994
+    x force:        0.0225572, y force:         0.221636
+
+step 995
+    x force:        0.0225266, y force:         0.221625
+
+step 996
+    x force:        0.0224962, y force:         0.221613
+
+step 997
+    x force:         0.022466, y force:           0.2216
+
+step 998
+    x force:        0.0224361, y force:         0.221587
+
+step 999
+    x force:        0.0224064, y force:         0.221574
+
+step 1000
+    x force:        0.0223769, y force:          0.22156
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/SD7003/_run_data_smalldt_cpp/run01000.bin...done
+
+step 1001
+    x force:        0.0223477, y force:         0.221545
+
+step 1002
+    x force:        0.0223187, y force:          0.22153
+
+step 1003
+    x force:          0.02229, y force:         0.221515
+
+step 1004
+    x force:        0.0222615, y force:         0.221499
+
+step 1005
+    x force:        0.0222333, y force:         0.221482
+
+step 1006
+    x force:        0.0222054, y force:         0.221465
+
+step 1007
+    x force:        0.0221777, y force:         0.221448
+
+step 1008
+    x force:        0.0221502, y force:         0.221431
+
+step 1009
+    x force:        0.0221231, y force:         0.221413
+
+step 1010
+    x force:        0.0220962, y force:         0.221394
+
+step 1011
+    x force:        0.0220695, y force:         0.221376
+
+step 1012
+    x force:        0.0220432, y force:         0.221357
+
+step 1013
+    x force:        0.0220171, y force:         0.221337
+
+step 1014
+    x force:        0.0219913, y force:         0.221318
+
+step 1015
+    x force:        0.0219658, y force:         0.221298
+
+step 1016
+    x force:        0.0219406, y force:         0.221278
+
+step 1017
+    x force:        0.0219157, y force:         0.221257
+
+step 1018
+    x force:        0.0218911, y force:         0.221236
+
+step 1019
+    x force:        0.0218667, y force:         0.221215
+
+step 1020
+    x force:        0.0218427, y force:         0.221194
+
+step 1021
+    x force:         0.021819, y force:         0.221172
+
+step 1022
+    x force:        0.0217956, y force:          0.22115
+
+step 1023
+    x force:        0.0217725, y force:         0.221127
+
+step 1024
+    x force:        0.0217497, y force:         0.221105
+
+step 1025
+    x force:        0.0217273, y force:         0.221082
+
+step 1026
+    x force:        0.0217051, y force:         0.221058
+
+step 1027
+    x force:        0.0216833, y force:         0.221034
+
+step 1028
+    x force:        0.0216619, y force:          0.22101
+
+step 1029
+    x force:        0.0216407, y force:         0.220986
+
+step 1030
+    x force:        0.0216199, y force:         0.220961
+
+step 1031
+    x force:        0.0215995, y force:         0.220935
+
+step 1032
+    x force:        0.0215794, y force:         0.220909
+
+step 1033
+    x force:        0.0215596, y force:         0.220883
+
+step 1034
+    x force:        0.0215402, y force:         0.220856
+
+step 1035
+    x force:        0.0215212, y force:         0.220829
+
+step 1036
+    x force:        0.0215025, y force:         0.220801
+
+step 1037
+    x force:        0.0214842, y force:         0.220773
+
+step 1038
+    x force:        0.0214663, y force:         0.220744
+
+step 1039
+    x force:        0.0214487, y force:         0.220715
+
+step 1040
+    x force:        0.0214315, y force:         0.220685
+
+step 1041
+    x force:        0.0214146, y force:         0.220655
+
+step 1042
+    x force:        0.0213982, y force:         0.220624
+
+step 1043
+    x force:        0.0213821, y force:         0.220592
+
+step 1044
+    x force:        0.0213664, y force:          0.22056
+
+step 1045
+    x force:        0.0213511, y force:         0.220527
+
+step 1046
+    x force:        0.0213362, y force:         0.220494
+
+step 1047
+    x force:        0.0213217, y force:         0.220459
+
+step 1048
+    x force:        0.0213076, y force:         0.220425
+
+step 1049
+    x force:        0.0212938, y force:         0.220389
+
+step 1050
+    x force:        0.0212805, y force:         0.220353
+
+step 1051
+    x force:        0.0212675, y force:         0.220316
+
+step 1052
+    x force:         0.021255, y force:         0.220279
+
+step 1053
+    x force:        0.0212429, y force:         0.220241
+
+step 1054
+    x force:        0.0212311, y force:         0.220202
+
+step 1055
+    x force:        0.0212198, y force:         0.220163
+
+step 1056
+    x force:        0.0212088, y force:         0.220123
+
+step 1057
+    x force:        0.0211983, y force:         0.220082
+
+step 1058
+    x force:        0.0211881, y force:         0.220041
+
+step 1059
+    x force:        0.0211784, y force:         0.219999
+
+step 1060
+    x force:         0.021169, y force:         0.219957
+
+step 1061
+    x force:        0.0211601, y force:         0.219914
+
+step 1062
+    x force:        0.0211515, y force:         0.219871
+
+step 1063
+    x force:        0.0211433, y force:         0.219827
+
+step 1064
+    x force:        0.0211356, y force:         0.219782
+
+step 1065
+    x force:        0.0211282, y force:         0.219737
+
+step 1066
+    x force:        0.0211212, y force:         0.219691
+
+step 1067
+    x force:        0.0211146, y force:         0.219645
+
+step 1068
+    x force:        0.0211083, y force:         0.219599
+
+step 1069
+    x force:        0.0211025, y force:         0.219552
+
+step 1070
+    x force:         0.021097, y force:         0.219505
+
+step 1071
+    x force:        0.0210919, y force:         0.219457
+
+step 1072
+    x force:        0.0210871, y force:         0.219409
+
+step 1073
+    x force:        0.0210827, y force:         0.219361
+
+step 1074
+    x force:        0.0210787, y force:         0.219313
+
+step 1075
+    x force:         0.021075, y force:         0.219264
+
+step 1076
+    x force:        0.0210716, y force:         0.219215
+
+step 1077
+    x force:        0.0210686, y force:         0.219166
+
+step 1078
+    x force:         0.021066, y force:         0.219116
+
+step 1079
+    x force:        0.0210636, y force:         0.219067
+
+step 1080
+    x force:        0.0210616, y force:         0.219017
+
+step 1081
+    x force:        0.0210598, y force:         0.218968
+
+step 1082
+    x force:        0.0210584, y force:         0.218918
+
+step 1083
+    x force:        0.0210573, y force:         0.218868
+
+step 1084
+    x force:        0.0210565, y force:         0.218818
+
+step 1085
+    x force:        0.0210559, y force:         0.218769
+
+step 1086
+    x force:        0.0210557, y force:         0.218719
+
+step 1087
+    x force:        0.0210557, y force:         0.218669
+
+step 1088
+    x force:         0.021056, y force:          0.21862
+
+step 1089
+    x force:        0.0210565, y force:          0.21857
+
+step 1090
+    x force:        0.0210573, y force:         0.218521
+
+step 1091
+    x force:        0.0210583, y force:         0.218472
+
+step 1092
+    x force:        0.0210595, y force:         0.218423
+
+step 1093
+    x force:         0.021061, y force:         0.218375
+
+step 1094
+    x force:        0.0210627, y force:         0.218327
+
+step 1095
+    x force:        0.0210646, y force:         0.218279
+
+step 1096
+    x force:        0.0210667, y force:         0.218231
+
+step 1097
+    x force:         0.021069, y force:         0.218183
+
+step 1098
+    x force:        0.0210715, y force:         0.218136
+
+step 1099
+    x force:        0.0210742, y force:          0.21809
+
+step 1100
+    x force:         0.021077, y force:         0.218043
+
+step 1101
+    x force:        0.0210801, y force:         0.217997
+
+step 1102
+    x force:        0.0210833, y force:         0.217952
+
+step 1103
+    x force:        0.0210866, y force:         0.217907
+
+step 1104
+    x force:        0.0210901, y force:         0.217862
+
+step 1105
+    x force:        0.0210938, y force:         0.217818
+
+step 1106
+    x force:        0.0210976, y force:         0.217775
+
+step 1107
+    x force:        0.0211015, y force:         0.217732
+
+step 1108
+    x force:        0.0211056, y force:         0.217689
+
+step 1109
+    x force:        0.0211098, y force:         0.217648
+
+step 1110
+    x force:        0.0211142, y force:         0.217606
+
+step 1111
+    x force:        0.0211186, y force:         0.217566
+
+step 1112
+    x force:        0.0211232, y force:         0.217526
+
+step 1113
+    x force:        0.0211279, y force:         0.217487
+
+step 1114
+    x force:        0.0211327, y force:         0.217448
+
+step 1115
+    x force:        0.0211377, y force:          0.21741
+
+step 1116
+    x force:        0.0211427, y force:         0.217373
+
+step 1117
+    x force:        0.0211478, y force:         0.217337
+
+step 1118
+    x force:        0.0211531, y force:         0.217301
+
+step 1119
+    x force:        0.0211585, y force:         0.217267
+
+step 1120
+    x force:        0.0211639, y force:         0.217233
+
+step 1121
+    x force:        0.0211695, y force:           0.2172
+
+step 1122
+    x force:        0.0211752, y force:         0.217168
+
+step 1123
+    x force:        0.0211809, y force:         0.217136
+
+step 1124
+    x force:        0.0211868, y force:         0.217106
+
+step 1125
+    x force:        0.0211928, y force:         0.217077
+
+step 1126
+    x force:        0.0211988, y force:         0.217048
+
+step 1127
+    x force:         0.021205, y force:         0.217021
+
+step 1128
+    x force:        0.0212113, y force:         0.216995
+
+step 1129
+    x force:        0.0212177, y force:          0.21697
+
+step 1130
+    x force:        0.0212242, y force:         0.216945
+
+step 1131
+    x force:        0.0212307, y force:         0.216922
+
+step 1132
+    x force:        0.0212374, y force:           0.2169
+
+step 1133
+    x force:        0.0212442, y force:         0.216879
+
+step 1134
+    x force:        0.0212511, y force:          0.21686
+
+step 1135
+    x force:        0.0212581, y force:         0.216841
+
+step 1136
+    x force:        0.0212652, y force:         0.216824
+
+step 1137
+    x force:        0.0212724, y force:         0.216807
+
+step 1138
+    x force:        0.0212797, y force:         0.216792
+
+step 1139
+    x force:        0.0212871, y force:         0.216779
+
+step 1140
+    x force:        0.0212947, y force:         0.216766
+
+step 1141
+    x force:        0.0213023, y force:         0.216755
+
+step 1142
+    x force:          0.02131, y force:         0.216745
+
+step 1143
+    x force:        0.0213179, y force:         0.216737
+
+step 1144
+    x force:        0.0213258, y force:         0.216729
+
+step 1145
+    x force:        0.0213339, y force:         0.216723
+
+step 1146
+    x force:         0.021342, y force:         0.216719
+
+step 1147
+    x force:        0.0213503, y force:         0.216715
+
+step 1148
+    x force:        0.0213587, y force:         0.216714
+
+step 1149
+    x force:        0.0213672, y force:         0.216713
+
+step 1150
+    x force:        0.0213757, y force:         0.216714
+
+step 1151
+    x force:        0.0213844, y force:         0.216716
+
+step 1152
+    x force:        0.0213932, y force:          0.21672
+
+step 1153
+    x force:        0.0214021, y force:         0.216725
+
+step 1154
+    x force:         0.021411, y force:         0.216731
+
+step 1155
+    x force:        0.0214201, y force:         0.216739
+
+step 1156
+    x force:        0.0214292, y force:         0.216748
+
+step 1157
+    x force:        0.0214385, y force:         0.216759
+
+step 1158
+    x force:        0.0214478, y force:         0.216771
+
+step 1159
+    x force:        0.0214572, y force:         0.216784
+
+step 1160
+    x force:        0.0214667, y force:         0.216799
+
+step 1161
+    x force:        0.0214763, y force:         0.216815
+
+step 1162
+    x force:        0.0214859, y force:         0.216833
+
+step 1163
+    x force:        0.0214956, y force:         0.216852
+
+step 1164
+    x force:        0.0215054, y force:         0.216873
+
+step 1165
+    x force:        0.0215153, y force:         0.216895
+
+step 1166
+    x force:        0.0215252, y force:         0.216918
+
+step 1167
+    x force:        0.0215351, y force:         0.216942
+
+step 1168
+    x force:        0.0215451, y force:         0.216968
+
+step 1169
+    x force:        0.0215552, y force:         0.216996
+
+step 1170
+    x force:        0.0215653, y force:         0.217025
+
+step 1171
+    x force:        0.0215754, y force:         0.217055
+
+step 1172
+    x force:        0.0215855, y force:         0.217086
+
+step 1173
+    x force:        0.0215957, y force:         0.217119
+
+step 1174
+    x force:        0.0216059, y force:         0.217153
+
+step 1175
+    x force:        0.0216161, y force:         0.217188
+
+step 1176
+    x force:        0.0216263, y force:         0.217225
+
+step 1177
+    x force:        0.0216365, y force:         0.217263
+
+step 1178
+    x force:        0.0216467, y force:         0.217302
+
+step 1179
+    x force:        0.0216569, y force:         0.217343
+
+step 1180
+    x force:        0.0216671, y force:         0.217384
+
+step 1181
+    x force:        0.0216772, y force:         0.217427
+
+step 1182
+    x force:        0.0216874, y force:         0.217472
+
+step 1183
+    x force:        0.0216974, y force:         0.217517
+
+step 1184
+    x force:        0.0217075, y force:         0.217563
+
+step 1185
+    x force:        0.0217175, y force:         0.217611
+
+step 1186
+    x force:        0.0217274, y force:          0.21766
+
+step 1187
+    x force:        0.0217373, y force:         0.217709
+
+step 1188
+    x force:        0.0217471, y force:          0.21776
+
+step 1189
+    x force:        0.0217568, y force:         0.217812
+
+step 1190
+    x force:        0.0217665, y force:         0.217865
+
+step 1191
+    x force:         0.021776, y force:         0.217919
+
+step 1192
+    x force:        0.0217855, y force:         0.217974
+
+step 1193
+    x force:        0.0217949, y force:          0.21803
+
+step 1194
+    x force:        0.0218041, y force:         0.218087
+
+step 1195
+    x force:        0.0218133, y force:         0.218144
+
+step 1196
+    x force:        0.0218223, y force:         0.218203
+
+step 1197
+    x force:        0.0218312, y force:         0.218262
+
+step 1198
+    x force:          0.02184, y force:         0.218323
+
+step 1199
+    x force:        0.0218487, y force:         0.218384
+
+step 1200
+    x force:        0.0218572, y force:         0.218445
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/SD7003/_run_data_smalldt_cpp/run01200.bin...done
+
+step 1201
+    x force:        0.0218655, y force:         0.218508
+
+step 1202
+    x force:        0.0218737, y force:         0.218571
+
+step 1203
+    x force:        0.0218818, y force:         0.218635
+
+step 1204
+    x force:        0.0218897, y force:         0.218699
+
+step 1205
+    x force:        0.0218974, y force:         0.218764
+
+step 1206
+    x force:         0.021905, y force:         0.218829
+
+step 1207
+    x force:        0.0219124, y force:         0.218895
+
+step 1208
+    x force:        0.0219196, y force:         0.218962
+
+step 1209
+    x force:        0.0219267, y force:         0.219029
+
+step 1210
+    x force:        0.0219336, y force:         0.219096
+
+step 1211
+    x force:        0.0219403, y force:         0.219164
+
+step 1212
+    x force:        0.0219468, y force:         0.219232
+
+step 1213
+    x force:        0.0219531, y force:           0.2193
+
+step 1214
+    x force:        0.0219592, y force:         0.219368
+
+step 1215
+    x force:        0.0219652, y force:         0.219437
+
+step 1216
+    x force:        0.0219709, y force:         0.219506
+
+step 1217
+    x force:        0.0219765, y force:         0.219575
+
+step 1218
+    x force:        0.0219819, y force:         0.219644
+
+step 1219
+    x force:         0.021987, y force:         0.219713
+
+step 1220
+    x force:         0.021992, y force:         0.219782
+
+step 1221
+    x force:        0.0219968, y force:         0.219852
+
+step 1222
+    x force:        0.0220015, y force:         0.219921
+
+step 1223
+    x force:        0.0220059, y force:          0.21999
+
+step 1224
+    x force:        0.0220102, y force:         0.220059
+
+step 1225
+    x force:        0.0220142, y force:         0.220128
+
+step 1226
+    x force:        0.0220181, y force:         0.220197
+
+step 1227
+    x force:        0.0220218, y force:         0.220265
+
+step 1228
+    x force:        0.0220254, y force:         0.220333
+
+step 1229
+    x force:        0.0220288, y force:         0.220401
+
+step 1230
+    x force:         0.022032, y force:         0.220469
+
+step 1231
+    x force:         0.022035, y force:         0.220536
+
+step 1232
+    x force:        0.0220379, y force:         0.220604
+
+step 1233
+    x force:        0.0220407, y force:          0.22067
+
+step 1234
+    x force:        0.0220432, y force:         0.220737
+
+step 1235
+    x force:        0.0220457, y force:         0.220802
+
+step 1236
+    x force:         0.022048, y force:         0.220868
+
+step 1237
+    x force:        0.0220502, y force:         0.220933
+
+step 1238
+    x force:        0.0220523, y force:         0.220997
+
+step 1239
+    x force:        0.0220542, y force:         0.221061
+
+step 1240
+    x force:         0.022056, y force:         0.221125
+
+step 1241
+    x force:        0.0220577, y force:         0.221188
+
+step 1242
+    x force:        0.0220594, y force:          0.22125
+
+step 1243
+    x force:        0.0220609, y force:         0.221312
+
+step 1244
+    x force:        0.0220623, y force:         0.221373
+
+step 1245
+    x force:        0.0220637, y force:         0.221434
+
+step 1246
+    x force:        0.0220649, y force:         0.221494
+
+step 1247
+    x force:        0.0220661, y force:         0.221553
+
+step 1248
+    x force:        0.0220673, y force:         0.221612
+
+step 1249
+    x force:        0.0220683, y force:         0.221671
+
+step 1250
+    x force:        0.0220694, y force:         0.221728
+
+step 1251
+    x force:        0.0220703, y force:         0.221785
+
+step 1252
+    x force:        0.0220713, y force:         0.221842
+
+step 1253
+    x force:        0.0220721, y force:         0.221897
+
+step 1254
+    x force:         0.022073, y force:         0.221952
+
+step 1255
+    x force:        0.0220738, y force:         0.222007
+
+step 1256
+    x force:        0.0220747, y force:         0.222061
+
+step 1257
+    x force:        0.0220754, y force:         0.222114
+
+step 1258
+    x force:        0.0220762, y force:         0.222167
+
+step 1259
+    x force:         0.022077, y force:         0.222218
+
+step 1260
+    x force:        0.0220778, y force:          0.22227
+
+step 1261
+    x force:        0.0220785, y force:          0.22232
+
+step 1262
+    x force:        0.0220793, y force:          0.22237
+
+step 1263
+    x force:        0.0220801, y force:          0.22242
+
+step 1264
+    x force:        0.0220809, y force:         0.222469
+
+step 1265
+    x force:        0.0220817, y force:         0.222517
+
+step 1266
+    x force:        0.0220825, y force:         0.222565
+
+step 1267
+    x force:        0.0220833, y force:         0.222612
+
+step 1268
+    x force:        0.0220842, y force:         0.222658
+
+step 1269
+    x force:        0.0220851, y force:         0.222704
+
+step 1270
+    x force:         0.022086, y force:          0.22275
+
+step 1271
+    x force:        0.0220869, y force:         0.222794
+
+step 1272
+    x force:        0.0220879, y force:         0.222839
+
+step 1273
+    x force:        0.0220889, y force:         0.222883
+
+step 1274
+    x force:        0.0220899, y force:         0.222926
+
+step 1275
+    x force:        0.0220909, y force:         0.222969
+
+step 1276
+    x force:         0.022092, y force:         0.223011
+
+step 1277
+    x force:        0.0220931, y force:         0.223053
+
+step 1278
+    x force:        0.0220943, y force:         0.223094
+
+step 1279
+    x force:        0.0220954, y force:         0.223135
+
+step 1280
+    x force:        0.0220967, y force:         0.223176
+
+step 1281
+    x force:        0.0220979, y force:         0.223216
+
+step 1282
+    x force:        0.0220992, y force:         0.223256
+
+step 1283
+    x force:        0.0221005, y force:         0.223295
+
+step 1284
+    x force:        0.0221019, y force:         0.223334
+
+step 1285
+    x force:        0.0221032, y force:         0.223373
+
+step 1286
+    x force:        0.0221046, y force:         0.223412
+
+step 1287
+    x force:        0.0221061, y force:          0.22345
+
+step 1288
+    x force:        0.0221076, y force:         0.223488
+
+step 1289
+    x force:        0.0221091, y force:         0.223525
+
+step 1290
+    x force:        0.0221106, y force:         0.223563
+
+step 1291
+    x force:        0.0221122, y force:           0.2236
+
+step 1292
+    x force:        0.0221138, y force:         0.223637
+
+step 1293
+    x force:        0.0221154, y force:         0.223673
+
+step 1294
+    x force:        0.0221171, y force:          0.22371
+
+step 1295
+    x force:        0.0221188, y force:         0.223746
+
+step 1296
+    x force:        0.0221205, y force:         0.223782
+
+step 1297
+    x force:        0.0221222, y force:         0.223818
+
+step 1298
+    x force:         0.022124, y force:         0.223854
+
+step 1299
+    x force:        0.0221258, y force:          0.22389
+
+step 1300
+    x force:        0.0221276, y force:         0.223926
+
+step 1301
+    x force:        0.0221295, y force:         0.223962
+
+step 1302
+    x force:        0.0221314, y force:         0.223998
+
+step 1303
+    x force:        0.0221333, y force:         0.224033
+
+step 1304
+    x force:        0.0221352, y force:         0.224069
+
+step 1305
+    x force:        0.0221371, y force:         0.224105
+
+step 1306
+    x force:        0.0221391, y force:         0.224141
+
+step 1307
+    x force:        0.0221411, y force:         0.224176
+
+step 1308
+    x force:        0.0221431, y force:         0.224212
+
+step 1309
+    x force:        0.0221452, y force:         0.224248
+
+step 1310
+    x force:        0.0221472, y force:         0.224284
+
+step 1311
+    x force:        0.0221493, y force:          0.22432
+
+step 1312
+    x force:        0.0221515, y force:         0.224356
+
+step 1313
+    x force:        0.0221536, y force:         0.224392
+
+step 1314
+    x force:        0.0221558, y force:         0.224428
+
+step 1315
+    x force:         0.022158, y force:         0.224464
+
+step 1316
+    x force:        0.0221602, y force:         0.224501
+
+step 1317
+    x force:        0.0221624, y force:         0.224537
+
+step 1318
+    x force:        0.0221647, y force:         0.224574
+
+step 1319
+    x force:         0.022167, y force:          0.22461
+
+step 1320
+    x force:        0.0221693, y force:         0.224647
+
+step 1321
+    x force:        0.0221717, y force:         0.224684
+
+step 1322
+    x force:        0.0221741, y force:         0.224721
+
+step 1323
+    x force:        0.0221765, y force:         0.224758
+
+step 1324
+    x force:         0.022179, y force:         0.224795
+
+step 1325
+    x force:        0.0221815, y force:         0.224832
+
+step 1326
+    x force:        0.0221841, y force:         0.224869
+
+step 1327
+    x force:        0.0221866, y force:         0.224906
+
+step 1328
+    x force:        0.0221893, y force:         0.224943
+
+step 1329
+    x force:         0.022192, y force:         0.224981
+
+step 1330
+    x force:        0.0221947, y force:         0.225018
+
+step 1331
+    x force:        0.0221975, y force:         0.225055
+
+step 1332
+    x force:        0.0222003, y force:         0.225092
+
+step 1333
+    x force:        0.0222032, y force:         0.225129
+
+step 1334
+    x force:        0.0222062, y force:         0.225166
+
+step 1335
+    x force:        0.0222092, y force:         0.225203
+
+step 1336
+    x force:        0.0222123, y force:          0.22524
+
+step 1337
+    x force:        0.0222155, y force:         0.225277
+
+step 1338
+    x force:        0.0222187, y force:         0.225313
+
+step 1339
+    x force:        0.0222221, y force:          0.22535
+
+step 1340
+    x force:        0.0222255, y force:         0.225386
+
+step 1341
+    x force:         0.022229, y force:         0.225422
+
+step 1342
+    x force:        0.0222326, y force:         0.225457
+
+step 1343
+    x force:        0.0222363, y force:         0.225492
+
+step 1344
+    x force:        0.0222401, y force:         0.225527
+
+step 1345
+    x force:        0.0222441, y force:         0.225562
+
+step 1346
+    x force:        0.0222481, y force:         0.225596
+
+step 1347
+    x force:        0.0222522, y force:          0.22563
+
+step 1348
+    x force:        0.0222565, y force:         0.225664
+
+step 1349
+    x force:        0.0222609, y force:         0.225697
+
+step 1350
+    x force:        0.0222655, y force:         0.225729
+
+step 1351
+    x force:        0.0222702, y force:         0.225761
+
+step 1352
+    x force:         0.022275, y force:         0.225792
+
+step 1353
+    x force:          0.02228, y force:         0.225823
+
+step 1354
+    x force:        0.0222851, y force:         0.225853
+
+step 1355
+    x force:        0.0222904, y force:         0.225883
+
+step 1356
+    x force:        0.0222959, y force:         0.225912
+
+step 1357
+    x force:        0.0223015, y force:          0.22594
+
+step 1358
+    x force:        0.0223073, y force:         0.225968
+
+step 1359
+    x force:        0.0223133, y force:         0.225994
+
+step 1360
+    x force:        0.0223195, y force:          0.22602
+
+step 1361
+    x force:        0.0223259, y force:         0.226046
+
+step 1362
+    x force:        0.0223324, y force:          0.22607
+
+step 1363
+    x force:        0.0223392, y force:         0.226094
+
+step 1364
+    x force:        0.0223462, y force:         0.226117
+
+step 1365
+    x force:        0.0223533, y force:         0.226139
+
+step 1366
+    x force:        0.0223607, y force:          0.22616
+
+step 1367
+    x force:        0.0223683, y force:          0.22618
+
+step 1368
+    x force:        0.0223762, y force:           0.2262
+
+step 1369
+    x force:        0.0223842, y force:         0.226218
+
+step 1370
+    x force:        0.0223925, y force:         0.226236
+
+step 1371
+    x force:        0.0224009, y force:         0.226253
+
+step 1372
+    x force:        0.0224097, y force:         0.226269
+
+step 1373
+    x force:        0.0224186, y force:         0.226283
+
+step 1374
+    x force:        0.0224278, y force:         0.226297
+
+step 1375
+    x force:        0.0224372, y force:          0.22631
+
+step 1376
+    x force:        0.0224468, y force:         0.226322
+
+step 1377
+    x force:        0.0224567, y force:         0.226333
+
+step 1378
+    x force:        0.0224668, y force:         0.226344
+
+step 1379
+    x force:        0.0224771, y force:         0.226353
+
+step 1380
+    x force:        0.0224877, y force:         0.226361
+
+step 1381
+    x force:        0.0224984, y force:         0.226368
+
+step 1382
+    x force:        0.0225094, y force:         0.226375
+
+step 1383
+    x force:        0.0225207, y force:          0.22638
+
+step 1384
+    x force:        0.0225321, y force:         0.226384
+
+step 1385
+    x force:        0.0225438, y force:         0.226388
+
+step 1386
+    x force:        0.0225557, y force:         0.226391
+
+step 1387
+    x force:        0.0225678, y force:         0.226392
+
+step 1388
+    x force:        0.0225801, y force:         0.226393
+
+step 1389
+    x force:        0.0225926, y force:         0.226393
+
+step 1390
+    x force:        0.0226054, y force:         0.226392
+
+step 1391
+    x force:        0.0226183, y force:          0.22639
+
+step 1392
+    x force:        0.0226314, y force:         0.226387
+
+step 1393
+    x force:        0.0226446, y force:         0.226383
+
+step 1394
+    x force:        0.0226581, y force:         0.226379
+
+step 1395
+    x force:        0.0226717, y force:         0.226373
+
+step 1396
+    x force:        0.0226855, y force:         0.226367
+
+step 1397
+    x force:        0.0226995, y force:          0.22636
+
+step 1398
+    x force:        0.0227136, y force:         0.226352
+
+step 1399
+    x force:        0.0227278, y force:         0.226344
+
+step 1400
+    x force:        0.0227422, y force:         0.226334
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/SD7003/_run_data_smalldt_cpp/run01400.bin...done
+
+step 1401
+    x force:        0.0227567, y force:         0.226324
+
+step 1402
+    x force:        0.0227714, y force:         0.226313
+
+step 1403
+    x force:        0.0227861, y force:         0.226301
+
+step 1404
+    x force:         0.022801, y force:         0.226289
+
+step 1405
+    x force:         0.022816, y force:         0.226275
+
+step 1406
+    x force:         0.022831, y force:         0.226262
+
+step 1407
+    x force:        0.0228462, y force:         0.226247
+
+step 1408
+    x force:        0.0228614, y force:         0.226232
+
+step 1409
+    x force:        0.0228766, y force:         0.226216
+
+step 1410
+    x force:         0.022892, y force:         0.226199
+
+step 1411
+    x force:        0.0229074, y force:         0.226182
+
+step 1412
+    x force:        0.0229228, y force:         0.226164
+
+step 1413
+    x force:        0.0229383, y force:         0.226146
+
+step 1414
+    x force:        0.0229538, y force:         0.226127
+
+step 1415
+    x force:        0.0229693, y force:         0.226107
+
+step 1416
+    x force:        0.0229849, y force:         0.226087
+
+step 1417
+    x force:        0.0230004, y force:         0.226067
+
+step 1418
+    x force:        0.0230159, y force:         0.226045
+
+step 1419
+    x force:        0.0230315, y force:         0.226024
+
+step 1420
+    x force:         0.023047, y force:         0.226002
+
+step 1421
+    x force:        0.0230625, y force:         0.225979
+
+step 1422
+    x force:         0.023078, y force:         0.225956
+
+step 1423
+    x force:        0.0230934, y force:         0.225933
+
+step 1424
+    x force:        0.0231089, y force:         0.225909
+
+step 1425
+    x force:        0.0231242, y force:         0.225885
+
+step 1426
+    x force:        0.0231395, y force:          0.22586
+
+step 1427
+    x force:        0.0231548, y force:         0.225835
+
+step 1428
+    x force:          0.02317, y force:          0.22581
+
+step 1429
+    x force:        0.0231851, y force:         0.225785
+
+step 1430
+    x force:        0.0232002, y force:         0.225759
+
+step 1431
+    x force:        0.0232152, y force:         0.225733
+
+step 1432
+    x force:        0.0232301, y force:         0.225707
+
+step 1433
+    x force:        0.0232449, y force:          0.22568
+
+step 1434
+    x force:        0.0232597, y force:         0.225654
+
+step 1435
+    x force:        0.0232744, y force:         0.225627
+
+step 1436
+    x force:         0.023289, y force:           0.2256
+
+step 1437
+    x force:        0.0233035, y force:         0.225574
+
+step 1438
+    x force:        0.0233179, y force:         0.225547
+
+step 1439
+    x force:        0.0233322, y force:          0.22552
+
+step 1440
+    x force:        0.0233464, y force:         0.225493
+
+step 1441
+    x force:        0.0233605, y force:         0.225466
+
+step 1442
+    x force:        0.0233745, y force:         0.225439
+
+step 1443
+    x force:        0.0233885, y force:         0.225412
+
+step 1444
+    x force:        0.0234023, y force:         0.225386
+
+step 1445
+    x force:         0.023416, y force:         0.225359
+
+step 1446
+    x force:        0.0234297, y force:         0.225333
+
+step 1447
+    x force:        0.0234432, y force:         0.225307
+
+step 1448
+    x force:        0.0234567, y force:         0.225281
+
+step 1449
+    x force:          0.02347, y force:         0.225256
+
+step 1450
+    x force:        0.0234833, y force:          0.22523
+
+step 1451
+    x force:        0.0234964, y force:         0.225206
+
+step 1452
+    x force:        0.0235095, y force:         0.225181
+
+step 1453
+    x force:        0.0235225, y force:         0.225157
+
+step 1454
+    x force:        0.0235354, y force:         0.225134
+
+step 1455
+    x force:        0.0235482, y force:          0.22511
+
+step 1456
+    x force:         0.023561, y force:         0.225088
+
+step 1457
+    x force:        0.0235736, y force:         0.225066
+
+step 1458
+    x force:        0.0235862, y force:         0.225044
+
+step 1459
+    x force:        0.0235987, y force:         0.225024
+
+step 1460
+    x force:        0.0236112, y force:         0.225003
+
+step 1461
+    x force:        0.0236235, y force:         0.224984
+
+step 1462
+    x force:        0.0236358, y force:         0.224965
+
+step 1463
+    x force:        0.0236481, y force:         0.224947
+
+step 1464
+    x force:        0.0236602, y force:          0.22493
+
+step 1465
+    x force:        0.0236723, y force:         0.224913
+
+step 1466
+    x force:        0.0236844, y force:         0.224897
+
+step 1467
+    x force:        0.0236964, y force:         0.224882
+
+step 1468
+    x force:        0.0237084, y force:         0.224868
+
+step 1469
+    x force:        0.0237203, y force:         0.224855
+
+step 1470
+    x force:        0.0237321, y force:         0.224843
+
+step 1471
+    x force:        0.0237439, y force:         0.224832
+
+step 1472
+    x force:        0.0237557, y force:         0.224822
+
+step 1473
+    x force:        0.0237674, y force:         0.224812
+
+step 1474
+    x force:         0.023779, y force:         0.224804
+
+step 1475
+    x force:        0.0237907, y force:         0.224797
+
+step 1476
+    x force:        0.0238022, y force:          0.22479
+
+step 1477
+    x force:        0.0238138, y force:         0.224785
+
+step 1478
+    x force:        0.0238253, y force:         0.224781
+
+step 1479
+    x force:        0.0238367, y force:         0.224778
+
+step 1480
+    x force:        0.0238481, y force:         0.224776
+
+step 1481
+    x force:        0.0238595, y force:         0.224775
+
+step 1482
+    x force:        0.0238708, y force:         0.224775
+
+step 1483
+    x force:        0.0238821, y force:         0.224776
+
+step 1484
+    x force:        0.0238934, y force:         0.224779
+
+step 1485
+    x force:        0.0239045, y force:         0.224782
+
+step 1486
+    x force:        0.0239157, y force:         0.224787
+
+step 1487
+    x force:        0.0239268, y force:         0.224792
+
+step 1488
+    x force:        0.0239378, y force:         0.224799
+
+step 1489
+    x force:        0.0239488, y force:         0.224807
+
+step 1490
+    x force:        0.0239597, y force:         0.224816
+
+step 1491
+    x force:        0.0239705, y force:         0.224826
+
+step 1492
+    x force:        0.0239813, y force:         0.224837
+
+step 1493
+    x force:         0.023992, y force:         0.224849
+
+step 1494
+    x force:        0.0240027, y force:         0.224862
+
+step 1495
+    x force:        0.0240133, y force:         0.224876
+
+step 1496
+    x force:        0.0240238, y force:         0.224892
+
+step 1497
+    x force:        0.0240342, y force:         0.224908
+
+step 1498
+    x force:        0.0240445, y force:         0.224925
+
+step 1499
+    x force:        0.0240547, y force:         0.224944
+
+step 1500
+    x force:        0.0240648, y force:         0.224963
+
+step 1501
+    x force:        0.0240749, y force:         0.224983
+
+step 1502
+    x force:        0.0240848, y force:         0.225004
+
+step 1503
+    x force:        0.0240946, y force:         0.225026
+
+step 1504
+    x force:        0.0241043, y force:         0.225049
+
+step 1505
+    x force:        0.0241139, y force:         0.225073
+
+step 1506
+    x force:        0.0241234, y force:         0.225098
+
+step 1507
+    x force:        0.0241328, y force:         0.225123
+
+step 1508
+    x force:         0.024142, y force:         0.225149
+
+step 1509
+    x force:        0.0241511, y force:         0.225176
+
+step 1510
+    x force:          0.02416, y force:         0.225204
+
+step 1511
+    x force:        0.0241689, y force:         0.225233
+
+step 1512
+    x force:        0.0241775, y force:         0.225262
+
+step 1513
+    x force:        0.0241861, y force:         0.225292
+
+step 1514
+    x force:        0.0241944, y force:         0.225322
+
+step 1515
+    x force:        0.0242027, y force:         0.225353
+
+step 1516
+    x force:        0.0242107, y force:         0.225385
+
+step 1517
+    x force:        0.0242187, y force:         0.225417
+
+step 1518
+    x force:        0.0242264, y force:         0.225449
+
+step 1519
+    x force:         0.024234, y force:         0.225482
+
+step 1520
+    x force:        0.0242415, y force:         0.225516
+
+step 1521
+    x force:        0.0242487, y force:          0.22555
+
+step 1522
+    x force:        0.0242559, y force:         0.225584
+
+step 1523
+    x force:        0.0242628, y force:         0.225619
+
+step 1524
+    x force:        0.0242696, y force:         0.225654
+
+step 1525
+    x force:        0.0242762, y force:         0.225689
+
+step 1526
+    x force:        0.0242826, y force:         0.225725
+
+step 1527
+    x force:        0.0242889, y force:          0.22576
+
+step 1528
+    x force:        0.0242949, y force:         0.225796
+
+step 1529
+    x force:        0.0243009, y force:         0.225832
+
+step 1530
+    x force:        0.0243066, y force:         0.225868
+
+step 1531
+    x force:        0.0243122, y force:         0.225905
+
+step 1532
+    x force:        0.0243176, y force:         0.225941
+
+step 1533
+    x force:        0.0243228, y force:         0.225977
+
+step 1534
+    x force:        0.0243279, y force:         0.226014
+
+step 1535
+    x force:        0.0243328, y force:          0.22605
+
+step 1536
+    x force:        0.0243375, y force:         0.226086
+
+step 1537
+    x force:        0.0243421, y force:         0.226122
+
+step 1538
+    x force:        0.0243465, y force:         0.226159
+
+step 1539
+    x force:        0.0243507, y force:         0.226194
+
+step 1540
+    x force:        0.0243548, y force:          0.22623
+
+step 1541
+    x force:        0.0243587, y force:         0.226266
+
+step 1542
+    x force:        0.0243625, y force:         0.226301
+
+step 1543
+    x force:        0.0243661, y force:         0.226336
+
+step 1544
+    x force:        0.0243695, y force:         0.226371
+
+step 1545
+    x force:        0.0243728, y force:         0.226405
+
+step 1546
+    x force:         0.024376, y force:          0.22644
+
+step 1547
+    x force:         0.024379, y force:         0.226474
+
+step 1548
+    x force:        0.0243818, y force:         0.226507
+
+step 1549
+    x force:        0.0243846, y force:          0.22654
+
+step 1550
+    x force:        0.0243871, y force:         0.226573
+
+step 1551
+    x force:        0.0243895, y force:         0.226605
+
+step 1552
+    x force:        0.0243918, y force:         0.226637
+
+step 1553
+    x force:         0.024394, y force:         0.226669
+
+step 1554
+    x force:         0.024396, y force:           0.2267
+
+step 1555
+    x force:        0.0243978, y force:          0.22673
+
+step 1556
+    x force:        0.0243996, y force:         0.226761
+
+step 1557
+    x force:        0.0244012, y force:          0.22679
+
+step 1558
+    x force:        0.0244027, y force:          0.22682
+
+step 1559
+    x force:         0.024404, y force:         0.226848
+
+step 1560
+    x force:        0.0244052, y force:         0.226877
+
+step 1561
+    x force:        0.0244063, y force:         0.226904
+
+step 1562
+    x force:        0.0244072, y force:         0.226932
+
+step 1563
+    x force:         0.024408, y force:         0.226959
+
+step 1564
+    x force:        0.0244087, y force:         0.226985
+
+step 1565
+    x force:        0.0244092, y force:         0.227011
+
+step 1566
+    x force:        0.0244096, y force:         0.227036
+
+step 1567
+    x force:        0.0244099, y force:         0.227062
+
+step 1568
+    x force:          0.02441, y force:         0.227086
+
+step 1569
+    x force:          0.02441, y force:          0.22711
+
+step 1570
+    x force:        0.0244099, y force:         0.227134
+
+step 1571
+    x force:        0.0244096, y force:         0.227157
+
+step 1572
+    x force:        0.0244092, y force:          0.22718
+
+step 1573
+    x force:        0.0244086, y force:         0.227203
+
+step 1574
+    x force:        0.0244079, y force:         0.227225
+
+step 1575
+    x force:         0.024407, y force:         0.227247
+
+step 1576
+    x force:        0.0244059, y force:         0.227269
+
+step 1577
+    x force:        0.0244047, y force:          0.22729
+
+step 1578
+    x force:        0.0244034, y force:         0.227311
+
+step 1579
+    x force:        0.0244018, y force:         0.227332
+
+step 1580
+    x force:        0.0244001, y force:         0.227352
+
+step 1581
+    x force:        0.0243982, y force:         0.227373
+
+step 1582
+    x force:        0.0243962, y force:         0.227393
+
+step 1583
+    x force:        0.0243939, y force:         0.227413
+
+step 1584
+    x force:        0.0243914, y force:         0.227433
+
+step 1585
+    x force:        0.0243888, y force:         0.227453
+
+step 1586
+    x force:        0.0243859, y force:         0.227473
+
+step 1587
+    x force:        0.0243828, y force:         0.227492
+
+step 1588
+    x force:        0.0243795, y force:         0.227512
+
+step 1589
+    x force:         0.024376, y force:         0.227532
+
+step 1590
+    x force:        0.0243723, y force:         0.227551
+
+step 1591
+    x force:        0.0243683, y force:         0.227571
+
+step 1592
+    x force:        0.0243641, y force:         0.227591
+
+step 1593
+    x force:        0.0243596, y force:         0.227611
+
+step 1594
+    x force:        0.0243549, y force:         0.227631
+
+step 1595
+    x force:        0.0243499, y force:         0.227651
+
+step 1596
+    x force:        0.0243446, y force:         0.227672
+
+step 1597
+    x force:        0.0243391, y force:         0.227693
+
+step 1598
+    x force:        0.0243333, y force:         0.227713
+
+step 1599
+    x force:        0.0243272, y force:         0.227734
+
+step 1600
+    x force:        0.0243208, y force:         0.227756
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/SD7003/_run_data_smalldt_cpp/run01600.bin...done
+
+step 1601
+    x force:        0.0243141, y force:         0.227777
+
+step 1602
+    x force:        0.0243071, y force:         0.227799
+
+step 1603
+    x force:        0.0242998, y force:         0.227821
+
+step 1604
+    x force:        0.0242922, y force:         0.227844
+
+step 1605
+    x force:        0.0242842, y force:         0.227866
+
+step 1606
+    x force:         0.024276, y force:         0.227889
+
+step 1607
+    x force:        0.0242674, y force:         0.227913
+
+step 1608
+    x force:        0.0242585, y force:         0.227936
+
+step 1609
+    x force:        0.0242492, y force:          0.22796
+
+step 1610
+    x force:        0.0242396, y force:         0.227984
+
+step 1611
+    x force:        0.0242297, y force:         0.228009
+
+step 1612
+    x force:        0.0242194, y force:         0.228034
+
+step 1613
+    x force:        0.0242088, y force:         0.228059
+
+step 1614
+    x force:        0.0241978, y force:         0.228085
+
+step 1615
+    x force:        0.0241865, y force:          0.22811
+
+step 1616
+    x force:        0.0241749, y force:         0.228136
+
+step 1617
+    x force:        0.0241629, y force:         0.228163
+
+step 1618
+    x force:        0.0241505, y force:         0.228189
+
+step 1619
+    x force:        0.0241379, y force:         0.228216
+
+step 1620
+    x force:        0.0241248, y force:         0.228243
+
+step 1621
+    x force:        0.0241115, y force:          0.22827
+
+step 1622
+    x force:        0.0240978, y force:         0.228297
+
+step 1623
+    x force:        0.0240838, y force:         0.228325
+
+step 1624
+    x force:        0.0240694, y force:         0.228352
+
+step 1625
+    x force:        0.0240547, y force:          0.22838
+
+step 1626
+    x force:        0.0240398, y force:         0.228407
+
+step 1627
+    x force:        0.0240245, y force:         0.228435
+
+step 1628
+    x force:        0.0240089, y force:         0.228462
+
+step 1629
+    x force:         0.023993, y force:          0.22849
+
+step 1630
+    x force:        0.0239769, y force:         0.228517
+
+step 1631
+    x force:        0.0239605, y force:         0.228544
+
+step 1632
+    x force:        0.0239438, y force:         0.228571
+
+step 1633
+    x force:        0.0239269, y force:         0.228598
+
+step 1634
+    x force:        0.0239097, y force:         0.228625
+
+step 1635
+    x force:        0.0238923, y force:         0.228651
+
+step 1636
+    x force:        0.0238747, y force:         0.228677
+
+step 1637
+    x force:        0.0238569, y force:         0.228703
+
+step 1638
+    x force:        0.0238389, y force:         0.228728
+
+step 1639
+    x force:        0.0238207, y force:         0.228752
+
+step 1640
+    x force:        0.0238024, y force:         0.228776
+
+step 1641
+    x force:        0.0237839, y force:           0.2288
+
+step 1642
+    x force:        0.0237653, y force:         0.228823
+
+step 1643
+    x force:        0.0237466, y force:         0.228845
+
+step 1644
+    x force:        0.0237278, y force:         0.228867
+
+step 1645
+    x force:        0.0237089, y force:         0.228888
+
+step 1646
+    x force:          0.02369, y force:         0.228908
+
+step 1647
+    x force:         0.023671, y force:         0.228927
+
+step 1648
+    x force:        0.0236519, y force:         0.228945
+
+step 1649
+    x force:        0.0236329, y force:         0.228963
+
+step 1650
+    x force:        0.0236139, y force:         0.228979
+
+step 1651
+    x force:        0.0235949, y force:         0.228995
+
+step 1652
+    x force:        0.0235759, y force:         0.229009
+
+step 1653
+    x force:         0.023557, y force:         0.229023
+
+step 1654
+    x force:        0.0235382, y force:         0.229035
+
+step 1655
+    x force:        0.0235194, y force:         0.229046
+
+step 1656
+    x force:        0.0235008, y force:         0.229056
+
+step 1657
+    x force:        0.0234823, y force:         0.229065
+
+step 1658
+    x force:         0.023464, y force:         0.229072
+
+step 1659
+    x force:        0.0234458, y force:         0.229079
+
+step 1660
+    x force:        0.0234278, y force:         0.229083
+
+step 1661
+    x force:          0.02341, y force:         0.229087
+
+step 1662
+    x force:        0.0233924, y force:         0.229089
+
+step 1663
+    x force:         0.023375, y force:          0.22909
+
+step 1664
+    x force:        0.0233579, y force:         0.229089
+
+step 1665
+    x force:         0.023341, y force:         0.229087
+
+step 1666
+    x force:        0.0233245, y force:         0.229083
+
+step 1667
+    x force:        0.0233082, y force:         0.229078
+
+step 1668
+    x force:        0.0232922, y force:         0.229071
+
+step 1669
+    x force:        0.0232765, y force:         0.229063
+
+step 1670
+    x force:        0.0232611, y force:         0.229053
+
+step 1671
+    x force:        0.0232461, y force:         0.229042
+
+step 1672
+    x force:        0.0232315, y force:         0.229029
+
+step 1673
+    x force:        0.0232172, y force:         0.229014
+
+step 1674
+    x force:        0.0232032, y force:         0.228998
+
+step 1675
+    x force:        0.0231897, y force:         0.228981
+
+step 1676
+    x force:        0.0231765, y force:         0.228961
+
+step 1677
+    x force:        0.0231638, y force:         0.228941
+
+step 1678
+    x force:        0.0231514, y force:         0.228918
+
+step 1679
+    x force:        0.0231395, y force:         0.228894
+
+step 1680
+    x force:         0.023128, y force:         0.228868
+
+step 1681
+    x force:        0.0231169, y force:         0.228841
+
+step 1682
+    x force:        0.0231062, y force:         0.228812
+
+step 1683
+    x force:         0.023096, y force:         0.228782
+
+step 1684
+    x force:        0.0230862, y force:          0.22875
+
+step 1685
+    x force:        0.0230769, y force:         0.228717
+
+step 1686
+    x force:         0.023068, y force:         0.228682
+
+step 1687
+    x force:        0.0230596, y force:         0.228645
+
+step 1688
+    x force:        0.0230516, y force:         0.228608
+
+step 1689
+    x force:         0.023044, y force:         0.228568
+
+step 1690
+    x force:        0.0230369, y force:         0.228528
+
+step 1691
+    x force:        0.0230303, y force:         0.228486
+
+step 1692
+    x force:        0.0230241, y force:         0.228442
+
+step 1693
+    x force:        0.0230184, y force:         0.228397
+
+step 1694
+    x force:        0.0230131, y force:         0.228351
+
+step 1695
+    x force:        0.0230082, y force:         0.228304
+
+step 1696
+    x force:        0.0230038, y force:         0.228256
+
+step 1697
+    x force:        0.0229998, y force:         0.228206
+
+step 1698
+    x force:        0.0229963, y force:         0.228155
+
+step 1699
+    x force:        0.0229932, y force:         0.228104
+
+step 1700
+    x force:        0.0229905, y force:         0.228051
+
+step 1701
+    x force:        0.0229882, y force:         0.227997
+
+step 1702
+    x force:        0.0229863, y force:         0.227942
+
+step 1703
+    x force:        0.0229849, y force:         0.227887
+
+step 1704
+    x force:        0.0229838, y force:          0.22783
+
+step 1705
+    x force:        0.0229832, y force:         0.227773
+
+step 1706
+    x force:        0.0229829, y force:         0.227715
+
+step 1707
+    x force:         0.022983, y force:         0.227657
+
+step 1708
+    x force:        0.0229835, y force:         0.227597
+
+step 1709
+    x force:        0.0229843, y force:         0.227538
+
+step 1710
+    x force:        0.0229856, y force:         0.227477
+
+step 1711
+    x force:        0.0229871, y force:         0.227417
+
+step 1712
+    x force:         0.022989, y force:         0.227356
+
+step 1713
+    x force:        0.0229913, y force:         0.227295
+
+step 1714
+    x force:        0.0229938, y force:         0.227233
+
+step 1715
+    x force:        0.0229967, y force:         0.227171
+
+step 1716
+    x force:        0.0229999, y force:          0.22711
+
+step 1717
+    x force:        0.0230034, y force:         0.227048
+
+step 1718
+    x force:        0.0230072, y force:         0.226986
+
+step 1719
+    x force:        0.0230112, y force:         0.226924
+
+step 1720
+    x force:        0.0230156, y force:         0.226863
+
+step 1721
+    x force:        0.0230202, y force:         0.226801
+
+step 1722
+    x force:        0.0230251, y force:          0.22674
+
+step 1723
+    x force:        0.0230302, y force:          0.22668
+
+step 1724
+    x force:        0.0230356, y force:         0.226619
+
+step 1725
+    x force:        0.0230412, y force:         0.226559
+
+step 1726
+    x force:         0.023047, y force:           0.2265
+
+step 1727
+    x force:        0.0230531, y force:         0.226442
+
+step 1728
+    x force:        0.0230593, y force:         0.226384
+
+step 1729
+    x force:        0.0230658, y force:         0.226327
+
+step 1730
+    x force:        0.0230724, y force:          0.22627
+
+step 1731
+    x force:        0.0230793, y force:         0.226215
+
+step 1732
+    x force:        0.0230863, y force:          0.22616
+
+step 1733
+    x force:        0.0230935, y force:         0.226107
+
+step 1734
+    x force:        0.0231009, y force:         0.226054
+
+step 1735
+    x force:        0.0231084, y force:         0.226003
+
+step 1736
+    x force:        0.0231161, y force:         0.225952
+
+step 1737
+    x force:        0.0231239, y force:         0.225903
+
+step 1738
+    x force:        0.0231318, y force:         0.225856
+
+step 1739
+    x force:        0.0231399, y force:         0.225809
+
+step 1740
+    x force:        0.0231481, y force:         0.225764
+
+step 1741
+    x force:        0.0231565, y force:         0.225721
+
+step 1742
+    x force:        0.0231649, y force:         0.225679
+
+step 1743
+    x force:        0.0231735, y force:         0.225638
+
+step 1744
+    x force:        0.0231821, y force:         0.225599
+
+step 1745
+    x force:        0.0231908, y force:         0.225562
+
+step 1746
+    x force:        0.0231997, y force:         0.225526
+
+step 1747
+    x force:        0.0232086, y force:         0.225492
+
+step 1748
+    x force:        0.0232176, y force:         0.225459
+
+step 1749
+    x force:        0.0232266, y force:         0.225429
+
+step 1750
+    x force:        0.0232357, y force:           0.2254
+
+step 1751
+    x force:        0.0232449, y force:         0.225373
+
+step 1752
+    x force:        0.0232541, y force:         0.225348
+
+step 1753
+    x force:        0.0232634, y force:         0.225325
+
+step 1754
+    x force:        0.0232727, y force:         0.225303
+
+step 1755
+    x force:         0.023282, y force:         0.225284
+
+step 1756
+    x force:        0.0232913, y force:         0.225266
+
+step 1757
+    x force:        0.0233007, y force:         0.225251
+
+step 1758
+    x force:        0.0233101, y force:         0.225237
+
+step 1759
+    x force:        0.0233195, y force:         0.225226
+
+step 1760
+    x force:        0.0233289, y force:         0.225216
+
+step 1761
+    x force:        0.0233383, y force:         0.225208
+
+step 1762
+    x force:        0.0233477, y force:         0.225203
+
+step 1763
+    x force:        0.0233571, y force:         0.225199
+
+step 1764
+    x force:        0.0233664, y force:         0.225197
+
+step 1765
+    x force:        0.0233757, y force:         0.225198
+
+step 1766
+    x force:         0.023385, y force:           0.2252
+
+step 1767
+    x force:        0.0233942, y force:         0.225204
+
+step 1768
+    x force:        0.0234033, y force:          0.22521
+
+step 1769
+    x force:        0.0234124, y force:         0.225218
+
+step 1770
+    x force:        0.0234215, y force:         0.225228
+
+step 1771
+    x force:        0.0234304, y force:          0.22524
+
+step 1772
+    x force:        0.0234393, y force:         0.225253
+
+step 1773
+    x force:        0.0234481, y force:         0.225269
+
+step 1774
+    x force:        0.0234567, y force:         0.225286
+
+step 1775
+    x force:        0.0234653, y force:         0.225305
+
+step 1776
+    x force:        0.0234737, y force:         0.225326
+
+step 1777
+    x force:         0.023482, y force:         0.225349
+
+step 1778
+    x force:        0.0234901, y force:         0.225373
+
+step 1779
+    x force:        0.0234982, y force:         0.225399
+
+step 1780
+    x force:         0.023506, y force:         0.225426
+
+step 1781
+    x force:        0.0235137, y force:         0.225455
+
+step 1782
+    x force:        0.0235212, y force:         0.225486
+
+step 1783
+    x force:        0.0235285, y force:         0.225518
+
+step 1784
+    x force:        0.0235356, y force:         0.225551
+
+step 1785
+    x force:        0.0235424, y force:         0.225585
+
+step 1786
+    x force:        0.0235491, y force:         0.225621
+
+step 1787
+    x force:        0.0235555, y force:         0.225659
+
+step 1788
+    x force:        0.0235617, y force:         0.225697
+
+step 1789
+    x force:        0.0235677, y force:         0.225736
+
+step 1790
+    x force:        0.0235733, y force:         0.225777
+
+step 1791
+    x force:        0.0235787, y force:         0.225818
+
+step 1792
+    x force:        0.0235838, y force:         0.225861
+
+step 1793
+    x force:        0.0235886, y force:         0.225904
+
+step 1794
+    x force:        0.0235931, y force:         0.225948
+
+step 1795
+    x force:        0.0235973, y force:         0.225993
+
+step 1796
+    x force:        0.0236011, y force:         0.226038
+
+step 1797
+    x force:        0.0236046, y force:         0.226084
+
+step 1798
+    x force:        0.0236078, y force:          0.22613
+
+step 1799
+    x force:        0.0236106, y force:         0.226177
+
+step 1800
+    x force:         0.023613, y force:         0.226225
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/SD7003/_run_data_smalldt_cpp/run01800.bin...done
+
+step 1801
+    x force:         0.023615, y force:         0.226272
+
+step 1802
+    x force:        0.0236167, y force:          0.22632
+
+step 1803
+    x force:        0.0236179, y force:         0.226368
+
+step 1804
+    x force:        0.0236187, y force:         0.226416
+
+step 1805
+    x force:        0.0236192, y force:         0.226465
+
+step 1806
+    x force:        0.0236192, y force:         0.226513
+
+step 1807
+    x force:        0.0236187, y force:         0.226561
+
+step 1808
+    x force:        0.0236179, y force:         0.226608
+
+step 1809
+    x force:        0.0236165, y force:         0.226656
+
+step 1810
+    x force:        0.0236148, y force:         0.226703
+
+step 1811
+    x force:        0.0236125, y force:          0.22675
+
+step 1812
+    x force:        0.0236098, y force:         0.226797
+
+step 1813
+    x force:        0.0236067, y force:         0.226842
+
+step 1814
+    x force:        0.0236031, y force:         0.226888
+
+step 1815
+    x force:         0.023599, y force:         0.226933
+
+step 1816
+    x force:        0.0235944, y force:         0.226977
+
+step 1817
+    x force:        0.0235893, y force:          0.22702
+
+step 1818
+    x force:        0.0235838, y force:         0.227062
+
+step 1819
+    x force:        0.0235778, y force:         0.227104
+
+step 1820
+    x force:        0.0235713, y force:         0.227145
+
+step 1821
+    x force:        0.0235643, y force:         0.227185
+
+step 1822
+    x force:        0.0235569, y force:         0.227224
+
+step 1823
+    x force:         0.023549, y force:         0.227261
+
+step 1824
+    x force:        0.0235406, y force:         0.227298
+
+step 1825
+    x force:        0.0235317, y force:         0.227334
+
+step 1826
+    x force:        0.0235224, y force:         0.227368
+
+step 1827
+    x force:        0.0235126, y force:         0.227401
+
+step 1828
+    x force:        0.0235024, y force:         0.227434
+
+step 1829
+    x force:        0.0234917, y force:         0.227464
+
+step 1830
+    x force:        0.0234806, y force:         0.227494
+
+step 1831
+    x force:        0.0234691, y force:         0.227522
+
+step 1832
+    x force:        0.0234571, y force:         0.227549
+
+step 1833
+    x force:        0.0234447, y force:         0.227575
+
+step 1834
+    x force:         0.023432, y force:         0.227599
+
+step 1835
+    x force:        0.0234188, y force:         0.227622
+
+step 1836
+    x force:        0.0234052, y force:         0.227643
+
+step 1837
+    x force:        0.0233913, y force:         0.227663
+
+step 1838
+    x force:        0.0233771, y force:         0.227682
+
+step 1839
+    x force:        0.0233624, y force:           0.2277
+
+step 1840
+    x force:        0.0233475, y force:         0.227715
+
+step 1841
+    x force:        0.0233322, y force:          0.22773
+
+step 1842
+    x force:        0.0233167, y force:         0.227743
+
+step 1843
+    x force:        0.0233008, y force:         0.227755
+
+step 1844
+    x force:        0.0232847, y force:         0.227765
+
+step 1845
+    x force:        0.0232683, y force:         0.227774
+
+step 1846
+    x force:        0.0232517, y force:         0.227781
+
+step 1847
+    x force:        0.0232348, y force:         0.227788
+
+step 1848
+    x force:        0.0232177, y force:         0.227792
+
+step 1849
+    x force:        0.0232005, y force:         0.227796
+
+step 1850
+    x force:         0.023183, y force:         0.227798
+
+step 1851
+    x force:        0.0231654, y force:         0.227799
+
+step 1852
+    x force:        0.0231477, y force:         0.227798
+
+step 1853
+    x force:        0.0231298, y force:         0.227796
+
+step 1854
+    x force:        0.0231119, y force:         0.227793
+
+step 1855
+    x force:        0.0230938, y force:         0.227789
+
+step 1856
+    x force:        0.0230756, y force:         0.227783
+
+step 1857
+    x force:        0.0230574, y force:         0.227776
+
+step 1858
+    x force:        0.0230392, y force:         0.227769
+
+step 1859
+    x force:        0.0230209, y force:         0.227759
+
+step 1860
+    x force:        0.0230026, y force:         0.227749
+
+step 1861
+    x force:        0.0229843, y force:         0.227738
+
+step 1862
+    x force:         0.022966, y force:         0.227725
+
+step 1863
+    x force:        0.0229478, y force:         0.227712
+
+step 1864
+    x force:        0.0229296, y force:         0.227697
+
+step 1865
+    x force:        0.0229115, y force:         0.227682
+
+step 1866
+    x force:        0.0228935, y force:         0.227665
+
+step 1867
+    x force:        0.0228755, y force:         0.227648
+
+step 1868
+    x force:        0.0228577, y force:          0.22763
+
+step 1869
+    x force:          0.02284, y force:          0.22761
+
+step 1870
+    x force:        0.0228225, y force:          0.22759
+
+step 1871
+    x force:        0.0228051, y force:         0.227569
+
+step 1872
+    x force:        0.0227878, y force:         0.227548
+
+step 1873
+    x force:        0.0227708, y force:         0.227525
+
+step 1874
+    x force:        0.0227539, y force:         0.227502
+
+step 1875
+    x force:        0.0227372, y force:         0.227478
+
+step 1876
+    x force:        0.0227208, y force:         0.227454
+
+step 1877
+    x force:        0.0227045, y force:         0.227428
+
+step 1878
+    x force:        0.0226885, y force:         0.227403
+
+step 1879
+    x force:        0.0226727, y force:         0.227376
+
+step 1880
+    x force:        0.0226572, y force:          0.22735
+
+step 1881
+    x force:        0.0226419, y force:         0.227322
+
+step 1882
+    x force:        0.0226269, y force:         0.227295
+
+step 1883
+    x force:        0.0226122, y force:         0.227266
+
+step 1884
+    x force:        0.0225978, y force:         0.227238
+
+step 1885
+    x force:        0.0225836, y force:         0.227209
+
+step 1886
+    x force:        0.0225697, y force:          0.22718
+
+step 1887
+    x force:        0.0225561, y force:         0.227151
+
+step 1888
+    x force:        0.0225428, y force:         0.227121
+
+step 1889
+    x force:        0.0225298, y force:         0.227092
+
+step 1890
+    x force:        0.0225171, y force:         0.227062
+
+step 1891
+    x force:        0.0225047, y force:         0.227032
+
+step 1892
+    x force:        0.0224927, y force:         0.227002
+
+step 1893
+    x force:        0.0224809, y force:         0.226972
+
+step 1894
+    x force:        0.0224694, y force:         0.226943
+
+step 1895
+    x force:        0.0224583, y force:         0.226913
+
+step 1896
+    x force:        0.0224474, y force:         0.226884
+
+step 1897
+    x force:        0.0224369, y force:         0.226854
+
+step 1898
+    x force:        0.0224266, y force:         0.226825
+
+step 1899
+    x force:        0.0224167, y force:         0.226797
+
+step 1900
+    x force:         0.022407, y force:         0.226768
+
+step 1901
+    x force:        0.0223976, y force:          0.22674
+
+step 1902
+    x force:        0.0223886, y force:         0.226713
+
+step 1903
+    x force:        0.0223798, y force:         0.226686
+
+step 1904
+    x force:        0.0223713, y force:          0.22666
+
+step 1905
+    x force:         0.022363, y force:         0.226634
+
+step 1906
+    x force:        0.0223551, y force:         0.226609
+
+step 1907
+    x force:        0.0223474, y force:         0.226584
+
+step 1908
+    x force:        0.0223399, y force:          0.22656
+
+step 1909
+    x force:        0.0223327, y force:         0.226537
+
+step 1910
+    x force:        0.0223257, y force:         0.226515
+
+step 1911
+    x force:        0.0223189, y force:         0.226494
+
+step 1912
+    x force:        0.0223124, y force:         0.226474
+
+step 1913
+    x force:        0.0223061, y force:         0.226454
+
+step 1914
+    x force:           0.0223, y force:         0.226436
+
+step 1915
+    x force:         0.022294, y force:         0.226419
+
+step 1916
+    x force:        0.0222883, y force:         0.226402
+
+step 1917
+    x force:        0.0222827, y force:         0.226387
+
+step 1918
+    x force:        0.0222773, y force:         0.226373
+
+step 1919
+    x force:         0.022272, y force:          0.22636
+
+step 1920
+    x force:        0.0222669, y force:         0.226349
+
+step 1921
+    x force:        0.0222619, y force:         0.226339
+
+step 1922
+    x force:         0.022257, y force:          0.22633
+
+step 1923
+    x force:        0.0222522, y force:         0.226322
+
+step 1924
+    x force:        0.0222475, y force:         0.226315
+
+step 1925
+    x force:        0.0222429, y force:          0.22631
+
+step 1926
+    x force:        0.0222384, y force:         0.226307
+
+step 1927
+    x force:        0.0222339, y force:         0.226304
+
+step 1928
+    x force:        0.0222295, y force:         0.226303
+
+step 1929
+    x force:        0.0222252, y force:         0.226304
+
+step 1930
+    x force:        0.0222208, y force:         0.226306
+
+step 1931
+    x force:        0.0222165, y force:         0.226309
+
+step 1932
+    x force:        0.0222122, y force:         0.226314
+
+step 1933
+    x force:        0.0222079, y force:          0.22632
+
+step 1934
+    x force:        0.0222036, y force:         0.226327
+
+step 1935
+    x force:        0.0221993, y force:         0.226336
+
+step 1936
+    x force:         0.022195, y force:         0.226347
+
+step 1937
+    x force:        0.0221906, y force:         0.226358
+
+step 1938
+    x force:        0.0221862, y force:         0.226372
+
+step 1939
+    x force:        0.0221818, y force:         0.226386
+
+step 1940
+    x force:        0.0221773, y force:         0.226402
+
+step 1941
+    x force:        0.0221727, y force:         0.226419
+
+step 1942
+    x force:        0.0221681, y force:         0.226437
+
+step 1943
+    x force:        0.0221634, y force:         0.226457
+
+step 1944
+    x force:        0.0221586, y force:         0.226478
+
+step 1945
+    x force:        0.0221537, y force:           0.2265
+
+step 1946
+    x force:        0.0221488, y force:         0.226524
+
+step 1947
+    x force:        0.0221437, y force:         0.226548
+
+step 1948
+    x force:        0.0221386, y force:         0.226574
+
+step 1949
+    x force:        0.0221334, y force:           0.2266
+
+step 1950
+    x force:        0.0221281, y force:         0.226628
+
+step 1951
+    x force:        0.0221226, y force:         0.226657
+
+step 1952
+    x force:        0.0221171, y force:         0.226687
+
+step 1953
+    x force:        0.0221115, y force:         0.226717
+
+step 1954
+    x force:        0.0221058, y force:         0.226748
+
+step 1955
+    x force:           0.0221, y force:         0.226781
+
+step 1956
+    x force:         0.022094, y force:         0.226814
+
+step 1957
+    x force:         0.022088, y force:         0.226847
+
+step 1958
+    x force:        0.0220819, y force:         0.226882
+
+step 1959
+    x force:        0.0220757, y force:         0.226916
+
+step 1960
+    x force:        0.0220694, y force:         0.226952
+
+step 1961
+    x force:         0.022063, y force:         0.226988
+
+step 1962
+    x force:        0.0220565, y force:         0.227024
+
+step 1963
+    x force:          0.02205, y force:         0.227061
+
+step 1964
+    x force:        0.0220434, y force:         0.227098
+
+step 1965
+    x force:        0.0220367, y force:         0.227136
+
+step 1966
+    x force:        0.0220299, y force:         0.227173
+
+step 1967
+    x force:        0.0220231, y force:         0.227211
+
+step 1968
+    x force:        0.0220163, y force:         0.227249
+
+step 1969
+    x force:        0.0220094, y force:         0.227288
+
+step 1970
+    x force:        0.0220024, y force:         0.227326
+
+step 1971
+    x force:        0.0219954, y force:         0.227364
+
+step 1972
+    x force:        0.0219884, y force:         0.227402
+
+step 1973
+    x force:        0.0219814, y force:          0.22744
+
+step 1974
+    x force:        0.0219744, y force:         0.227478
+
+step 1975
+    x force:        0.0219673, y force:         0.227516
+
+step 1976
+    x force:        0.0219603, y force:         0.227554
+
+step 1977
+    x force:        0.0219532, y force:         0.227591
+
+step 1978
+    x force:        0.0219462, y force:         0.227628
+
+step 1979
+    x force:        0.0219393, y force:         0.227665
+
+step 1980
+    x force:        0.0219323, y force:         0.227701
+
+step 1981
+    x force:        0.0219254, y force:         0.227738
+
+step 1982
+    x force:        0.0219186, y force:         0.227773
+
+step 1983
+    x force:        0.0219118, y force:         0.227809
+
+step 1984
+    x force:         0.021905, y force:         0.227843
+
+step 1985
+    x force:        0.0218984, y force:         0.227878
+
+step 1986
+    x force:        0.0218918, y force:         0.227912
+
+step 1987
+    x force:        0.0218853, y force:         0.227945
+
+step 1988
+    x force:        0.0218789, y force:         0.227978
+
+step 1989
+    x force:        0.0218726, y force:          0.22801
+
+step 1990
+    x force:        0.0218664, y force:         0.228042
+
+step 1991
+    x force:        0.0218604, y force:         0.228073
+
+step 1992
+    x force:        0.0218544, y force:         0.228104
+
+step 1993
+    x force:        0.0218486, y force:         0.228134
+
+step 1994
+    x force:        0.0218429, y force:         0.228164
+
+step 1995
+    x force:        0.0218373, y force:         0.228193
+
+step 1996
+    x force:        0.0218319, y force:         0.228222
+
+step 1997
+    x force:        0.0218267, y force:          0.22825
+
+step 1998
+    x force:        0.0218216, y force:         0.228278
+
+step 1999
+    x force:        0.0218166, y force:         0.228305
+
+step 2000
+    x force:        0.0218118, y force:         0.228331
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/SD7003/_run_data_smalldt_cpp/run02000.bin...done

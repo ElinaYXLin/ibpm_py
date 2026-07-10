@@ -7,7 +7,7 @@ UIUC LSAT wind-tunnel experiment -- see run_all_airfoils.py (Python) and
 run_all_airfoils_cpp.py (C++) for how each dataset was produced.
 
 Difference from the original gen_airfoil_report.py (kept for the record --
-its output now lives in SD7003/old, SD8000/old): NO ERROR BARS are drawn on
+its output now lives in SD7003/1-orig, SD8000/1-orig): NO ERROR BARS are drawn on
 these figures. The instantaneous Cd/Cl trace this solver produces is
 genuinely unsteady at this Re/resolution (vortex shedding, not noise), so
 "mean +/- std dev of the trace over the averaging window" is a real,
@@ -22,10 +22,10 @@ Usage:
     python3 SURF_test/gen_airfoil_report_v2.py
 
 Output (per case):
-    SURF_test/{SD7003,SD8000}/new/polar_comparison.png
-    SURF_test/{SD7003,SD8000}/new/drag_polar.png
-    SURF_test/{SD7003,SD8000}/new/grid_convergence.png
-    SURF_test/{SD7003,SD8000}/new/summary.txt
+    SURF_test/{SD7003,SD8000}/2-c++included/polar_comparison.png
+    SURF_test/{SD7003,SD8000}/2-c++included/drag_polar.png
+    SURF_test/{SD7003,SD8000}/2-c++included/grid_convergence.png
+    SURF_test/{SD7003,SD8000}/2-c++included/summary.txt
 """
 import sys, json, pathlib
 import numpy as np
@@ -65,7 +65,7 @@ def series(results, name, key):
 
 
 for name, cfg in CASES.items():
-    outdir = SURF / name / "new"
+    outdir = SURF / name / "2-c++included"
     outdir.mkdir(parents=True, exist_ok=True)
 
     drg_blocks = parse_blocks(SURF / name / f"{name}.DRG.txt", "drg")
