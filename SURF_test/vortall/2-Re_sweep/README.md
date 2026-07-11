@@ -3,9 +3,10 @@
 Pushes Re UP from `../1-baseline/`'s clean Re=100 (matches `VORTALL.mat`)
 toward the airfoils' usual Re~40-61k, at fixed geometry/grid
 (`examples/cylinder.geom`, nx=450, ny=200, dx=0.02, same domain as
-`1-baseline/`). C++ `build/ibpm` only -- see
-[`../run_cylinder_re_sweep.py`](../run_cylinder_re_sweep.py)'s docstring
-for why. Figures from
+`1-baseline/`). Originally C++-only; Python added afterward at every Re
+(see [`../run_cylinder_re_sweep.py`](../run_cylinder_re_sweep.py) /
+[`../run_cylinder_re_sweep_py.py`](../run_cylinder_re_sweep_py.py)).
+Figures from
 [`../gen_cylinder_re_sweep_figs.py`](../gen_cylinder_re_sweep_figs.py).
 
 **Re>=1000 needed a smaller dt**: at dt=0.02 (the Re=100/500 baseline
@@ -14,7 +15,18 @@ steps -- not a late-time chaotic blowup, a genuine CFL violation from the
 very start (the impulsive-start transient's sharp initial vorticity
 gradient becomes too violent for this dt once viscous damping drops
 enough). Fixed with dt=0.005 (4x smaller, nsteps=6000 for the same t=30)
-for those three Re values.
+for those three Re values, in both implementations.
+
+## Fidelity result: exact agreement through Re=3000, chaos-divergence at Re=10000
+
+`fidelity_summary.txt`: py/ibpm.py and C++ build/ibpm match to 0.00%
+relative pointwise difference at Re=100, 500, 1000, and 3000. At Re=10000
+(fully speckled/turbulent-looking), the pointwise difference is 93% even
+though domain-RMS is close (4.48 vs 4.39) -- the same chaos-amplification
+pattern documented in `../1-baseline/README.md` and
+`../../airfoils/SD7003/4-Re_sweep/README.md`, not a fidelity defect: once
+the flow is genuinely chaotic, both implementations remain statistically
+correct but diverge in instantaneous phase.
 
 ## Result: converges on the same transition zone as the airfoil sweep, from the opposite direction
 

@@ -1,7 +1,12 @@
 # SD8000 grid refinement at fixed Re=5000 (E4)
 
 Same methodology as `../../SD7003/5-grid_refine/README.md` -- see that
-file for the full explanation.
+file for the full explanation, py/ibpm.py vs. C++ build/ibpm at every dx.
+
+## Fidelity result: same as SD7003
+
+`fidelity_summary.txt`: 0.00% relative pointwise difference at all three
+dx levels -- pixel-identical in `grid_refine_comparison.png`.
 
 ## Result: same pattern as SD7003
 

@@ -1,14 +1,18 @@
 """
 gen_airfoil_re_sweep_figs.py
 
-Figures for run_airfoil_re_sweep.py's Re sweep (E1+E2 combined): grid of
-(Re rows) x (vorticity | velocity magnitude columns) at t=30, plus a
-quantitative domain-RMS/max vorticity vs Re companion plot. Companion to
-vortall/gen_cylinder_re_sweep_figs.py, same style, opposite Re direction.
+Figures for run_airfoil_re_sweep.py / run_airfoil_re_sweep_py.py's Re
+sweep: grid of (Re rows) x (py vorticity | C++ vorticity columns) at
+t=30 -- the core Python-vs-C++ fidelity check for every swept Re, not
+just the pre-existing baseline. Plus quantitative companions: domain-RMS/
+max vorticity vs Re for both implementations overlaid, and a
+py-vs-cpp agreement table (RMS of the pointwise difference, relative to
+the field's own RMS).
 
 Usage: python3 SURF_test/airfoils/gen_airfoil_re_sweep_figs.py <SD7003|SD8000>
 Output: SURF_test/airfoils/<name>/4-Re_sweep/re_sweep_comparison.png,
-        SURF_test/airfoils/<name>/4-Re_sweep/domain_rms_vs_Re.png
+        SURF_test/airfoils/<name>/4-Re_sweep/domain_rms_vs_Re.png,
+        SURF_test/airfoils/<name>/4-Re_sweep/fidelity_summary.txt
 """
 import pathlib
 import sys
@@ -25,8 +29,6 @@ pkg = types.ModuleType("py")
 pkg.__path__ = [str(REPO / "py")]
 sys.modules["py"] = pkg
 from py.state import State  # noqa: E402
-from py.vector_operations import FluxToXVelocity, FluxToYVelocity  # noqa: E402
-from py.scalar import Scalar  # noqa: E402
 
 CASES = {
     "SD7003": dict(alpha=4.60, dat=REPO / "SURF_test" / "airfoils" / "SD7003" / "sd7003.dat.txt"),
@@ -40,6 +42,7 @@ DX = DOMAIN["length"] / NX
 xs = DOMAIN["xoffset"] + np.arange(1, NX) * DX
 ys = DOMAIN["yoffset"] + np.arange(1, NY) * DX
 X, Y = np.meshgrid(xs, ys, indexing="ij")
+PY_COLOR, CPP_COLOR = "C0", "C3"
 
 
 def load_dat_pts(path):
@@ -54,25 +57,16 @@ def load_dat_pts(path):
     return np.array(pts)
 
 
-def vorticity(s):
-    return s.omega._data[0].copy()
-
-
-def velocity_mag(s):
-    u = Scalar(s.q.getGrid())
-    v = Scalar(s.q.getGrid())
-    FluxToXVelocity(s.q, u)
-    FluxToYVelocity(s.q, v)
-    return np.sqrt(u._data[0] ** 2 + v._data[0] ** 2)
+def vorticity(path):
+    return State(filename=str(path)).omega._data[0].copy()
 
 
 def rms(f):
     return float(np.sqrt(np.nanmean(f.astype(np.float64) ** 2)))
 
 
-def draw(ax, field, title, pts, alpha_deg, vmax, cmap):
-    ax.contourf(X, Y, np.clip(field, -vmax if cmap == "RdBu_r" else 0, vmax),
-                levels=41, cmap=cmap, extend="both")
+def draw(ax, field, title, pts, alpha_deg, vmax=8.0):
+    ax.contourf(X, Y, np.clip(field, -vmax, vmax), levels=41, cmap="RdBu_r", extend="both")
     th = -np.deg2rad(alpha_deg)
     c, sn = np.cos(th), np.sin(th)
     xc, yc = pts[:, 0] - 0.25, pts[:, 1]
@@ -89,48 +83,65 @@ def main():
     name = sys.argv[1]
     cfg = CASES[name]
     outdir = REPO / "SURF_test" / "airfoils" / name / "4-Re_sweep"
-    rundir = outdir / "_run_data_cpp"
+    py_dir = outdir / "_run_data"
+    cpp_dir = outdir / "_run_data_cpp"
     pts = load_dat_pts(cfg["dat"])
 
-    available = [Re for Re in RE_VALUES if (rundir / f"Re{Re}" / f"run{FINAL_STEP:05d}.bin").exists()]
+    available = [Re for Re in RE_VALUES
+                 if (py_dir / f"Re{Re}" / f"run{FINAL_STEP:05d}.bin").exists()
+                 and (cpp_dir / f"Re{Re}" / f"run{FINAL_STEP:05d}.bin").exists()]
     if not available:
-        print(f"{name}: no completed Re-sweep snapshots found")
+        print(f"{name}: no matching Python+C++ Re-sweep snapshots found")
         return
 
     fig, axes = plt.subplots(len(available), 2, figsize=(9, 2.6 * len(available)))
     axes = np.atleast_2d(axes)
-    re_list, rms_list, max_list = [], [], []
+    re_list, py_rms_list, cpp_rms_list, py_max_list, cpp_max_list, rel_diff_list = [], [], [], [], [], []
     for row, Re in enumerate(available):
-        s = State(filename=str(rundir / f"Re{Re}" / f"run{FINAL_STEP:05d}.bin"))
-        w = vorticity(s)
-        vmag = velocity_mag(s)
-        draw(axes[row, 0], w, f"Re={Re}: vorticity, t=30", pts, cfg["alpha"], vmax=8.0, cmap="RdBu_r")
-        draw(axes[row, 1], vmag, f"Re={Re}: |velocity|, t=30", pts, cfg["alpha"], vmax=2.0, cmap="viridis")
+        w_py = vorticity(py_dir / f"Re{Re}" / f"run{FINAL_STEP:05d}.bin")
+        w_cpp = vorticity(cpp_dir / f"Re{Re}" / f"run{FINAL_STEP:05d}.bin")
+        draw(axes[row, 0], w_py, f"Re={Re}: py/ibpm.py, t=30", pts, cfg["alpha"])
+        draw(axes[row, 1], w_cpp, f"Re={Re}: C++ build/ibpm, t=30", pts, cfg["alpha"])
         re_list.append(Re)
-        rms_list.append(rms(w))
-        max_list.append(float(np.max(np.abs(w))))
-    fig.suptitle(f"{name} Re sweep: does lowering Re from {name}'s usual ~40-61k\n"
-                 f"toward the cylinder's clean Re=100 baseline clean up the wake?", fontsize=12)
-    fig.tight_layout(rect=(0, 0, 1, 0.95))
+        py_rms_list.append(rms(w_py))
+        cpp_rms_list.append(rms(w_cpp))
+        py_max_list.append(float(np.max(np.abs(w_py))))
+        cpp_max_list.append(float(np.max(np.abs(w_cpp))))
+        diff_rms = rms(w_py - w_cpp)
+        rel_diff_list.append(diff_rms / max(rms(w_cpp), 1e-12))
+    axes[0, 0].set_ylabel("y")
+    fig.suptitle(f"{name} Re sweep: py/ibpm.py vs. C++ build/ibpm fidelity, t=30\n"
+                 f"(does lowering Re from ~40-61k toward the cylinder's clean Re=100 baseline "
+                 f"clean up the wake, in BOTH implementations?)", fontsize=12)
+    fig.tight_layout(rect=(0, 0, 1, 0.94))
     fig.savefig(outdir / "re_sweep_comparison.png", dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"wrote {outdir / 're_sweep_comparison.png'} ({len(available)} Re values)")
 
     fig, ax = plt.subplots(1, 2, figsize=(11, 4.5))
-    ax[0].plot(re_list, rms_list, "o-", color="C0")
+    ax[0].plot(re_list, py_rms_list, "o-", color=PY_COLOR, label="py/ibpm.py")
+    ax[0].plot(re_list, cpp_rms_list, "^--", color=CPP_COLOR, label="C++ build/ibpm")
     ax[0].set_xscale("log"); ax[0].set_xlabel("Re"); ax[0].set_ylabel(r"domain-RMS $|\omega|$, t=30")
-    ax[0].set_title(f"{name}: domain-RMS vorticity vs. Re"); ax[0].grid(alpha=0.3)
-    ax[1].plot(re_list, max_list, "s-", color="C3")
+    ax[0].set_title(f"{name}: domain-RMS vorticity vs. Re"); ax[0].legend(fontsize=8); ax[0].grid(alpha=0.3)
+    ax[1].plot(re_list, py_max_list, "o-", color=PY_COLOR, label="py/ibpm.py")
+    ax[1].plot(re_list, cpp_max_list, "^--", color=CPP_COLOR, label="C++ build/ibpm")
     ax[1].set_xscale("log"); ax[1].set_xlabel("Re"); ax[1].set_ylabel(r"max $|\omega|$, t=30")
-    ax[1].set_title(f"{name}: peak vorticity vs. Re"); ax[1].grid(alpha=0.3)
-    fig.suptitle(f"{name} Re sweep: quantitative trend of broadband noise vs. Re", fontsize=12)
+    ax[1].set_title(f"{name}: peak vorticity vs. Re"); ax[1].legend(fontsize=8); ax[1].grid(alpha=0.3)
+    fig.suptitle(f"{name} Re sweep: quantitative trend vs. Re, both implementations overlaid", fontsize=12)
     fig.tight_layout(rect=(0, 0, 1, 0.93))
     fig.savefig(outdir / "domain_rms_vs_Re.png", dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"wrote {outdir / 'domain_rms_vs_Re.png'}")
-    print(f"\n{name} Re, RMS|omega|, max|omega|:")
-    for Re, r, m in zip(re_list, rms_list, max_list):
-        print(f"  Re={Re}: RMS={r:.4f}  max={m:.4f}")
+
+    with open(outdir / "fidelity_summary.txt", "w") as f:
+        f.write(f"{name} Re sweep: py/ibpm.py vs. C++ build/ibpm fidelity at t=30\n\n")
+        f.write(f"{'Re':>8} {'RMS_py':>10} {'RMS_cpp':>10} {'max_py':>10} {'max_cpp':>10} {'RMS(py-cpp)/RMS_cpp':>22}\n")
+        for Re, rp, rc, mp, mc, rd in zip(re_list, py_rms_list, cpp_rms_list, py_max_list, cpp_max_list, rel_diff_list):
+            f.write(f"{Re:8d} {rp:10.4f} {rc:10.4f} {mp:10.3f} {mc:10.3f} {rd:22.4%}\n")
+    print(f"wrote {outdir / 'fidelity_summary.txt'}")
+    print(f"\n{name} Re, RMS_py, RMS_cpp, relative diff:")
+    for Re, rp, rc, rd in zip(re_list, py_rms_list, cpp_rms_list, rel_diff_list):
+        print(f"  Re={Re}: RMS_py={rp:.4f}  RMS_cpp={rc:.4f}  rel_diff={rd:.2%}")
 
 
 if __name__ == "__main__":

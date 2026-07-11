@@ -6,9 +6,20 @@ rather than rerun), refines dx across coarse/medium/fine (0.04/0.02/0.01,
 this suite's usual three convergence levels) to separate two variables
 that `4-Re_sweep/` alone conflates: is it Re, or is it resolution (at a
 given Re), that controls whether the field looks clean or speckled?
-C++ only, same rationale as the Re sweep. See
+Originally C++-only; Python added afterward at every dx level (see
 [`../../run_airfoil_grid_refine.py`](../../run_airfoil_grid_refine.py) /
-[`../../gen_airfoil_grid_refine_figs.py`](../../gen_airfoil_grid_refine_figs.py).
+[`../../run_airfoil_grid_refine_py.py`](../../run_airfoil_grid_refine_py.py) /
+[`../../gen_airfoil_grid_refine_figs.py`](../../gen_airfoil_grid_refine_figs.py)).
+
+## Fidelity result: exact agreement at every dx level
+
+`fidelity_summary.txt`: py/ibpm.py and C++ build/ibpm match to 0.00%
+relative pointwise difference at all three dx levels (coarse/medium/fine)
+-- Re=5000 stays in the deterministic (non-chaotic) regime even at the
+coarsest, speckled resolution, so unlike the high-Re end of
+`../4-Re_sweep/`, there's no chaos-amplified divergence to worry about
+here; the two implementations are pixel-identical in
+`grid_refine_comparison.png` at every dx.
 
 ## Result: resolution matters, but not the way "just refine dx" suggests
 

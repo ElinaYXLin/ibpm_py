@@ -1,5 +1,10 @@
 # Airfoil validation: SD7003, SD8000, ClarkY, GM15
 
+**See [`../SUMMARY.md`](../SUMMARY.md) for the full consolidated
+findings** (mentor-question resolution, Python-vs-C++ fidelity results,
+and the genuinely-low-Re `../low_re/` follow-up) across this directory,
+`../vortall/`, and `../low_re/` together.
+
 This directory holds all airfoil validation cases for `py/ibpm.py` vs.
 `build/ibpm` vs. UIUC LSAT (Low-Speed Airfoil Tests) wind-tunnel data:
 

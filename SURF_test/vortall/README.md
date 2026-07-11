@@ -1,5 +1,8 @@
 # Cylinder flow validation and resolution/Re experiments
 
+**See [`../SUMMARY.md`](../SUMMARY.md) for the full consolidated
+findings** across this directory, `../airfoils/`, and `../low_re/`.
+
 - **[`1-baseline/`](1-baseline/)** — the original validation: cylinder at
   Re=100 vs. the published `VORTALL.mat` reference dataset. Clean,
   coherent von Kármán vortex street, matching the reference almost

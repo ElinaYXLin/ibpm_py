@@ -1,0 +1,1 @@
+py.ibpm -name cyl -outdir /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/vortall/2-Re_sweep/_run_data/Re100 -tecplot 0 -restart 250 -force 1 -nx 450 -ny 200 -ngrid 1 -length 9.0 -xoffset -1.0 -yoffset -2.0 -geom /Users/elina/Desktop/SURF2026/ibpm_py-main/examples/cylinder.geom -Re 100.0 -dt 0.02 -nsteps 1500

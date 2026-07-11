@@ -1,0 +1,6 @@
+SD7003 grid refinement (Re=5000): py/ibpm.py vs. C++ build/ibpm fidelity at t=30
+
+    dx     RMS_py    RMS_cpp     max_py    max_cpp    RMS(py-cpp)/RMS_cpp
+  0.04     2.8411     2.8411     68.211     68.211                0.0000%
+  0.02     2.7486     2.7486    171.221    171.221                0.0000%
+  0.01     2.6841     2.6841    201.158    201.158                0.0000%

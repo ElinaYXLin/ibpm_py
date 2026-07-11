@@ -3,17 +3,38 @@
 Pushes Re DOWN from SD7003's usual ~61,100 (`../2-c++included/`) toward
 the cylinder's clean Re=100 baseline (`../../../vortall/1-baseline/`),
 at fixed dx=0.02, alpha=4.60 (same geometry/domain/alpha as the existing
-flowfield case). C++ `build/ibpm` only -- see
-[`../../run_airfoil_re_sweep.py`](../../run_airfoil_re_sweep.py)'s
-docstring for why (this is a resolution/Re *behavior* question, not a
-re-check of port fidelity, already established at the baseline Re
-elsewhere in this suite). Figures from
+flowfield case). Originally run C++-only (this was framed as a
+resolution/Re *behavior* question, not a port-fidelity recheck); **Python
+was added afterward at every Re value** (see
+[`../../run_airfoil_re_sweep_py.py`](../../run_airfoil_re_sweep_py.py))
+so `re_sweep_comparison.png` now shows py/ibpm.py vs. C++ build/ibpm side
+by side at every Re, and `fidelity_summary.txt` quantifies the agreement.
+Figures from
 [`../../gen_airfoil_re_sweep_figs.py`](../../gen_airfoil_re_sweep_figs.py).
+
+## Fidelity result: exact agreement through Re=10000, then chaos-divergence (not a bug)
+
+`fidelity_summary.txt`: domain-RMS vorticity matches to 4+ significant
+figures (0.00-0.01% relative pointwise difference) between py/ibpm.py and
+C++ build/ibpm at every Re from 200 through 10000 -- the two
+implementations are, for practical purposes, computing identical
+trajectories in this deterministic/laminar-to-transitional regime. At
+Re=20000 and 40000 (both fully in the broadband-speckle regime), the
+pointwise difference jumps to 12-143% even though domain-RMS/max stay in
+the same ballpark -- this is the SAME chaos-amplification phenomenon
+`../../../vortall/1-baseline/README.md` already documents for its own
+statistically-converged Re=100 case ("match in periodic amplitude/
+frequency, not instantaneous phase"): once the flow is genuinely chaotic,
+floating-point-level differences between the two implementations'
+operation order get amplified exponentially, so pointwise agreement is
+not expected or meaningful there -- only statistical agreement is, and
+that still holds (see `re_sweep_comparison.png`'s Re=20000/40000 rows:
+same broadband character, different instantaneous micro-detail).
 
 ## Result: a clean, sharp transition -- and it answers the mentor's original question
 
-`re_sweep_comparison.png` shows both vorticity and velocity-magnitude
-fields at t=30, for Re = 200, 500, 1000, 5000, 10000, 20000, 40000:
+`re_sweep_comparison.png` shows py/ibpm.py vs. C++ build/ibpm vorticity
+fields side by side at t=30, for Re = 200, 500, 1000, 5000, 10000, 20000, 40000:
 
 - **Re=200, 500, 1000: clean, coherent wake sheet.** No broadband
   speckle at all -- visually indistinguishable in character from

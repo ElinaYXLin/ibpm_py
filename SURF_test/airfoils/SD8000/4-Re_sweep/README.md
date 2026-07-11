@@ -1,8 +1,16 @@
 # SD8000 Reynolds-number sweep (E1 + E2)
 
 Same methodology as `../../SD7003/4-Re_sweep/README.md` (see that file
-for the full explanation) -- Re sweep DOWN from SD8000's usual ~60,800 at
-fixed dx=0.02, alpha=5.36.
+for the full explanation, including the fidelity-chaos note) -- Re sweep
+DOWN from SD8000's usual ~60,800 at fixed dx=0.02, alpha=5.36, py/ibpm.py
+vs. C++ build/ibpm at every Re.
+
+## Fidelity result: same as SD7003
+
+`fidelity_summary.txt`: exact agreement (0.00% relative pointwise
+difference) from Re=200 through Re=10000; chaos-amplified divergence at
+Re=20000 (12.9%) and Re=40000 (143%) despite similar domain-RMS/max --
+same expected pattern as SD7003, not a bug.
 
 ## Result: same transition, same conclusion, on the sibling airfoil
 

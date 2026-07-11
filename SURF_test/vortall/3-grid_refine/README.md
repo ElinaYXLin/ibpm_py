@@ -5,16 +5,35 @@ refines dx across coarse/medium/fine (0.04/0.02/0.01) -- same question as
 `../../airfoils/SD7003/5-grid_refine/`, on the cylinder instead. Circle
 geometry regenerated fresh at each dx via `circle_n` (point spacing
 tracks dx at every level, same convention `make_airfoil_raw.py` uses for
-the airfoils). See
+the airfoils). Originally C++-only; Python added afterward at all three
+dx levels (see
 [`../run_cylinder_grid_refine.py`](../run_cylinder_grid_refine.py) /
-[`../gen_cylinder_grid_refine_figs.py`](../gen_cylinder_grid_refine_figs.py).
+[`../run_cylinder_grid_refine_py.py`](../run_cylinder_grid_refine_py.py) /
+[`../gen_cylinder_grid_refine_figs.py`](../gen_cylinder_grid_refine_figs.py)).
 
 **Also needed smaller dt**: at Re=5000, both dx=0.02 (dt=0.02) and
 dx=0.01 (dt=0.01) diverged within the first ~15-18 steps -- same
 early-blowup CFL signature as `../2-Re_sweep/`'s Re>=1000 cases, but this
 blunt body's impulsive-start vorticity layer needed an even smaller dt
 than the equivalent-Re airfoil case did. Fixed with dt=0.005/nsteps=6000
-(medium) and dt=0.0025/nsteps=12000 (fine), same t=30.
+(medium) and dt=0.0025/nsteps=12000 (fine), same t=30, in both
+implementations.
+
+## Fidelity result: exact match where the flow is clean, chaos-divergence where it's speckled
+
+`fidelity_summary.txt`: **0.00% relative pointwise difference at
+dx=0.02 (medium) and dx=0.01 (fine)** -- the clean, organized levels --
+pixel-identical between py/ibpm.py and C++ build/ibpm in
+`grid_refine_comparison.png`. At dx=0.04 (coarse, the speckled/aliased
+level), the difference is 20% despite near-identical domain-RMS (4.027 vs
+4.026) -- consistent with (not contradicting) the chaos-amplification
+pattern documented in `../2-Re_sweep/README.md` and
+`../../airfoils/SD7003/4-Re_sweep/README.md`: this coarse level's
+broadband speckle IS a chaotic regime (visually confirmed in the same
+figure), so pointwise phase divergence between two independent runs is
+expected there, exactly as it is at high Re. This is a clean, direct
+demonstration that agreement-vs-divergence tracks *whether the flow is
+chaotic*, not resolution or implementation quality on their own.
 
 ## Result: same pattern as the airfoils -- coarse aliases, fine resolves
 
