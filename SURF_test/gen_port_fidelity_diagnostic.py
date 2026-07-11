@@ -38,7 +38,7 @@ airfoils and both implementations; the coarse-grid sign flip is an unstable-
 run averaging artifact, not evidence of a bug.
 
 Usage:  python3 SURF_test/gen_port_fidelity_diagnostic.py
-Output: SURF_test/high_re/SD8000/2-c++included/port_fidelity_diagnostic.png
+Output: SURF_test/airfoils/SD8000/2-c++included/port_fidelity_diagnostic.png
 """
 import pathlib
 import numpy as np
@@ -47,7 +47,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 REPO = pathlib.Path("/Users/elina/Desktop/SURF2026/ibpm_py-main")
-SD8 = REPO / "SURF_test" / "high_re" / "SD8000"
+SD8 = REPO / "SURF_test" / "airfoils" / "SD8000"
 
 
 def load(p):

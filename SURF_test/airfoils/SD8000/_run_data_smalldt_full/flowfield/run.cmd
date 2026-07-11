@@ -1,0 +1,1 @@
+py.ibpm -name run -outdir /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/SD8000/_run_data_smalldt_full/flowfield -tecplot 0 -restart 1000 -force 1 -nx 300 -ny 150 -ngrid 1 -length 6.0 -xoffset -2.0 -yoffset -1.5 -alpha 5.36 -geom /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/geom/sd8000_dx0.0200.geom -Re 60800.0 -dt 0.001 -nsteps 6000

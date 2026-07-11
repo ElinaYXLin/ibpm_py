@@ -1,0 +1,23 @@
+GM15 vs. UIUC LSAT experiment (Re_exp=40600, Re_sim=40600)
+py/ibpm.py vs. C++ build/ibpm vs. UIUC LSAT experiment
+
+NOTE on the +/- figures below: these are the std. dev. of the instantaneous
+Cl/Cd trace over the last 60% of each run, not measurement uncertainty -- see
+airfoils/SD7003/2-c++included/summary.txt's header note (same convention) or
+this script's module docstring for the full explanation.
+
+Polar sweep (dx=0.02, nx=300, ny=150):
+   alpha   Cl_exp          Cl_py         Cl_cpp   Cd_exp           Cd_py          Cd_cpp
+   -3.62   -0.071  -0.181±0.535  -0.159±0.669   0.0499   0.0653±0.1077   0.0654±0.1106
+    0.66    0.362   0.312±0.766   0.403±0.640   0.0223   0.0334±0.0560   0.0251±0.0546
+    4.61    0.869   0.943±0.678   0.993±0.540   0.0292   0.0763±0.0565   0.0868±0.0494
+    8.75    1.187   1.196±0.245   1.161±0.275   0.0256   0.1637±0.0448   0.1758±0.0470
+    9.94    1.250   1.183±0.261   1.172±0.318   0.0259   0.2064±0.0606   0.2170±0.0644
+
+Grid convergence at alpha=0.66° (experiment closest alpha=0.66°, Cl_exp=0.362, Cd_exp=0.0223):
+  dx=0.040 (coarse)  py:  Cl=+0.3789±0.6881  Cd=+0.0586±0.0739  (24s)
+  dx=0.040 (coarse)  cpp: Cl=+0.3941±0.6894  Cd=+0.0582±0.0742  (19s)
+  dx=0.020 (medium)  py:  Cl=+0.3425±0.7228  Cd=+0.0298±0.0466  (77s)
+  dx=0.020 (medium)  cpp: Cl=+0.4428±0.7307  Cd=+0.0276±0.0530  (65s)
+  dx=0.010 (fine  )  py:  Cl=+0.5536±0.1630  Cd=+0.0229±0.0119  (444s)
+  dx=0.010 (fine  )  cpp: Cl=+0.5116±0.1749  Cd=+0.0248±0.0119  (430s)

@@ -107,8 +107,8 @@ def main():
         if not geom.exists():
             raise FileNotFoundError(f"{geom} missing -- run SURF_test/run_all_airfoils.py first")
 
-        py_outdir = REPO / "SURF_test" / "high_re" / name / "_run_data_smalldt"
-        cpp_outdir = REPO / "SURF_test" / "high_re" / name / "_run_data_smalldt_cpp"
+        py_outdir = REPO / "SURF_test" / "airfoils" / name / "_run_data_smalldt"
+        cpp_outdir = REPO / "SURF_test" / "airfoils" / name / "_run_data_smalldt_cpp"
 
         print(f"=== {name}: Python (native FFTW3, FFTW_EXHAUSTIVE), dt={DT}, nsteps={NSTEPS} ===",
               flush=True)

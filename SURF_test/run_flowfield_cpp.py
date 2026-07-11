@@ -28,7 +28,7 @@ def main():
         sys.exit(1)
 
     for name, cfg in CASES.items():
-        outdir = REPO / "SURF_test" / "high_re" / name / "_run_data_cpp" / "flowfield"
+        outdir = REPO / "SURF_test" / "airfoils" / name / "_run_data_cpp" / "flowfield"
         outdir.mkdir(parents=True, exist_ok=True)
         cmd = [str(CPP_BIN),
                "-geom", str(cfg["geom"]), "-name", "flow", "-outdir", str(outdir),

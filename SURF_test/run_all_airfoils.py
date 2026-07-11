@@ -14,13 +14,13 @@ AVG_FRAC = 0.6  # average over the last 60% of the run
 
 CASES = {
     "SD7003": dict(
-        dat=REPO / "SURF_test" / "high_re" / "SD7003" / "sd7003.dat.txt",
+        dat=REPO / "SURF_test" / "airfoils" / "SD7003" / "sd7003.dat.txt",
         Re=61100,
         polar_alphas=[-2.92, -0.09, 1.66, 4.60, 7.72],
         conv_alpha=-0.09,
     ),
     "SD8000": dict(
-        dat=REPO / "SURF_test" / "high_re" / "SD8000" / "sd8000.dat.txt",
+        dat=REPO / "SURF_test" / "airfoils" / "SD8000" / "sd8000.dat.txt",
         Re=60800,
         polar_alphas=[-3.88, -0.81, 2.29, 5.36, 8.36],
         conv_alpha=-0.81,
@@ -56,7 +56,7 @@ def main():
         results["polar"][name] = []
         for alpha in cfg["polar_alphas"]:
             t0 = time.time()
-            outdir = REPO / "SURF_test" / "high_re" / name / "_run_data" / f"polar_a{alpha:+.2f}"
+            outdir = REPO / "SURF_test" / "airfoils" / name / "_run_data" / f"polar_a{alpha:+.2f}"
             fpath, elapsed = run_case(
                 geom=geom_path, name="run", outdir=outdir, alpha=alpha,
                 nx=POLAR_LEVEL["nx"], ny=POLAR_LEVEL["ny"], Re=cfg["Re"],
@@ -73,7 +73,7 @@ def main():
         results["convergence"][name] = []
         for lvl in CONV_LEVELS:
             geom_path, npts, perim = geom_for_dx(name, cfg["dat"], lvl["dx"])
-            outdir = REPO / "SURF_test" / "high_re" / name / "_run_data" / f"conv_{lvl['tag']}"
+            outdir = REPO / "SURF_test" / "airfoils" / name / "_run_data" / f"conv_{lvl['tag']}"
             fpath, elapsed = run_case(
                 geom=geom_path, name="run", outdir=outdir, alpha=cfg["conv_alpha"],
                 nx=lvl["nx"], ny=lvl["ny"], Re=cfg["Re"],

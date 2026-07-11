@@ -31,7 +31,7 @@ sys.modules["py"] = pkg
 from py.state import State  # noqa: E402
 
 ALPHA = 4.60
-DAT = SURF / "high_re" / "SD7003" / "sd7003.dat.txt"
+DAT = SURF / "airfoils" / "SD7003" / "sd7003.dat.txt"
 VMAX = 8.0
 LEVELS = np.linspace(-VMAX, VMAX, 41)
 
@@ -115,9 +115,9 @@ def make_flow_evolution(outdir, py_dir, cpp_dir, dt, steps, nx, ny, xoffset, yof
 def main():
     # ---- ngrid=3 (dx=0.02, dt=0.005, nsteps=6000; ny=152/yoffset=-1.52 to satisfy ny%4==0) ----
     make_flow_evolution(
-        outdir=SURF / "high_re" / "SD7003" / "3-ngrid=3",
-        py_dir=SURF / "high_re" / "SD7003" / "_run_data_ngrid3" / "flowfield",
-        cpp_dir=SURF / "high_re" / "SD7003" / "_run_data_ngrid3_cpp" / "flowfield",
+        outdir=SURF / "airfoils" / "SD7003" / "3-ngrid=3",
+        py_dir=SURF / "airfoils" / "SD7003" / "_run_data_ngrid3" / "flowfield",
+        cpp_dir=SURF / "airfoils" / "SD7003" / "_run_data_ngrid3_cpp" / "flowfield",
         dt=0.005, steps=[0, 1000, 2000, 3000, 4000, 5000, 6000],
         nx=300, ny=152, xoffset=-2.0, yoffset=-1.52,
         subtitle="ngrid=3 (multi-domain), dx=0.02, dt=0.005 -- both implementations diverge to NaN "
@@ -126,9 +126,9 @@ def main():
 
     # ---- dx=0.01 (dt=0.005, nsteps=6000, nx=600, ny=300) ----
     make_flow_evolution(
-        outdir=SURF / "high_re" / "SD7003" / "3-dx0.01",
-        py_dir=SURF / "high_re" / "SD7003" / "_run_data_dx001" / "flowfield",
-        cpp_dir=SURF / "high_re" / "SD7003" / "_run_data_dx001_cpp" / "flowfield",
+        outdir=SURF / "airfoils" / "SD7003" / "3-dx0.01",
+        py_dir=SURF / "airfoils" / "SD7003" / "_run_data_dx001" / "flowfield",
+        cpp_dir=SURF / "airfoils" / "SD7003" / "_run_data_dx001_cpp" / "flowfield",
         dt=0.005, steps=[0, 1000, 2000, 3000, 4000, 5000, 6000],
         nx=600, ny=300, xoffset=-2.0, yoffset=-1.5,
         subtitle="dx=0.01, dt=0.005 (halved from dt=0.01 baseline; finest grid needs this per "

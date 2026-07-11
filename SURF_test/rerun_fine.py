@@ -13,8 +13,8 @@ DT = 0.005
 NSTEPS = 6000
 
 CASES = {
-    "SD7003": dict(dat=REPO / "SURF_test" / "high_re" / "SD7003" / "sd7003.dat.txt", Re=61100, conv_alpha=-0.09),
-    "SD8000": dict(dat=REPO / "SURF_test" / "high_re" / "SD8000" / "sd8000.dat.txt", Re=60800, conv_alpha=-0.81),
+    "SD7003": dict(dat=REPO / "SURF_test" / "airfoils" / "SD7003" / "sd7003.dat.txt", Re=61100, conv_alpha=-0.09),
+    "SD8000": dict(dat=REPO / "SURF_test" / "airfoils" / "SD8000" / "sd8000.dat.txt", Re=60800, conv_alpha=-0.81),
 }
 FINE = dict(tag="fine", dx=0.01, nx=600, ny=300)
 
@@ -27,7 +27,7 @@ for name, cfg in CASES.items():
     geom_path = GEOMDIR / f"{name.lower()}_dx{FINE['dx']:.4f}.geom"
     geom_path.write_text(f"body {name}\n  raw {raw_path}\n  center 0.25 0.0\nend\n")
 
-    outdir = REPO / "SURF_test" / "high_re" / name / "_run_data" / "conv_fine_dt0005"
+    outdir = REPO / "SURF_test" / "airfoils" / name / "_run_data" / "conv_fine_dt0005"
     fpath, elapsed = run_case(
         geom=geom_path, name="run", outdir=outdir, alpha=cfg["conv_alpha"],
         nx=FINE["nx"], ny=FINE["ny"], Re=cfg["Re"], dt=DT, nsteps=NSTEPS, **DOMAIN,
