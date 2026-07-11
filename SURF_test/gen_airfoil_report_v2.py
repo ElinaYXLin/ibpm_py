@@ -65,10 +65,10 @@ def series(results, name, key):
 
 
 for name, cfg in CASES.items():
-    outdir = SURF / name / "2-c++included"
+    outdir = SURF / "high_re" / name / "2-c++included"
     outdir.mkdir(parents=True, exist_ok=True)
 
-    drg_blocks = parse_blocks(SURF / name / f"{name}.DRG.txt", "drg")
+    drg_blocks = parse_blocks(SURF / "high_re" / name / f"{name}.DRG.txt", "drg")
     exp = nearest_block(drg_blocks, cfg["Re"])
     exp_alpha = np.array(exp["alpha"])
     exp_cl = np.array(exp["Cl"])

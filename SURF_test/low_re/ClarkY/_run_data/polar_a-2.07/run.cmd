@@ -1,0 +1,1 @@
+py.ibpm -name run -outdir /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/ClarkY/_run_data/polar_a-2.07 -tecplot 0 -restart 0 -force 1 -nx 300 -ny 150 -ngrid 1 -length 6.0 -xoffset -2.0 -yoffset -1.5 -alpha -2.07 -geom /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/geom/clarky_dx0.0200.geom -Re 60700.0 -dt 0.01 -nsteps 3000

@@ -12,7 +12,7 @@ CASES = {
 }
 
 for name, cfg in CASES.items():
-    outdir = REPO / "SURF_test" / name / "_run_data" / "flowfield"
+    outdir = REPO / "SURF_test" / "high_re" / name / "_run_data" / "flowfield"
     fpath, elapsed = run_case(
         geom=cfg["geom"], name="flow", outdir=outdir, alpha=cfg["alpha"],
         nx=300, ny=150, Re=cfg["Re"], dt=0.01, nsteps=3000, restart=250, **DOMAIN,

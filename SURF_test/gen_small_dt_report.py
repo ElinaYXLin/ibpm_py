@@ -59,10 +59,10 @@ def load_omega_q(path):
 
 def main():
     for name in META["cases"]:
-        outdir = REPO / "SURF_test" / name / "3-small_dt"
+        outdir = REPO / "SURF_test" / "high_re" / name / "3-small_dt"
         outdir.mkdir(parents=True, exist_ok=True)
-        py_dir = REPO / "SURF_test" / name / "_run_data_smalldt"
-        cpp_dir = REPO / "SURF_test" / name / "_run_data_smalldt_cpp"
+        py_dir = REPO / "SURF_test" / "high_re" / name / "_run_data_smalldt"
+        cpp_dir = REPO / "SURF_test" / "high_re" / name / "_run_data_smalldt_cpp"
 
         # ---------------- 1. force trace comparison ----------------
         tp, cdp, clp = load_force(py_dir / "run.force")
