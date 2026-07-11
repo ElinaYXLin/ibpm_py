@@ -22,3 +22,14 @@ in the noise, not less, consistent with SD7003/README.md's explanation that
 the speckle is a real feature of this Re/resolution regime (no subgrid
 dissipation to damp grid-scale noise) rather than a coarse-grid artifact
 that finer dx would remove.
+
+Why: quantified, at the matched t=30 snapshot, max|omega| grows from 208
+(dx=0.02) to 369 (dx=0.01), while domain-RMS |omega| stays essentially
+flat (8.27 vs 7.62) -- see ../3-ngrid=3/instability_diagnostic.png panel C
+and its summary.txt for the full explanation. The finer grid is not adding
+more total vortical energy; it's resolving sharper, more concentrated
+peaks in the same broadband field (thinner shear layers, tighter vortex
+cores) that dx=0.02 simply smooths over. Because neither resolution
+resolves the actual Re~61100 boundary layer and there's no subgrid
+dissipation, refining dx doesn't converge the peak vorticity to a fixed
+value -- it keeps sharpening whatever gradients the grid can represent.
