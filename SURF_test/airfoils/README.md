@@ -52,9 +52,40 @@ under *one* grid cell at the same dx -- the boundary layer itself is
 aliased by the grid, which is what generates the broadband noise (no
 subgrid/turbulence model exists to compensate, by design, since this is a
 DNS-style solver). Re=40k vs. 61k (a 1.5x change) doesn't cross this
-threshold; the experiments below (numbered `4-`/`5-`/`6-` in each airfoil
-folder, `2-`/`3-` in `../vortall/`) test this directly by sweeping Re and
-dx far enough to see the clean-to-speckled transition happen.
+threshold.
+
+**Confirmed directly** by the experiments numbered `4-`/`5-`/`6-` in
+`SD7003/`/`SD8000/` and `2-`/`3-` in `../vortall/`:
+
+- **`SD7003/4-Re_sweep/`, `SD8000/4-Re_sweep/`** (Re swept DOWN from
+  ~61k/60.8k toward 200): clean, coherent wake through Re~200-1000,
+  transitional waviness at Re~5000-10000, full broadband speckle by
+  Re~20000-40000 (i.e. the mentor's original suggestion was right --
+  just needed Re a couple orders of magnitude lower than ClarkY/GM15
+  tested, not 1.5x lower).
+- **`../vortall/2-Re_sweep/`** (Re swept UP from the clean Re=100
+  baseline): clean through Re~1000, transitional at Re~3000, fully
+  speckled by Re~10000 -- **the same transition zone, found completely
+  independently, from the opposite direction, on a different geometry
+  (blunt cylinder vs. thin cambered airfoil).**
+- **`SD7003/5-grid_refine/`, `SD8000/5-grid_refine/`, `../vortall/3-grid_refine/`**
+  (dx refined at FIXED Re=5000, in the transitional zone): the coarsest
+  grid (dx=0.04) aliases genuine shear-layer/wake instability into
+  broadband speckle; dx=0.02 or finer resolves the *same physics* as
+  organized vortex structures, not noise -- confirming resolution
+  *relative to* Re (not dx or Re in isolation) is what controls the
+  clean/speckled outcome.
+- **`SD7003/6-explicit_dissipation/`** (post-hoc spatial filtering of an
+  already-speckled Re=40000 field, NOT a solver rerun): filtering
+  progressively reveals coherent large-scale structure underneath the
+  speckle, consistent with (not new evidence beyond) the above.
+
+This is the headline result of the whole `airfoils/`+`vortall/`
+investigation: **this solver is not broken, and the mentor's low-Re
+intuition was correct** -- it just takes a much lower Re (hundreds, not
+tens of thousands) than any of SD7003/SD8000/ClarkY/GM15 were tested at,
+to fall inside this `ngrid=1`/dx=0.02/no-subgrid-dissipation
+configuration's comfortably-resolved regime.
 
 ## Numbering convention
 

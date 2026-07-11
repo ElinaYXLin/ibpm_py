@@ -8,6 +8,13 @@ tested at UIUC. All figures/numbers here are generated purely by
 `py/ibpm.py` output and the `.DRG`/`.LFT` reference files in
 `SURF_test/airfoils/SD7003/` — nothing is hand-drawn or AI-generated.
 
+**If you're here about the "weird" broadband vorticity speckle in
+`flow_evolution.png`, see [`../README.md`](../README.md)'s "Mentor
+question" section for the full investigation and its answer** (resolution
+relative to Reynolds number, confirmed by
+[`4-Re_sweep/`](4-Re_sweep/), [`5-grid_refine/`](5-grid_refine/), and
+[`6-explicit_dissipation/`](6-explicit_dissipation/) below).
+
 ## `2-c++included/` vs. `1-orig/`
 
 - **`2-c++included/`** — current figures. Three-way comparison

@@ -1,5 +1,10 @@
 # SD8000 airfoil vs. UIUC LSAT experiment
 
+**If you're here about the "weird" broadband vorticity speckle, see
+[`../README.md`](../README.md)'s "Mentor question" section** (resolution
+relative to Reynolds number, confirmed by this airfoil's own
+[`4-Re_sweep/`](4-Re_sweep/) and [`5-grid_refine/`](5-grid_refine/)).
+
 Same methodology as [`SURF_test/airfoils/SD7003/README.md`](../SD7003/README.md) —
 read that first for the full setup/limitations discussion, **and for the
 full explanation of the `2-c++included/`/`1-orig/` split and what the removed error-bar
