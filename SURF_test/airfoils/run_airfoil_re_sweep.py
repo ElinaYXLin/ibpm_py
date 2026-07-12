@@ -2,7 +2,7 @@
 run_airfoil_re_sweep.py
 
 Pushes SD7003/SD8000's Reynolds number DOWN from their usual Re~60-61k
-(SURF_test/airfoils/{SD7003,SD8000}/2-c++included/) to see where -- if
+(SURF_test/airfoils/LSAT-{SD7003,SD8000}/2-c++included/) to see where -- if
 anywhere -- the broadband vorticity speckle documented there clears up.
 Companion to SURF_test/vortall/run_cylinder_re_sweep.py, which pushes the
 opposite direction (UP from the cylinder's clean Re=100 baseline) --
@@ -39,7 +39,7 @@ RESTART = 500  # 7 snapshots: t=0,5,...,30
 
 
 def run_one(name, cfg, Re):
-    outdir = REPO / "SURF_test" / "airfoils" / name / "4-Re_sweep" / "_run_data_cpp" / f"Re{int(Re)}"
+    outdir = REPO / "SURF_test" / "airfoils" / f"LSAT-{name}" / "4-Re_sweep" / "_run_data_cpp" / f"Re{int(Re)}"
     outdir.mkdir(parents=True, exist_ok=True)
     cmd = [str(CPP_BIN),
            "-geom", str(cfg["geom"]), "-name", "run", "-outdir", str(outdir),

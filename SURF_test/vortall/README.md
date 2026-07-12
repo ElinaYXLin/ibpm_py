@@ -26,7 +26,7 @@ findings** across this directory, `../airfoils/`, and `../low_re/`.
 Two independent experiments here — a Re sweep (`2-Re_sweep/`) and a
 grid-refinement study at fixed Re (`3-grid_refine/`) — both converge on
 the same answer as the equivalent experiments in
-`../airfoils/SD7003/4-Re_sweep/` and `../airfoils/SD7003/5-grid_refine/`
+`../airfoils/LSAT-SD7003/4-Re_sweep/` and `../airfoils/LSAT-SD7003/5-grid_refine/`
 (run on a completely different geometry, sweeping Re from the opposite
 direction): the broadband speckle documented throughout this test suite
 is a resolution-vs-Reynolds-number threshold effect (boundary-layer

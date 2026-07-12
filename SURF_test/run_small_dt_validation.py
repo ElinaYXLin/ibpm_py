@@ -21,8 +21,8 @@ error, which sharpens that comparison (less truncation-error "noise" to
 distinguish from genuine FFTW-backend differences).
 
 Usage:  python3 SURF_test/run_small_dt_validation.py
-Output: SURF_test/{SD7003,SD8000}/_run_data_smalldt/       (Python)
-        SURF_test/{SD7003,SD8000}/_run_data_smalldt_cpp/   (C++)
+Output: SURF_test/airfoils/LSAT-{SD7003,SD8000}/_run_data_smalldt/       (Python)
+        SURF_test/airfoils/LSAT-{SD7003,SD8000}/_run_data_smalldt_cpp/   (C++)
 """
 import json
 import pathlib
@@ -107,8 +107,8 @@ def main():
         if not geom.exists():
             raise FileNotFoundError(f"{geom} missing -- run SURF_test/run_all_airfoils.py first")
 
-        py_outdir = REPO / "SURF_test" / "airfoils" / name / "_run_data_smalldt"
-        cpp_outdir = REPO / "SURF_test" / "airfoils" / name / "_run_data_smalldt_cpp"
+        py_outdir = REPO / "SURF_test" / "airfoils" / f"LSAT-{name}" / "_run_data_smalldt"
+        cpp_outdir = REPO / "SURF_test" / "airfoils" / f"LSAT-{name}" / "_run_data_smalldt_cpp"
 
         print(f"=== {name}: Python (native FFTW3, FFTW_EXHAUSTIVE), dt={DT}, nsteps={NSTEPS} ===",
               flush=True)

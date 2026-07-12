@@ -9,7 +9,7 @@ Flow-evolution figures for the two genuinely-low-Re (hundreds) airfoils:
   laminar-separation-bubble-prone airfoil that originally prompted the
   mentor's question, now shown at genuinely low Re instead of its usual
   ~61,100. Reuses SD7003's own Re=500 run from
-  ../airfoils/SD7003/4-Re_sweep/ rather than duplicating it.
+  ../airfoils/LSAT-SD7003/4-Re_sweep/ rather than duplicating it.
 
 Both: py/ibpm.py vs. C++ build/ibpm, same flow_evolution.png convention
 (7 snapshots t=0,5,...,30) as the rest of this suite.
@@ -104,12 +104,12 @@ def main():
         filename_stem="flow", out_path=REPO / "SURF_test" / "low_re" / "NACA0012" / "flow_evolution.png",
         re_val=500,
     )
-    # ---- SD7003 (hard), Re=500, alpha=4.60 -- reused from ../airfoils/SD7003/4-Re_sweep/ ----
+    # ---- SD7003 (hard), Re=500, alpha=4.60 -- reused from ../airfoils/LSAT-SD7003/4-Re_sweep/ ----
     make_flow_evolution(
         label="SD7003", alpha=4.60,
-        dat_path=REPO / "SURF_test" / "airfoils" / "SD7003" / "sd7003.dat.txt",
-        py_dir=REPO / "SURF_test" / "airfoils" / "SD7003" / "4-Re_sweep" / "_run_data" / "Re500",
-        cpp_dir=REPO / "SURF_test" / "airfoils" / "SD7003" / "4-Re_sweep" / "_run_data_cpp" / "Re500",
+        dat_path=REPO / "SURF_test" / "airfoils" / "LSAT-SD7003" / "sd7003.dat.txt",
+        py_dir=REPO / "SURF_test" / "airfoils" / "LSAT-SD7003" / "4-Re_sweep" / "_run_data" / "Re500",
+        cpp_dir=REPO / "SURF_test" / "airfoils" / "LSAT-SD7003" / "4-Re_sweep" / "_run_data_cpp" / "Re500",
         filename_stem="run", out_path=REPO / "SURF_test" / "low_re" / "SD7003" / "flow_evolution.png",
         re_val=500,
     )

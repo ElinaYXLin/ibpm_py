@@ -31,8 +31,8 @@ sys.modules["py"] = pkg
 from py.state import State  # noqa: E402
 
 CASES = {
-    "SD7003": dict(alpha=4.60, dat=REPO / "SURF_test" / "airfoils" / "SD7003" / "sd7003.dat.txt"),
-    "SD8000": dict(alpha=5.36, dat=REPO / "SURF_test" / "airfoils" / "SD8000" / "sd8000.dat.txt"),
+    "SD7003": dict(alpha=4.60, dat=REPO / "SURF_test" / "airfoils" / "LSAT-SD7003" / "sd7003.dat.txt"),
+    "SD8000": dict(alpha=5.36, dat=REPO / "SURF_test" / "airfoils" / "LSAT-SD8000" / "sd8000.dat.txt"),
 }
 RE_VALUES = [200, 500, 1000, 5000, 10000, 20000, 40000]
 FINAL_STEP = 3000  # t=30
@@ -82,7 +82,7 @@ def main():
         sys.exit(1)
     name = sys.argv[1]
     cfg = CASES[name]
-    outdir = REPO / "SURF_test" / "airfoils" / name / "4-Re_sweep"
+    outdir = REPO / "SURF_test" / "airfoils" / f"LSAT-{name}" / "4-Re_sweep"
     py_dir = outdir / "_run_data"
     cpp_dir = outdir / "_run_data_cpp"
     pts = load_dat_pts(cfg["dat"])

@@ -1,5 +1,5 @@
 """C++ counterpart of run_airfoils_flowfield.py: runs build/ibpm on the
-same airfoils/ClarkY and airfoils/GM15 flowfield case (same geometry, alpha,
+same airfoils/LSAT-ClarkY and airfoils/LSAT-GM15 flowfield case (same geometry, alpha,
 grid, dt, nsteps, restart cadence) so gen_clarky_gm15_flowfield_figs.py can
 show a Python-vs-C++ vorticity-field comparison.
 
@@ -28,7 +28,7 @@ def main():
         sys.exit(1)
 
     for name, cfg in CASES.items():
-        outdir = REPO / "SURF_test" / "airfoils" / name / "_run_data_cpp" / "flowfield"
+        outdir = REPO / "SURF_test" / "airfoils" / f"LSAT-{name}" / "_run_data_cpp" / "flowfield"
         outdir.mkdir(parents=True, exist_ok=True)
         cmd = [str(CPP_BIN),
                "-geom", str(cfg["geom"]), "-name", "flow", "-outdir", str(outdir),

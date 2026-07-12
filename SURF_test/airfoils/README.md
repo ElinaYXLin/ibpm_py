@@ -1,23 +1,26 @@
-# Airfoil validation: SD7003, SD8000, ClarkY, GM15
+# Airfoil validation: LSAT-SD7003/SD8000/ClarkY/GM15, Lockard-NACA0012
 
 **See [`../SUMMARY.md`](../SUMMARY.md) for the full consolidated
 findings** (mentor-question resolution, Python-vs-C++ fidelity results,
-and the genuinely-low-Re `../low_re/` follow-up) across this directory,
-`../vortall/`, and `../low_re/` together.
+and the genuinely-low-Re follow-up) across this directory, `../vortall/`,
+and `../low_re/` together.
 
-This directory holds all airfoil validation cases for `py/ibpm.py` vs.
-`build/ibpm` vs. UIUC LSAT (Low-Speed Airfoil Tests) wind-tunnel data:
+## Folder-naming convention: `<dataset>-<airfoil>`
 
-| Airfoil | Re | Why picked |
-|---|---|---|
-| [`SD7003/`](SD7003/) | ≈61,100 | Cambered, laminar-separation-bubble-prone low-Re airfoil; the original case, extensively wind-tunnel tested at UIUC |
-| [`SD8000/`](SD8000/) | ≈60,800 | Sibling Selig-Donovan design, run for direct comparison against SD7003 |
-| [`ClarkY/`](ClarkY/) | ≈60,700 | Flat-bottomed, historically the most widely-used airfoil in aviation; same Re ballpark as SD7003 -- isolates "does a different, more mainstream airfoil geometry help at the same Re" |
-| [`GM15/`](GM15/) | ≈40,600 | Small free-flight-model airfoil; genuinely, substantially lower Re than SD7003 -- isolates "does meaningfully lower Re help" |
+Each airfoil folder is named for the reference dataset it validates
+against, so provenance is explicit:
 
-(ClarkY/GM15 were originally in a separate `low_re/` directory, distinct
-from SD7003/SD8000's `high_re/`; both were merged here once the
-lower-Re-alone hypothesis was ruled out -- see "Mentor question" below.)
+| Folder | Re | Dataset | Why picked |
+|---|---|---|---|
+| [`LSAT-SD7003/`](LSAT-SD7003/) | ≈61,100 | UIUC LSAT (wind tunnel) | Cambered, laminar-separation-bubble-prone; the original case |
+| [`LSAT-SD8000/`](LSAT-SD8000/) | ≈60,800 | UIUC LSAT (wind tunnel) | Sibling Selig-Donovan design, for direct comparison against SD7003 |
+| [`LSAT-ClarkY/`](LSAT-ClarkY/) | ≈60,700 | UIUC LSAT (wind tunnel) | Flat-bottomed, historically the most-used airfoil; same Re as SD7003 -- isolates "does a different airfoil geometry help at the same Re" |
+| [`LSAT-GM15/`](LSAT-GM15/) | ≈40,600 | UIUC LSAT (wind tunnel) | Small free-flight-model airfoil; genuinely lower Re -- isolates "does lower Re help" |
+| [`Lockard-NACA0012/`](Lockard-NACA0012/) | 500 & 1000 | Lockard/Wu/Nita/Di Ilio (CFD benchmark) | Standard symmetric airfoil at Re genuinely in the **hundreds**; the first non-LSAT (computational) reference here, since no wind-tunnel data exists that low |
+
+(The four LSAT airfoils were previously named without the `LSAT-` prefix,
+and ClarkY/GM15 briefly lived in a separate `low_re/` directory; all were
+consolidated and renamed for a uniform `<dataset>-<airfoil>` scheme.)
 
 ## Mentor question: why does the vorticity field look "weird"?
 

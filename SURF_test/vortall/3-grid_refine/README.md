@@ -2,7 +2,7 @@
 
 At FIXED Re=5000 (a point in `../2-Re_sweep/`'s transitional zone),
 refines dx across coarse/medium/fine (0.04/0.02/0.01) -- same question as
-`../../airfoils/SD7003/5-grid_refine/`, on the cylinder instead. Circle
+`../../airfoils/LSAT-SD7003/5-grid_refine/`, on the cylinder instead. Circle
 geometry regenerated fresh at each dx via `circle_n` (point spacing
 tracks dx at every level, same convention `make_airfoil_raw.py` uses for
 the airfoils). Originally C++-only; Python added afterward at all three
@@ -28,7 +28,7 @@ pixel-identical between py/ibpm.py and C++ build/ibpm in
 level), the difference is 20% despite near-identical domain-RMS (4.027 vs
 4.026) -- consistent with (not contradicting) the chaos-amplification
 pattern documented in `../2-Re_sweep/README.md` and
-`../../airfoils/SD7003/4-Re_sweep/README.md`: this coarse level's
+`../../airfoils/LSAT-SD7003/4-Re_sweep/README.md`: this coarse level's
 broadband speckle IS a chaotic regime (visually confirmed in the same
 figure), so pointwise phase divergence between two independent runs is
 expected there, exactly as it is at high Re. This is a clean, direct
@@ -53,5 +53,5 @@ Domain-RMS vorticity drops from coarse to medium/fine (4.03 -> 3.46 ->
 airfoil grid-refine experiments show: the coarse grid aliases genuine
 shear-layer/wake instability into broadband noise; adequate resolution
 resolves it as organized vortex dynamics with sharper (not spurious)
-peaks. Confirms `../../airfoils/SD7003/5-grid_refine/`'s finding is not
+peaks. Confirms `../../airfoils/LSAT-SD7003/5-grid_refine/`'s finding is not
 airfoil-specific -- it reproduces on a completely different body shape.

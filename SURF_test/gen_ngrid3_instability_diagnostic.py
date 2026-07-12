@@ -27,7 +27,7 @@ energy. Consistent with SD7003/README.md's documented explanation
 than a new artifact introduced by refining the grid.
 
 Usage: python3 SURF_test/gen_ngrid3_instability_diagnostic.py
-Output: SURF_test/airfoils/SD7003/3-ngrid=3/instability_diagnostic.png
+Output: SURF_test/airfoils/LSAT-SD7003/3-ngrid=3/instability_diagnostic.png
 """
 import pathlib
 import sys
@@ -57,12 +57,12 @@ def rms(f):
 
 def main():
     # ---- Panel A data: ngrid=1 baseline vs ngrid=3 RMS(t) ----
-    base_dir = SURF / "airfoils" / "SD7003" / "_run_data" / "flowfield"
+    base_dir = SURF / "airfoils" / "LSAT-SD7003" / "_run_data" / "flowfield"
     base_steps = list(range(0, 3001, 500))
     base_t = [s * 0.01 for s in base_steps]
     base_rms = [rms(load(base_dir / f"flow{s:05d}.bin")) for s in base_steps]
 
-    ng3_dir = SURF / "airfoils" / "SD7003" / "_run_data_ngrid3" / "flowfield"
+    ng3_dir = SURF / "airfoils" / "LSAT-SD7003" / "_run_data_ngrid3" / "flowfield"
     ng3_steps = [s for s in range(0, 6001, 1000)
                  if (ng3_dir / f"flow{s:05d}.bin").exists()]
     ng3_t, ng3_rms, ng3_finite = [], [], []
@@ -95,8 +95,8 @@ def main():
         edge_rms.append(rms(f[mask_edge]))
 
     # ---- Panel C data: max|omega|, RMS vs dx at matched t=30 ----
-    dx02 = load(SURF / "airfoils" / "SD7003" / "_run_data" / "flowfield" / "flow03000.bin")
-    dx01 = load(SURF / "airfoils" / "SD7003" / "_run_data_dx001" / "flowfield" / "flow06000.bin")
+    dx02 = load(SURF / "airfoils" / "LSAT-SD7003" / "_run_data" / "flowfield" / "flow03000.bin")
+    dx01 = load(SURF / "airfoils" / "LSAT-SD7003" / "_run_data_dx001" / "flowfield" / "flow06000.bin")
     dxs = [0.02, 0.01]
     max_vals = [float(np.max(np.abs(dx02))), float(np.max(np.abs(dx01)))]
     rms_vals = [rms(dx02), rms(dx01)]
@@ -136,7 +136,7 @@ def main():
 
     fig.suptitle("SD7003: diagnosing the ngrid=3 divergence and the dx=0.01 peak-vorticity increase", fontsize=12)
     fig.tight_layout(rect=(0, 0, 1, 0.93))
-    outpath = SURF / "airfoils" / "SD7003" / "3-ngrid=3" / "instability_diagnostic.png"
+    outpath = SURF / "airfoils" / "LSAT-SD7003" / "3-ngrid=3" / "instability_diagnostic.png"
     fig.savefig(outpath, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"wrote {outpath}")

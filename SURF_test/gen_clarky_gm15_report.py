@@ -57,10 +57,10 @@ def series(results, name, key):
 
 
 for name, cfg in CASES.items():
-    outdir = SURF / "airfoils" / name / "1-orig"
+    outdir = SURF / "airfoils" / f"LSAT-{name}" / "1-orig"
     outdir.mkdir(parents=True, exist_ok=True)
 
-    drg_blocks = parse_blocks(SURF / "airfoils" / name / f"{name}.DRG.txt", "drg")
+    drg_blocks = parse_blocks(SURF / "airfoils" / f"LSAT-{name}" / f"{name}.DRG.txt", "drg")
     exp = nearest_block(drg_blocks, cfg["Re"])
     exp_alpha = np.array(exp["alpha"])
     exp_cl = np.array(exp["Cl"])
@@ -157,7 +157,7 @@ for name, cfg in CASES.items():
         f.write(
             "NOTE on the +/- figures below: these are the std. dev. of the instantaneous\n"
             "Cl/Cd trace over the last 60% of each run, not measurement uncertainty -- see\n"
-            "airfoils/SD7003/2-c++included/summary.txt's header note (same convention) or\n"
+            "airfoils/LSAT-SD7003/2-c++included/summary.txt's header note (same convention) or\n"
             "this script's module docstring for the full explanation.\n\n"
         )
         f.write("Polar sweep (dx=0.02, nx=300, ny=150):\n")

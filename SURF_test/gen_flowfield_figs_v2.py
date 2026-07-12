@@ -9,7 +9,7 @@ _run_data{,_cpp}/flowfield/ restart files (see run_flowfield.py /
 run_flowfield_cpp.py).
 
 Usage: python3 SURF_test/gen_flowfield_figs_v2.py
-Output: SURF_test/{SD7003,SD8000}/2-c++included/flow_evolution.png
+Output: SURF_test/airfoils/LSAT-{SD7003,SD8000}/2-c++included/flow_evolution.png
 """
 import sys, types, pathlib
 import numpy as np
@@ -32,8 +32,8 @@ ys = DOMAIN["yoffset"] + np.arange(1, NY) * DX
 X, Y = np.meshgrid(xs, ys, indexing="ij")
 
 CASES = {
-    "SD7003": dict(alpha=4.60, Re=61100, dat=REPO / "SURF_test" / "airfoils" / "SD7003" / "sd7003.dat.txt"),
-    "SD8000": dict(alpha=5.36, Re=60800, dat=REPO / "SURF_test" / "airfoils" / "SD8000" / "sd8000.dat.txt"),
+    "SD7003": dict(alpha=4.60, Re=61100, dat=REPO / "SURF_test" / "airfoils" / "LSAT-SD7003" / "sd7003.dat.txt"),
+    "SD8000": dict(alpha=5.36, Re=60800, dat=REPO / "SURF_test" / "airfoils" / "LSAT-SD8000" / "sd8000.dat.txt"),
 }
 
 
@@ -74,10 +74,10 @@ def draw_field(ax, field, title, airfoil_pts, alpha_deg):
 
 
 for name, cfg in CASES.items():
-    outdir = REPO / "SURF_test" / "airfoils" / name / "2-c++included"
+    outdir = REPO / "SURF_test" / "airfoils" / f"LSAT-{name}" / "2-c++included"
     outdir.mkdir(parents=True, exist_ok=True)
-    py_rundir = REPO / "SURF_test" / "airfoils" / name / "_run_data" / "flowfield"
-    cpp_rundir = REPO / "SURF_test" / "airfoils" / name / "_run_data_cpp" / "flowfield"
+    py_rundir = REPO / "SURF_test" / "airfoils" / f"LSAT-{name}" / "_run_data" / "flowfield"
+    cpp_rundir = REPO / "SURF_test" / "airfoils" / f"LSAT-{name}" / "_run_data_cpp" / "flowfield"
     airfoil_pts = load_dat_pts(cfg["dat"])
 
     steps = [0, 500, 1000, 1500, 2000, 2500, 3000]

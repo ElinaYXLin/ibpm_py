@@ -32,7 +32,7 @@ DX_LEVELS = [
 
 def run_one(name, cfg, lvl):
     geom_path = GEOMDIR / f"{name.lower()}_dx{lvl['dx']:.4f}.geom"
-    outdir = REPO / "SURF_test" / "airfoils" / name / "5-grid_refine" / "_run_data" / f"dx{lvl['dx']}"
+    outdir = REPO / "SURF_test" / "airfoils" / f"LSAT-{name}" / "5-grid_refine" / "_run_data" / f"dx{lvl['dx']}"
     outdir.mkdir(parents=True, exist_ok=True)
     restart = round(lvl["nsteps"] / 6)
     cmd = [sys.executable, "-u", str(RUNNER),

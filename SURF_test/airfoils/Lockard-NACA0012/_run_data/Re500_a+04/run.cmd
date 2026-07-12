@@ -1,0 +1,1 @@
+py.ibpm -name run -outdir /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/airfoils/Lockard-NACA0012/_run_data/Re500_a+04 -tecplot 0 -restart 0 -force 1 -nx 300 -ny 150 -ngrid 1 -length 6.0 -xoffset -2.0 -yoffset -1.5 -alpha 4.0 -geom /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/geom/naca0012_dx0.0200.geom -Re 500.0 -dt 0.01 -nsteps 3000

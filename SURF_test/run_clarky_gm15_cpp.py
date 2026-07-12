@@ -1,5 +1,5 @@
 """C++ counterpart of run_clarky_gm15.py: runs build/ibpm on the same
-airfoils/ClarkY and airfoils/GM15 polar sweep + grid convergence cases (same
+airfoils/LSAT-ClarkY and airfoils/LSAT-GM15 polar sweep + grid convergence cases (same
 geometry files, alphas, grid levels, dt/nsteps -- including the dt=0.005
 fix for the finest convergence level, applied here from the start, same as
 run_all_airfoils_cpp.py does for SD7003/SD8000).
@@ -104,7 +104,7 @@ def main():
             if alpha in done_alphas:
                 print(f"  alpha={alpha:+.2f}: already done, skipping", flush=True)
                 continue
-            outdir = REPO / "SURF_test" / "airfoils" / name / "_run_data_cpp" / f"polar_a{alpha:+.2f}"
+            outdir = REPO / "SURF_test" / "airfoils" / f"LSAT-{name}" / "_run_data_cpp" / f"polar_a{alpha:+.2f}"
             fpath, elapsed = run_case_cpp(
                 geom=geom_path, name="run", outdir=outdir, alpha=alpha,
                 nx=POLAR_LEVEL["nx"], ny=POLAR_LEVEL["ny"], Re=cfg["Re"],
@@ -123,7 +123,7 @@ def main():
                 print(f"  {lvl['tag']}: already done, skipping", flush=True)
                 continue
             geom_path = geom_path_for_dx(name, lvl["dx"])
-            outdir = REPO / "SURF_test" / "airfoils" / name / "_run_data_cpp" / f"conv_{lvl['tag']}"
+            outdir = REPO / "SURF_test" / "airfoils" / f"LSAT-{name}" / "_run_data_cpp" / f"conv_{lvl['tag']}"
             fpath, elapsed = run_case_cpp(
                 geom=geom_path, name="run", outdir=outdir, alpha=cfg["conv_alpha"],
                 nx=lvl["nx"], ny=lvl["ny"], Re=cfg["Re"],

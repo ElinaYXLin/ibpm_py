@@ -6,7 +6,7 @@ now calling the real FFTW3 library with FFTW_EXHAUSTIVE planning (see
 py/elliptic_solver_2d.py), still agree with C++ build/ibpm -- both at a
 much smaller dt (0.001, vs. this suite's usual 0.01) than used elsewhere?
 
-Two kinds of evidence, both written to SURF_test/{SD7003,SD8000}/3-small_dt/:
+Two kinds of evidence, both written to SURF_test/airfoils/LSAT-{SD7003,SD8000}/3-small_dt/:
 
   1. Force-trace comparison (small_dt_force_comparison.png) -- Cd/Cl(t) for
      both implementations overlaid, plus their pointwise difference on a log
@@ -59,10 +59,10 @@ def load_omega_q(path):
 
 def main():
     for name in META["cases"]:
-        outdir = REPO / "SURF_test" / "airfoils" / name / "3-small_dt"
+        outdir = REPO / "SURF_test" / "airfoils" / f"LSAT-{name}" / "3-small_dt"
         outdir.mkdir(parents=True, exist_ok=True)
-        py_dir = REPO / "SURF_test" / "airfoils" / name / "_run_data_smalldt"
-        cpp_dir = REPO / "SURF_test" / "airfoils" / name / "_run_data_smalldt_cpp"
+        py_dir = REPO / "SURF_test" / "airfoils" / f"LSAT-{name}" / "_run_data_smalldt"
+        cpp_dir = REPO / "SURF_test" / "airfoils" / f"LSAT-{name}" / "_run_data_smalldt_cpp"
 
         # ---------------- 1. force trace comparison ----------------
         tp, cdp, clp = load_force(py_dir / "run.force")

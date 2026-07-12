@@ -5,7 +5,7 @@ findings** across this directory, `../airfoils/`, and `../vortall/`.
 
 ## Why this directory exists (again)
 
-`../airfoils/4-Re_sweep/` experiments already established that this
+`../airfoils/LSAT-SD7003/4-Re_sweep/` experiments already established that this
 solver is clean at Re~200-1000 and only speckles above Re~5000-10000
 (see `../airfoils/README.md`'s "Mentor question" section). This
 directory follows up on that with two dedicated, from-scratch runs at a
@@ -45,18 +45,18 @@ wind-tunnel data throughout.
   laminar-separation-bubble design intent. The "easy" case. Coordinates
   from `https://m-selig.ae.illinois.edu/ads/coord/n0012.dat` (Lednicer
   format, converted to the Selig closed-loop format this pipeline
-  expects, same conversion as `../airfoils/ClarkY/`). Freshly run for
+  expects, same conversion as `../airfoils/LSAT-ClarkY/`). Freshly run for
   this folder at alpha=5 deg (see
   [`run_naca0012.py`](run_naca0012.py)).
 - **[`SD7003/`](SD7003/)** -- the same cambered, laminar-separation-
   bubble-prone airfoil that originally prompted the mentor's question
-  (`../airfoils/SD7003/`), now shown at Re=500 instead of its usual
+  (`../airfoils/LSAT-SD7003/`), now shown at Re=500 instead of its usual
   ~61,100. The "hard" case -- and choosing the *same* airfoil that looked
   "weird" at high Re, rather than a new complex geometry, closes the
   loop directly: this is proof that SD7003 itself, unmodified, is clean
   at low Re. Reuses the Re=500 run already produced by
   `../airfoils/run_airfoil_re_sweep.py`/`run_airfoil_re_sweep_py.py`
-  (part of `../airfoils/SD7003/4-Re_sweep/`) rather than duplicating the
+  (part of `../airfoils/LSAT-SD7003/4-Re_sweep/`) rather than duplicating the
   simulation -- only the flow_evolution figure is generated fresh here
   (see [`gen_low_re_figs.py`](gen_low_re_figs.py)).
 
@@ -68,6 +68,6 @@ broadband speckle at every snapshot from t=0 to t=30, in **both**
 py/ibpm.py and C++ build/ibpm, visually indistinguishable between the two
 implementations at every timestep. This directly confirms, on a brand-new
 airfoil (NACA0012) as well as the original one (SD7003), what
-`../airfoils/4-Re_sweep/` already found: **the "weird" broadband vorticity
+`../airfoils/LSAT-SD7003/4-Re_sweep/` already found: **the "weird" broadband vorticity
 speckle is a Re~1000-5000+ phenomenon, not present at Re=500, regardless
 of airfoil shape or camber complexity.**

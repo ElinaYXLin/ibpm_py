@@ -29,8 +29,8 @@ ys = DOMAIN["yoffset"] + np.arange(1, NY) * DX
 X, Y = np.meshgrid(xs, ys, indexing="ij")
 
 CASES = {
-    "ClarkY": dict(alpha=4.16, Re=60700, dat=REPO / "SURF_test" / "airfoils" / "ClarkY" / "clarky.dat.txt"),
-    "GM15": dict(alpha=4.61, Re=40600, dat=REPO / "SURF_test" / "airfoils" / "GM15" / "gm15.dat.txt"),
+    "ClarkY": dict(alpha=4.16, Re=60700, dat=REPO / "SURF_test" / "airfoils" / "LSAT-ClarkY" / "clarky.dat.txt"),
+    "GM15": dict(alpha=4.61, Re=40600, dat=REPO / "SURF_test" / "airfoils" / "LSAT-GM15" / "gm15.dat.txt"),
 }
 
 
@@ -71,10 +71,10 @@ def draw_field(ax, field, title, airfoil_pts, alpha_deg):
 
 
 for name, cfg in CASES.items():
-    outdir = REPO / "SURF_test" / "airfoils" / name / "1-orig"
+    outdir = REPO / "SURF_test" / "airfoils" / f"LSAT-{name}" / "1-orig"
     outdir.mkdir(parents=True, exist_ok=True)
-    py_rundir = REPO / "SURF_test" / "airfoils" / name / "_run_data" / "flowfield"
-    cpp_rundir = REPO / "SURF_test" / "airfoils" / name / "_run_data_cpp" / "flowfield"
+    py_rundir = REPO / "SURF_test" / "airfoils" / f"LSAT-{name}" / "_run_data" / "flowfield"
+    cpp_rundir = REPO / "SURF_test" / "airfoils" / f"LSAT-{name}" / "_run_data_cpp" / "flowfield"
     airfoil_pts = load_dat_pts(cfg["dat"])
 
     steps = [0, 500, 1000, 1500, 2000, 2500, 3000]

@@ -4,7 +4,7 @@ gen_small_dt_full_report.py
 Produces the SAME diagram types that live in SD7003/SD8000's
 2-c++included/ -- polar_comparison.png, drag_polar.png,
 grid_convergence.png, flow_evolution.png -- but from the dt=0.001 sweep
-run by run_small_dt_full_sweep.py, into {SD7003,SD8000}/3-small_dt/.
+run by run_small_dt_full_sweep.py, into airfoils/LSAT-{SD7003,SD8000}/3-small_dt/.
 
 No error-bar whiskers here either (matching 2-c++included/'s convention --
 see SD7003/README.md's "About the error bars" section for why); std. dev.
@@ -68,10 +68,10 @@ def load_omega(path):
 
 def main():
     for name, cfg in CASES.items():
-        outdir = SURF / "airfoils" / name / "3-small_dt"
+        outdir = SURF / "airfoils" / f"LSAT-{name}" / "3-small_dt"
         outdir.mkdir(parents=True, exist_ok=True)
 
-        drg_blocks = parse_blocks(SURF / "airfoils" / name / f"{name}.DRG.txt", "drg")
+        drg_blocks = parse_blocks(SURF / "airfoils" / f"LSAT-{name}" / f"{name}.DRG.txt", "drg")
         exp = nearest_block(drg_blocks, cfg["Re"])
         exp_alpha, exp_cl, exp_cd = np.array(exp["alpha"]), np.array(exp["Cl"]), np.array(exp["Cd"])
 
@@ -182,8 +182,8 @@ def main():
     VMAX = 8.0
     LEVELS = np.linspace(-VMAX, VMAX, 41)
     FLOW_CFG = {
-        "SD7003": dict(alpha=4.60, dat=SURF / "airfoils" / "SD7003" / "sd7003.dat.txt"),
-        "SD8000": dict(alpha=5.36, dat=SURF / "airfoils" / "SD8000" / "sd8000.dat.txt"),
+        "SD7003": dict(alpha=4.60, dat=SURF / "airfoils" / "LSAT-SD7003" / "sd7003.dat.txt"),
+        "SD8000": dict(alpha=5.36, dat=SURF / "airfoils" / "LSAT-SD8000" / "sd8000.dat.txt"),
     }
 
     def draw_field(ax, field, title, pts, alpha_deg):
@@ -197,9 +197,9 @@ def main():
         ax.set_title(title, fontsize=9)
 
     for name, cfg in FLOW_CFG.items():
-        outdir = SURF / "airfoils" / name / "3-small_dt"
-        py_dir = SURF / "airfoils" / name / "_run_data_smalldt_full" / "flowfield"
-        cpp_dir = SURF / "airfoils" / name / "_run_data_smalldt_full_cpp" / "flowfield"
+        outdir = SURF / "airfoils" / f"LSAT-{name}" / "3-small_dt"
+        py_dir = SURF / "airfoils" / f"LSAT-{name}" / "_run_data_smalldt_full" / "flowfield"
+        cpp_dir = SURF / "airfoils" / f"LSAT-{name}" / "_run_data_smalldt_full_cpp" / "flowfield"
         pts = load_dat_pts(cfg["dat"])
         steps = [0, 1000, 2000, 3000, 4000, 5000, 6000]
         steps = [s for s in steps if (py_dir / f"run{s:05d}.bin").exists()

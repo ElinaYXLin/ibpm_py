@@ -24,7 +24,7 @@ relative pointwise difference at Re=100, 500, 1000, and 3000. At Re=10000
 (fully speckled/turbulent-looking), the pointwise difference is 93% even
 though domain-RMS is close (4.48 vs 4.39) -- the same chaos-amplification
 pattern documented in `../1-baseline/README.md` and
-`../../airfoils/SD7003/4-Re_sweep/README.md`, not a fidelity defect: once
+`../../airfoils/LSAT-SD7003/4-Re_sweep/README.md`, not a fidelity defect: once
 the flow is genuinely chaotic, both implementations remain statistically
 correct but diverge in instantaneous phase.
 
@@ -45,7 +45,7 @@ correct but diverge in instantaneous phase.
 past Re~1000-3000).
 
 **This transition zone (Re~1000-3000 here) lines up closely with
-`../../airfoils/SD7003/4-Re_sweep/`'s own transition zone (Re~1000-5000),
+`../../airfoils/LSAT-SD7003/4-Re_sweep/`'s own transition zone (Re~1000-5000),
 found by sweeping a completely different geometry (thin cambered airfoil
 vs. blunt cylinder) from the opposite direction** (down from SD7003's
 usual ~61k, vs. up from this cylinder's usual Re=100). Two independent

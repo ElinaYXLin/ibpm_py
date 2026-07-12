@@ -1,4 +1,4 @@
-"""Driver: run py/ibpm.py on the airfoils/ClarkY and airfoils/GM15 airfoils,
+"""Driver: run py/ibpm.py on the airfoils/LSAT-ClarkY and airfoils/LSAT-GM15 airfoils,
 same methodology as run_all_airfoils.py (SD7003/SD8000, now in airfoils/):
 polar sweep (5 alphas) + grid convergence study (dx=0.04/0.02/0.01) at
 dx=0.02 production resolution, same domain/dt/nsteps.
@@ -28,13 +28,13 @@ AVG_FRAC = 0.6  # average over the last 60% of the run
 
 CASES = {
     "ClarkY": dict(
-        dat=REPO / "SURF_test" / "airfoils" / "ClarkY" / "clarky.dat.txt",
+        dat=REPO / "SURF_test" / "airfoils" / "LSAT-ClarkY" / "clarky.dat.txt",
         Re=60700,
         polar_alphas=[-2.07, 1.02, 4.16, 7.19, 10.26],
         conv_alpha=-0.45,
     ),
     "GM15": dict(
-        dat=REPO / "SURF_test" / "airfoils" / "GM15" / "gm15.dat.txt",
+        dat=REPO / "SURF_test" / "airfoils" / "LSAT-GM15" / "gm15.dat.txt",
         Re=40600,
         polar_alphas=[-3.62, 0.66, 4.61, 8.75, 9.94],
         conv_alpha=0.66,
@@ -79,7 +79,7 @@ def main():
             if alpha in done_alphas:
                 continue
             t0 = time.time()
-            outdir = REPO / "SURF_test" / "airfoils" / name / "_run_data" / f"polar_a{alpha:+.2f}"
+            outdir = REPO / "SURF_test" / "airfoils" / f"LSAT-{name}" / "_run_data" / f"polar_a{alpha:+.2f}"
             fpath, elapsed = run_case(
                 geom=geom_path, name="run", outdir=outdir, alpha=alpha,
                 nx=POLAR_LEVEL["nx"], ny=POLAR_LEVEL["ny"], Re=cfg["Re"],
@@ -99,7 +99,7 @@ def main():
             if lvl["tag"] in done_tags:
                 continue
             geom_path, npts, perim = geom_for_dx(name, cfg["dat"], lvl["dx"])
-            outdir = REPO / "SURF_test" / "airfoils" / name / "_run_data" / f"conv_{lvl['tag']}"
+            outdir = REPO / "SURF_test" / "airfoils" / f"LSAT-{name}" / "_run_data" / f"conv_{lvl['tag']}"
             fpath, elapsed = run_case(
                 geom=geom_path, name="run", outdir=outdir, alpha=cfg["conv_alpha"],
                 nx=lvl["nx"], ny=lvl["ny"], Re=cfg["Re"],

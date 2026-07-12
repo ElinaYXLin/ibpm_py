@@ -22,8 +22,8 @@ the wake is already established within the first few time units) while
 keeping this sweep's total wall-clock time tractable.
 
 Usage:  python3 SURF_test/run_small_dt_full_sweep.py
-Output: SURF_test/{SD7003,SD8000}/_run_data_smalldt_full/       (Python)
-        SURF_test/{SD7003,SD8000}/_run_data_smalldt_full_cpp/   (C++)
+Output: SURF_test/airfoils/LSAT-{SD7003,SD8000}/_run_data_smalldt_full/       (Python)
+        SURF_test/airfoils/LSAT-{SD7003,SD8000}/_run_data_smalldt_full_cpp/   (C++)
         SURF_test/small_dt_full_results.json
 """
 import json
@@ -135,7 +135,7 @@ def main():
         # ---- polar sweep ----
         for alpha in cfg["polar_alphas"]:
             if alpha not in done_py_alphas:
-                outdir = REPO / "SURF_test" / "airfoils" / name / "_run_data_smalldt_full" / f"polar_a{alpha:+.2f}"
+                outdir = REPO / "SURF_test" / "airfoils" / f"LSAT-{name}" / "_run_data_smalldt_full" / f"polar_a{alpha:+.2f}"
                 t = run_case([sys.executable, "-u", str(RUNNER)], geom, "run", outdir, alpha,
                              cfg["Re"], POLAR_LEVEL["nx"], POLAR_LEVEL["ny"])
                 stats = time_avg_force(outdir / "run.force")
@@ -145,7 +145,7 @@ def main():
                       f"Cd={stats['cd_mean']:+.4f}  ({t:.0f}s)", flush=True)
                 save()
             if alpha not in done_cpp_alphas:
-                outdir = REPO / "SURF_test" / "airfoils" / name / "_run_data_smalldt_full_cpp" / f"polar_a{alpha:+.2f}"
+                outdir = REPO / "SURF_test" / "airfoils" / f"LSAT-{name}" / "_run_data_smalldt_full_cpp" / f"polar_a{alpha:+.2f}"
                 t = run_case([str(CPP_BIN)], geom, "run", outdir, alpha,
                              cfg["Re"], POLAR_LEVEL["nx"], POLAR_LEVEL["ny"])
                 stats = time_avg_force(outdir / "run.force")
@@ -161,7 +161,7 @@ def main():
         for lvl in CONV_LEVELS:
             geom_c = geom_for_dx(name, lvl["dx"])
             if lvl["tag"] not in done_py_tags:
-                outdir = REPO / "SURF_test" / "airfoils" / name / "_run_data_smalldt_full" / f"conv_{lvl['tag']}"
+                outdir = REPO / "SURF_test" / "airfoils" / f"LSAT-{name}" / "_run_data_smalldt_full" / f"conv_{lvl['tag']}"
                 t = run_case([sys.executable, "-u", str(RUNNER)], geom_c, "run", outdir,
                              cfg["conv_alpha"], cfg["Re"], lvl["nx"], lvl["ny"])
                 stats = time_avg_force(outdir / "run.force")
@@ -171,7 +171,7 @@ def main():
                       f"Cd={stats['cd_mean']:+.4f}  ({t:.0f}s)", flush=True)
                 save()
             if lvl["tag"] not in done_cpp_tags:
-                outdir = REPO / "SURF_test" / "airfoils" / name / "_run_data_smalldt_full_cpp" / f"conv_{lvl['tag']}"
+                outdir = REPO / "SURF_test" / "airfoils" / f"LSAT-{name}" / "_run_data_smalldt_full_cpp" / f"conv_{lvl['tag']}"
                 t = run_case([str(CPP_BIN)], geom_c, "run", outdir,
                              cfg["conv_alpha"], cfg["Re"], lvl["nx"], lvl["ny"])
                 stats = time_avg_force(outdir / "run.force")
@@ -182,8 +182,8 @@ def main():
                 save()
 
         # ---- flowfield (vorticity snapshots) ----
-        flow_py_dir = REPO / "SURF_test" / "airfoils" / name / "_run_data_smalldt_full" / "flowfield"
-        flow_cpp_dir = REPO / "SURF_test" / "airfoils" / name / "_run_data_smalldt_full_cpp" / "flowfield"
+        flow_py_dir = REPO / "SURF_test" / "airfoils" / f"LSAT-{name}" / "_run_data_smalldt_full" / "flowfield"
+        flow_cpp_dir = REPO / "SURF_test" / "airfoils" / f"LSAT-{name}" / "_run_data_smalldt_full_cpp" / "flowfield"
         if not (flow_py_dir / "run.force").exists():
             t = run_case([sys.executable, "-u", str(RUNNER)], geom, "run", flow_py_dir,
                          cfg["flow_alpha"], cfg["Re"], POLAR_LEVEL["nx"], POLAR_LEVEL["ny"],

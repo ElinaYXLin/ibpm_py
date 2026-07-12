@@ -22,10 +22,10 @@ Usage:
     python3 SURF_test/gen_airfoil_report_v2.py
 
 Output (per case):
-    SURF_test/{SD7003,SD8000}/2-c++included/polar_comparison.png
-    SURF_test/{SD7003,SD8000}/2-c++included/drag_polar.png
-    SURF_test/{SD7003,SD8000}/2-c++included/grid_convergence.png
-    SURF_test/{SD7003,SD8000}/2-c++included/summary.txt
+    SURF_test/airfoils/LSAT-{SD7003,SD8000}/2-c++included/polar_comparison.png
+    SURF_test/airfoils/LSAT-{SD7003,SD8000}/2-c++included/drag_polar.png
+    SURF_test/airfoils/LSAT-{SD7003,SD8000}/2-c++included/grid_convergence.png
+    SURF_test/airfoils/LSAT-{SD7003,SD8000}/2-c++included/summary.txt
 """
 import sys, json, pathlib
 import numpy as np
@@ -65,10 +65,10 @@ def series(results, name, key):
 
 
 for name, cfg in CASES.items():
-    outdir = SURF / "airfoils" / name / "2-c++included"
+    outdir = SURF / "airfoils" / f"LSAT-{name}" / "2-c++included"
     outdir.mkdir(parents=True, exist_ok=True)
 
-    drg_blocks = parse_blocks(SURF / "airfoils" / name / f"{name}.DRG.txt", "drg")
+    drg_blocks = parse_blocks(SURF / "airfoils" / f"LSAT-{name}" / f"{name}.DRG.txt", "drg")
     exp = nearest_block(drg_blocks, cfg["Re"])
     exp_alpha = np.array(exp["alpha"])
     exp_cl = np.array(exp["Cl"])

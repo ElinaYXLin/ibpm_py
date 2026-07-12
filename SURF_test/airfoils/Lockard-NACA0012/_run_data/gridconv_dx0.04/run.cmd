@@ -1,0 +1,1 @@
+py.ibpm -name run -outdir SURF_test/airfoils/Lockard-NACA0012/_run_data/gridconv_dx0.04 -tecplot 0 -restart 0 -force 1 -nx 150 -ny 75 -ngrid 1 -length 6.0 -xoffset -2.0 -yoffset -1.5 -alpha 0.0 -geom SURF_test/geom/naca0012_dx0.0400.geom -Re 500.0 -dt 0.01 -nsteps 3000

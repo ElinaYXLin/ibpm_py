@@ -31,7 +31,7 @@ RESTART = 500
 
 
 def run_one(name, cfg, Re):
-    outdir = REPO / "SURF_test" / "airfoils" / name / "4-Re_sweep" / "_run_data" / f"Re{int(Re)}"
+    outdir = REPO / "SURF_test" / "airfoils" / f"LSAT-{name}" / "4-Re_sweep" / "_run_data" / f"Re{int(Re)}"
     outdir.mkdir(parents=True, exist_ok=True)
     cmd = [sys.executable, "-u", str(RUNNER),
            "-geom", str(cfg["geom"]), "-name", "run", "-outdir", str(outdir),

@@ -1,4 +1,4 @@
-"""Flowfield case for airfoils/ClarkY and airfoils/GM15 (Python), same
+"""Flowfield case for airfoils/LSAT-ClarkY and airfoils/LSAT-GM15 (Python), same
 methodology/parameters as run_flowfield.py (SD7003/SD8000, now in
 airfoils/): dx=0.02, dt=0.01, nsteps=3000 (t=30), restart every 250 steps
 (7 snapshots at t=0,5,...,30).
@@ -20,7 +20,7 @@ CASES = {
 }
 
 for name, cfg in CASES.items():
-    outdir = REPO / "SURF_test" / "airfoils" / name / "_run_data" / "flowfield"
+    outdir = REPO / "SURF_test" / "airfoils" / f"LSAT-{name}" / "_run_data" / "flowfield"
     fpath, elapsed = run_case(
         geom=cfg["geom"], name="flow", outdir=outdir, alpha=cfg["alpha"],
         nx=300, ny=150, Re=cfg["Re"], dt=0.01, nsteps=3000, restart=250, **DOMAIN,

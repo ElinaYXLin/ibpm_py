@@ -58,7 +58,7 @@ def main():
         print("Usage: gen_airfoil_grid_refine_figs.py <SD7003|SD8000>", file=sys.stderr)
         sys.exit(1)
     name = sys.argv[1]
-    outdir = REPO / "SURF_test" / "airfoils" / name / "5-grid_refine"
+    outdir = REPO / "SURF_test" / "airfoils" / f"LSAT-{name}" / "5-grid_refine"
     py_dir = outdir / "_run_data"
     cpp_dir = outdir / "_run_data_cpp"
 

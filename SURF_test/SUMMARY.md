@@ -9,7 +9,7 @@ somewhere under `SURF_test/`; this is the map, not the primary evidence.
 
 ## 1. The original question
 
-A mentor flagged that `SURF_test/airfoils/SD7003/2-c++included/flow_evolution.png`
+A mentor flagged that `SURF_test/airfoils/LSAT-SD7003/2-c++included/flow_evolution.png`
 (Re=61,100) showed broadband, grid-scale vorticity speckle rather than
 the clean, coherent vortex structures a textbook figure would show, and
 suggested the cause might be Reynolds number -- IBPM-type immersed-
@@ -19,18 +19,18 @@ boundary solvers are supposed to suit low-to-medium Re well.
 
 | # | Candidate cause | Where tested | Result |
 |---|---|---|---|
-| 1 | Wrong initial conditions | `airfoils/SD7003/README.md`, `3-small_dt/` | Ruled out -- impulsive-start IC and Re=61,100 already match the UIUC LSAT dataset's own stated test condition |
-| 2 | Far-field domain too small (`ngrid=1`) | `airfoils/SD7003/3-ngrid=3/` | Ruled out -- the solver's own multi-domain scheme doesn't clean it up (and introduces a new instability past t~20) |
-| 3 | Under-resolved (dx=0.02) | `airfoils/SD7003/3-dx0.01/` | Ruled out -- finer dx doesn't clean it up; peak vorticity grows sharper without converging |
-| 4 | The specific airfoil, or Re~61k specifically | `airfoils/ClarkY/`, `airfoils/GM15/` (Re=60,700 and Re=40,600) | Ruled out -- both still speckle identically; a 1.5x change in Re isn't enough |
-| 5 | **Resolution relative to Re** (delta ~ c/sqrt(Re) vs. grid spacing dx) | `airfoils/SD7003/4-Re_sweep/`, `airfoils/SD8000/4-Re_sweep/`, `vortall/2-Re_sweep/`, `*/5-grid_refine/`, `vortall/3-grid_refine/` | **Confirmed** -- see below |
+| 1 | Wrong initial conditions | `airfoils/LSAT-SD7003/README.md`, `3-small_dt/` | Ruled out -- impulsive-start IC and Re=61,100 already match the UIUC LSAT dataset's own stated test condition |
+| 2 | Far-field domain too small (`ngrid=1`) | `airfoils/LSAT-SD7003/3-ngrid=3/` | Ruled out -- the solver's own multi-domain scheme doesn't clean it up (and introduces a new instability past t~20) |
+| 3 | Under-resolved (dx=0.02) | `airfoils/LSAT-SD7003/3-dx0.01/` | Ruled out -- finer dx doesn't clean it up; peak vorticity grows sharper without converging |
+| 4 | The specific airfoil, or Re~61k specifically | `airfoils/LSAT-ClarkY/`, `airfoils/LSAT-GM15/` (Re=60,700 and Re=40,600) | Ruled out -- both still speckle identically; a 1.5x change in Re isn't enough |
+| 5 | **Resolution relative to Re** (delta ~ c/sqrt(Re) vs. grid spacing dx) | `airfoils/LSAT-SD7003/4-Re_sweep/`, `airfoils/LSAT-SD8000/4-Re_sweep/`, `vortall/2-Re_sweep/`, `*/5-grid_refine/`, `vortall/3-grid_refine/` | **Confirmed** -- see below |
 
 ## 3. The answer: it *was* Reynolds number, just not the range tested
 
 Two independent Reynolds-number sweeps, run in opposite directions on
 two different geometries, converge on the same transition zone:
 
-- **`airfoils/SD7003/4-Re_sweep/`, `airfoils/SD8000/4-Re_sweep/`**
+- **`airfoils/LSAT-SD7003/4-Re_sweep/`, `airfoils/LSAT-SD8000/4-Re_sweep/`**
   (Re swept DOWN from ~61k/60.8k to 200): clean, coherent wake through
   Re~200-1000, transitional waviness at Re~5000-10000, full broadband
   speckle by Re~20000-40000.
@@ -41,7 +41,7 @@ two different geometries, converge on the same transition zone:
   vs. thin cambered airfoil).
 
 **Grid-refinement at a fixed, transitional Re=5000**
-(`airfoils/{SD7003,SD8000}/5-grid_refine/`, `vortall/3-grid_refine/`)
+(`airfoils/LSAT-{SD7003,SD8000}/5-grid_refine/`, `vortall/3-grid_refine/`)
 confirmed the mechanism directly: the coarsest grid (dx=0.04) aliases a
 genuine, organized shear-layer instability into broadband speckle;
 dx=0.02 or finer resolves the *same physics* as ordered vortex structures
@@ -76,7 +76,7 @@ a flow is genuinely chaotic, two independently-computed trajectories
 codebases with different operation orderings) diverge in *instantaneous
 phase* exponentially fast, while remaining statistically equivalent (same
 shedding period, same broadband character, same amplitude envelope). This
-was already well-documented in `airfoils/SD8000/2-c++included/port_fidelity_diagnostic.png`;
+was already well-documented in `airfoils/LSAT-SD8000/2-c++included/port_fidelity_diagnostic.png`;
 this investigation reconfirms it holds at every new Re/dx point tested,
 including exact (0.00%) agreement at every grid-refinement level, and at
 every Re up to the point flows actually turn chaotic.
@@ -116,7 +116,27 @@ both implementations, visually indistinguishable between py/ibpm.py and
 C++ build/ibpm at every timestep (`low_re/NACA0012/flow_evolution.png`,
 `low_re/SD7003/flow_evolution.png`). This directly confirms, on a
 brand-new airfoil as well as the original one, exactly what
-`airfoils/4-Re_sweep/` already found from a coarser Re grid.
+`airfoils/LSAT-SD7003/4-Re_sweep/` already found from a coarser Re grid.
+
+## 5b. Quantitative low-Re validation against a NON-LSAT dataset: `airfoils/Lockard-NACA0012/`
+
+The `low_re/` check above is qualitative (flow-field + fidelity). To also
+validate *quantitatively* at Re in the hundreds, `airfoils/Lockard-NACA0012/`
+compares NACA0012 drag against published **computational** benchmarks
+(the only kind that exist this low):
+
+| Re | Cd(alpha=0) reference | Source |
+|---|---|---|
+| 500 | 0.1762 / 0.1759 / 0.178 | Lockard et al. / Wu et al. / Nita et al. (LBM) |
+| 1000 | 0.119 / 0.119 / ~0.12 | Di Ilio et al. (HLBM) / (XFOIL) / Kurtulus |
+
+Result: at dx=0.02, py and C++ agree to machine precision (Cd=0.1891 both,
+at Re=500 alpha=0), ~7% above the benchmark band -- and grid-convergence
+(dx=0.04 -> 0.02 -> 0.01) drives Cd monotonically *toward* the reference,
+confirming the offset is the expected immersed-boundary resolution effect,
+not a modeling error. This is the first non-LSAT (computational-reference)
+validation in the suite; folders are now named `<dataset>-<airfoil>`
+(`LSAT-*` for the wind-tunnel cases, `Lockard-NACA0012` for this one).
 
 ## 6. Where everything lives
 
@@ -126,15 +146,16 @@ SURF_test/
     1-baseline/       cylinder Re=100 vs. VORTALL.mat (original validation)
     2-Re_sweep/        cylinder Re swept UP (100->10000), py vs. cpp
     3-grid_refine/     cylinder dx refined at fixed Re=5000, py vs. cpp
-  airfoils/
-    SD7003/, SD8000/   original UIUC LSAT validation (Re~61k/60.8k)
+  airfoils/           (folders named <dataset>-<airfoil>)
+    LSAT-SD7003/, LSAT-SD8000/   UIUC LSAT wind-tunnel validation (Re~61k/60.8k)
       1-orig/, 2-c++included/, 3-small_dt/, 3-ngrid=3/, 3-dx0.01/   (SD7003 only)
       4-Re_sweep/      Re swept DOWN (61k-> ... ->200), py vs. cpp
       5-grid_refine/   dx refined at fixed Re=5000, py vs. cpp
       6-explicit_dissipation/   (SD7003 only) post-hoc filter demo
-    ClarkY/, GM15/     Re~41-61k, different-airfoil / lower-Re controls
+    LSAT-ClarkY/, LSAT-GM15/     Re~41-61k, different-airfoil / lower-Re controls
+    Lockard-NACA0012/  NON-LSAT: NACA0012 Re=500/1000 vs. published CFD-benchmark drag
   low_re/
-    NACA0012/, SD7003/  genuinely low-Re (Re=500) airfoils, py vs. cpp
+    NACA0012/, SD7003/  genuinely low-Re (Re=500) airfoils, flow-field + py-vs-cpp check
 ```
 
 Each folder's own `README.md` has the full detail; `airfoils/README.md`
