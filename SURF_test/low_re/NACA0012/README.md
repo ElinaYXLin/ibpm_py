@@ -1,25 +1,37 @@
 # NACA0012 at low Reynolds number vs. published CFD-benchmark drag (non-LSAT)
 
-This is the first validation case in this suite against a **non-LSAT
-reference dataset**: published low-Reynolds-number *computational*
-benchmark drag coefficients for the NACA0012 airfoil, at Reynolds
-numbers genuinely in the hundreds. Every other airfoil folder here
-(`../LSAT-SD7003/`, `../LSAT-SD8000/`, `../LSAT-ClarkY/`, `../LSAT-GM15/`)
-validates against the UIUC LSAT wind-tunnel dataset; this one cannot,
-because **no wind-tunnel data exists at Re in the hundreds** (UIUC LSAT's
-practical floor is Re~40,000-60,000 -- see `../README.md` and
-`../../low_re/README.md`). Below that floor, the only published Cl/Cd
-data is CFD/DNS-computed. That is exactly the dataset used here.
+**Note on this folder's location:** this validation originally lived at
+`airfoils/Lockard-NACA0012/`, named per the `<dataset>-<airfoil>`
+convention used for the LSAT wind-tunnel cases (see below). It has since
+been merged into `low_re/NACA0012/` (alongside the qualitative
+`flow_evolution.png` already here, from the same Re=500 case) so that all
+low-Re NACA0012 results -- qualitative flow-field and quantitative
+Cl/Cd -- live in one place instead of being split across two directories.
+Nothing about the data or analysis changed, only its location; see
+`../README.md` for how this fits alongside `../SD7003/`.
 
-## Folder-naming convention
+This is the suite's only validation case against a **non-LSAT reference
+dataset**: published low-Reynolds-number *computational* benchmark drag
+coefficients for the NACA0012 airfoil, at Reynolds numbers genuinely in
+the hundreds. Every airfoil in `../../airfoils/` (`LSAT-SD7003`,
+`LSAT-SD8000`, `LSAT-ClarkY`, `LSAT-GM15`) validates against the UIUC LSAT
+wind-tunnel dataset; this one cannot, because **no wind-tunnel data exists
+at Re in the hundreds** (UIUC LSAT's practical floor is Re~40,000-60,000
+-- see `../../airfoils/README.md` and `../README.md`). Below that floor,
+the only published Cl/Cd data is CFD/DNS-computed. That is exactly the
+dataset used here.
+
+## Folder-naming convention (for the LSAT cases)
 
 To make the reference-dataset provenance explicit and consistent, every
-airfoil folder is now named `<dataset>-<airfoil>`:
+airfoil folder under `../../airfoils/` is named `<dataset>-<airfoil>`:
 
 - `LSAT-SD7003`, `LSAT-SD8000`, `LSAT-ClarkY`, `LSAT-GM15` -- validated
   against the UIUC **LSAT** (Low-Speed Airfoil Tests) wind-tunnel dataset.
-- `Lockard-NACA0012` (this folder) -- validated against the **Lockard et
-  al.** low-Re CFD drag benchmark (and corroborating references below).
+- This folder (formerly `Lockard-NACA0012`) -- validated against the
+  **Lockard et al.** low-Re CFD drag benchmark (and corroborating
+  references below), now living under `low_re/` instead since it isn't an
+  LSAT case.
 
 ## The reference dataset
 
@@ -69,7 +81,7 @@ precision at every alpha (see `fidelity_summary.txt`) -- e.g. at alpha=0,
 both give Cd=0.1891 to four+ significant figures, and Cl=-0.006 (~0, the
 expected symmetry result). This is the cleanest kind of fidelity check:
 no chaos to amplify differences (unlike the high-Re cases in
-`../LSAT-SD7003/4-Re_sweep/`), so agreement is exact, not just
+`../../airfoils/LSAT-SD7003/4-Re_sweep/`), so agreement is exact, not just
 statistical.
 
 **Vs. the CFD benchmark.** At dx=0.02, the immersed-boundary drag at
@@ -92,7 +104,7 @@ though those references are figure-only for the quantitative values.
 
 Coordinates: `naca0012.dat.txt`, converted from
 `https://m-selig.ae.illinois.edu/ads/coord/n0012.dat` (Lednicer format ->
-Selig closed loop, same conversion as `../LSAT-ClarkY/`). Reference Cd
+Selig closed loop, same conversion as `../../airfoils/LSAT-ClarkY/`). Reference Cd
 values are transcribed from the papers cited in the table above (the
 Re=500 trio via Nita et al.'s comparison table, arXiv:1901.08766; the
 Re=1000 values via Di Ilio et al., arXiv:2006.10487, and Kurtulus 2015).

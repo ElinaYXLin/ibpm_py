@@ -4,7 +4,7 @@ run_naca0012_polar.py
 Validates py/ibpm.py and C++ build/ibpm on NACA0012 at genuinely low
 (hundreds) Reynolds number, against a NON-LSAT reference: published
 low-Reynolds-number CFD benchmark drag coefficients (no wind-tunnel data
-exists this low -- see SURF_test/airfoils/Lockard-NACA0012/README.md).
+exists this low -- see SURF_test/low_re/NACA0012/README.md).
 
 Reference drag anchors (alpha=0, where lift is zero by NACA0012 symmetry):
   Re=500:  Cd = 0.1762 (Lockard et al.), 0.1759 (Wu et al.), 0.178 (Nita et al. LBM)
@@ -16,9 +16,14 @@ second independent drag anchor. Same convention as the other airfoil
 polars in this suite: dx=0.02 (nx=300, ny=150), dt=0.01, nsteps=3000
 (t=30), Cl/Cd time-averaged over the last 60% of the run.
 
+NOTE: this used to live under SURF_test/airfoils/Lockard-NACA0012/; it was
+merged into SURF_test/low_re/NACA0012/ (which already had a qualitative
+flow_evolution.png at this same Re=500) so all NACA0012 low-Re results
+-- qualitative and quantitative -- live in one place.
+
 Usage: python3 SURF_test/run_naca0012_polar.py
-Output: SURF_test/airfoils/Lockard-NACA0012/_run_data{,_cpp}/
-        SURF_test/airfoils/Lockard-NACA0012/naca0012_polar_results.json
+Output: SURF_test/low_re/NACA0012/_run_data{,_cpp}/
+        SURF_test/low_re/NACA0012/naca0012_polar_results.json
 """
 import json
 import pathlib
@@ -30,7 +35,7 @@ REPO = pathlib.Path("/Users/elina/Desktop/SURF2026/ibpm_py-main")
 GEOM = REPO / "SURF_test" / "geom" / "naca0012_dx0.0200.geom"
 CPP_BIN = REPO / "build" / "ibpm"
 RUNNER = REPO / "SURF_test" / "run_ibpm_case.py"
-OUTBASE = REPO / "SURF_test" / "airfoils" / "Lockard-NACA0012"
+OUTBASE = REPO / "SURF_test" / "low_re" / "NACA0012"
 DOMAIN = dict(length=6, xoffset=-2, yoffset=-1.5)
 
 DT = 0.01

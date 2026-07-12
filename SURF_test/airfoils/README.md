@@ -1,4 +1,4 @@
-# Airfoil validation: LSAT-SD7003/SD8000/ClarkY/GM15, Lockard-NACA0012
+# Airfoil validation: LSAT-SD7003/SD8000/ClarkY/GM15
 
 **See [`../SUMMARY.md`](../SUMMARY.md) for the full consolidated
 findings** (mentor-question resolution, Python-vs-C++ fidelity results,
@@ -16,11 +16,16 @@ against, so provenance is explicit:
 | [`LSAT-SD8000/`](LSAT-SD8000/) | ≈60,800 | UIUC LSAT (wind tunnel) | Sibling Selig-Donovan design, for direct comparison against SD7003 |
 | [`LSAT-ClarkY/`](LSAT-ClarkY/) | ≈60,700 | UIUC LSAT (wind tunnel) | Flat-bottomed, historically the most-used airfoil; same Re as SD7003 -- isolates "does a different airfoil geometry help at the same Re" |
 | [`LSAT-GM15/`](LSAT-GM15/) | ≈40,600 | UIUC LSAT (wind tunnel) | Small free-flight-model airfoil; genuinely lower Re -- isolates "does lower Re help" |
-| [`Lockard-NACA0012/`](Lockard-NACA0012/) | 500 & 1000 | Lockard/Wu/Nita/Di Ilio (CFD benchmark) | Standard symmetric airfoil at Re genuinely in the **hundreds**; the first non-LSAT (computational) reference here, since no wind-tunnel data exists that low |
 
 (The four LSAT airfoils were previously named without the `LSAT-` prefix,
 and ClarkY/GM15 briefly lived in a separate `low_re/` directory; all were
 consolidated and renamed for a uniform `<dataset>-<airfoil>` scheme.)
+
+**NACA0012 at Re=500/1000 vs. a non-LSAT (Lockard/Wu/Nita/Di Ilio CFD)
+drag benchmark used to live here as `Lockard-NACA0012/`.** It has since
+been merged into [`../low_re/NACA0012/`](../low_re/NACA0012/), alongside
+that folder's existing qualitative flow-field check at the same Re=500
+-- see that folder's README for the full writeup.
 
 ## Mentor question: why does the vorticity field look "weird"?
 

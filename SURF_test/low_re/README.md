@@ -33,10 +33,14 @@ literature), not measured -- and even those computational references
 report bare Cl(alpha) numbers in papers, not the machine-readable
 tabulated format `parse_uiuc.py` expects.
 
-**Consequence: this directory validates Python-vs-C++ fidelity and
-qualitative flow behavior only, not against an experimental reference
-polar** -- unlike `../airfoils/`, which validates against real UIUC LSAT
-wind-tunnel data throughout.
+**Consequence: no *experimental* reference polar exists for either
+airfoil at this Re** -- unlike `../airfoils/`, which validates against
+real UIUC LSAT wind-tunnel data throughout. But a *computational*
+(CFD/LBM) drag benchmark does exist for NACA0012 specifically (the most
+commonly-used low-Re CFD validation airfoil) -- see below. SD7003 has no
+published reference at all, computational or experimental, at Re=500 (it
+is a far less common, non-canonical low-Re test case), so it stays a
+Python-vs-C++ fidelity + qualitative flow-field check only.
 
 ## The two airfoils, both at Re=500
 
@@ -45,9 +49,20 @@ wind-tunnel data throughout.
   laminar-separation-bubble design intent. The "easy" case. Coordinates
   from `https://m-selig.ae.illinois.edu/ads/coord/n0012.dat` (Lednicer
   format, converted to the Selig closed-loop format this pipeline
-  expects, same conversion as `../airfoils/LSAT-ClarkY/`). Freshly run for
-  this folder at alpha=5 deg (see
-  [`run_naca0012.py`](run_naca0012.py)).
+  expects, same conversion as `../airfoils/LSAT-ClarkY/`). Two things
+  live here: a qualitative flow-field run at alpha=5 deg (see
+  [`run_naca0012.py`](run_naca0012.py), `flow_evolution.png`), and a
+  **quantitative** Cl/Cd polar + grid-convergence study at alpha=0-10 deg,
+  Re=500/1000, validated against published CFD drag benchmarks (Lockard,
+  Wu, Nita, Di Ilio, Kurtulus) -- see
+  [`NACA0012/README.md`](NACA0012/README.md) for the full writeup
+  (`polar_comparison.png`, `grid_convergence.png`,
+  `fidelity_summary.txt`; driven by
+  [`../run_naca0012_polar.py`](../run_naca0012_polar.py) /
+  [`NACA0012/gen_naca0012_report.py`](NACA0012/gen_naca0012_report.py)).
+  This is the same content that used to live at
+  `airfoils/Lockard-NACA0012/`, merged here so all low-Re NACA0012
+  results are in one place.
 - **[`SD7003/`](SD7003/)** -- the same cambered, laminar-separation-
   bubble-prone airfoil that originally prompted the mentor's question
   (`../airfoils/LSAT-SD7003/`), now shown at Re=500 instead of its usual
@@ -58,7 +73,8 @@ wind-tunnel data throughout.
   `../airfoils/run_airfoil_re_sweep.py`/`run_airfoil_re_sweep_py.py`
   (part of `../airfoils/LSAT-SD7003/4-Re_sweep/`) rather than duplicating the
   simulation -- only the flow_evolution figure is generated fresh here
-  (see [`gen_low_re_figs.py`](gen_low_re_figs.py)).
+  (see [`gen_low_re_figs.py`](gen_low_re_figs.py)). No reference polar
+  exists for SD7003 at this Re (see above), so this one stays qualitative.
 
 ## Result: both clean, both implementations agree
 
