@@ -1,0 +1,1 @@
+py.ibpm -name cyl -outdir /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/vortall/3-grid_refine/_run_data/dx0.04 -tecplot 0 -restart 250 -force 1 -nx 225 -ny 100 -ngrid 1 -length 9.0 -xoffset -1.0 -yoffset -2.0 -geom /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/vortall/3-grid_refine/geom/cylinder_dx0.0400.geom -Re 5000.0 -dt 0.02 -nsteps 1500

@@ -7,7 +7,7 @@ sys.path.insert(0, str(repo_root))
 # 'py' (an old pytest dependency) installed in site-packages, which shadows
 # this repo's py/ namespace package when using `python -m py.ibpm`. Forcibly
 # register this repo's py/ directory as sys.modules['py'] before importing,
-# bypassing that shadow -- see SURF_test/vortall/README.md for the original
+# bypassing that shadow -- see SURF_test/vortall/1-baseline/README.md for the original
 # diagnosis of this environment quirk.
 pkg = types.ModuleType("py")
 pkg.__path__ = [str(repo_root / "py")]

@@ -12,7 +12,7 @@ make_raw_for_dx (same raw boundary points -> same body for both
 implementations).
 
 Usage: python3 SURF_test/run_all_airfoils_cpp.py
-Output: SURF_test/{SD7003,SD8000}/_run_data_cpp/, SURF_test/batch_results_cpp.json
+Output: SURF_test/airfoils/LSAT-{SD7003,SD8000}/_run_data_cpp/, SURF_test/batch_results_cpp.json
 """
 import json
 import pathlib
@@ -112,7 +112,7 @@ def main():
             if alpha in done_alphas:
                 print(f"  alpha={alpha:+.2f}: already done, skipping", flush=True)
                 continue
-            outdir = REPO / "SURF_test" / name / "_run_data_cpp" / f"polar_a{alpha:+.2f}"
+            outdir = REPO / "SURF_test" / "airfoils" / f"LSAT-{name}" / "_run_data_cpp" / f"polar_a{alpha:+.2f}"
             fpath, elapsed = run_case_cpp(
                 geom=geom_path, name="run", outdir=outdir, alpha=alpha,
                 nx=POLAR_LEVEL["nx"], ny=POLAR_LEVEL["ny"], Re=cfg["Re"],
@@ -131,7 +131,7 @@ def main():
                 print(f"  {lvl['tag']}: already done, skipping", flush=True)
                 continue
             geom_path = geom_path_for_dx(name, lvl["dx"])
-            outdir = REPO / "SURF_test" / name / "_run_data_cpp" / f"conv_{lvl['tag']}"
+            outdir = REPO / "SURF_test" / "airfoils" / f"LSAT-{name}" / "_run_data_cpp" / f"conv_{lvl['tag']}"
             fpath, elapsed = run_case_cpp(
                 geom=geom_path, name="run", outdir=outdir, alpha=cfg["conv_alpha"],
                 nx=lvl["nx"], ny=lvl["ny"], Re=cfg["Re"],

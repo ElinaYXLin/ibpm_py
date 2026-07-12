@@ -1,0 +1,1 @@
+./build/ibpm -name flow -outdir SURF_test/SD7003/_run_data_ngrid3_cpp/flowfield -tecplot 0 -restart 1000 -force 1 -nx 300 -ny 152 -ngrid 3 -length 6 -xoffset -2 -yoffset -1.52 -alpha 4.6 -geom SURF_test/geom/sd7003_dx0.0200.geom -Re 61100 -dt 0.005 -nsteps 6000

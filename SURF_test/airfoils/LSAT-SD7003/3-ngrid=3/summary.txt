@@ -1,0 +1,101 @@
+SD7003 flowfield case, ngrid=3 (multi-domain far field) vs. ngrid=1 baseline
+alpha=4.60 deg, Re=61100, dx=0.02 (nx=300, ny=152 -- bumped from 150 to
+satisfy Grid.cc/grid.py's "ngrid>1 requires nx%4==0 and ny%4==0" assertion;
+yoffset shifted to -1.52 to keep the domain centered), dt=0.005.
+
+Context: this run investigates a mentor question about why 3-small_dt/'s
+vorticity field still looks noisy after switching to native FFTW3. The
+domain/resolution README (SD7003/README.md, "Limitations") documents that
+this suite runs ngrid=1 (single uniform grid over a 6-chord domain) purely
+for compute cost, even though the solver's own manual recommends
+multi-domain (ngrid>1) for a domain this size. This run tests ngrid=3.
+
+Initial conditions were checked against the UIUC LSAT dataset
+(https://m-selig.ae.illinois.edu/uiuc_lsat.html) first: Re=61100 already
+matches the LSAT SD7003.DRG.txt table's own stated average Reynolds number
+exactly, and the impulsive-start-from-uniform-flow IC (py/ibpm.py:
+x.omega.assign(0.0)) is standard for this solver and identical to the
+unmodified C++ reference's IC -- so no IC changes were made or needed.
+
+Result: ngrid=3 does NOT clean up the vorticity field. Both py/ibpm.py and
+C++ build/ibpm produce broadband grid-scale speckle through t=20, same as
+the ngrid=1 baseline (2-c++included/, 3-small_dt/) -- see flow_evolution.png,
+columns t=0..20.
+
+Also found: both implementations diverge to NaN shortly after t=20 at
+ngrid=3 (first NaN at t=20.165 in py, t=20.945 in cpp). This was first
+seen at dt=0.01 (same divergence time, ~t=20-21) and did NOT go away when
+dt was halved to 0.005 -- ruling out a CFL/timestep cause. Since the
+divergence time is essentially unchanged across a 2x change in dt, this
+looks like a genuine multi-domain coupling instability specific to this
+ngrid=3 configuration (SD7003, alpha=4.6, Re=61100, 6-chord domain), present
+in both implementations, not a Python-port bug. flow_evolution.png shows
+"diverged (NaN)" placeholders for t=25, t=30 accordingly.
+
+Conclusion: ngrid=3 is not a fix for the vorticity-field noise reported by
+the mentor within the window it stays stable (t<=20), and introduces a new
+instability beyond that. The broadband speckle documented in
+SD7003/README.md's "Limitations" section remains the best explanation:
+under-resolved boundary layer at Re~61100 with dx=0.02-0.04 and no subgrid
+dissipation, not a far-field/ngrid artifact.
+
+What ngrid=3 actually does, and why it diverges (see instability_diagnostic.png)
+----------------------------------------------------------------------------
+ngrid=N is Colonius & Taira 2007's multi-domain far-field scheme (doc/
+ibpm_manual.tex sec. "Multi-domain method"; src/EllipticSolver.cc,
+src/Scalar.cc): N nested grids share the *same* nx x ny point count, but
+each successive (coarser) level covers 2x the physical domain of the one
+inside it -- so ngrid=3 means level 0 is the requested domain (here
+6x3.04c at dx=0.02), level 1 covers 12x6.08c at dx=0.04, and level 2
+covers 24x12.16c at dx=0.08, all centered on the same origin. Every
+elliptic solve (one Poisson + one Helmholtz per RK3 substep) runs
+outside-in: solve the coarsest grid first with zero far-field BCs, then
+Scalar::getBC() bilinearly interpolates that solution to supply boundary
+conditions for the next-finer grid, and Scalar::coarsify() restricts
+(4-point averaged) vorticity from fine to coarse grids to build each
+level's forcing term. This lets the domain edge sit much farther from the
+body without paying for a huge uniform grid.
+
+Quantified the divergence using the restart snapshots already on disk
+(no new runs needed) -- domain-RMS |omega| over time:
+  ngrid=1 baseline (dt=0.01): 6.29 (t=5) -> 6.90 -> 7.75 -> 8.80 -> 8.59 -> 8.27 (t=30)
+    -- saturates/plateaus, as expected for a statistically-stationary wake.
+  ngrid=3 (dt=0.005):         6.61 (t=5) -> 8.33 -> 11.13 -> 27.19 (t=20) -> NaN
+    -- grows without bound instead of saturating (panel A).
+Splitting the ngrid=3 field into a "core" band (near body/wake,
+|x|<1.5,|y|<0.5) and an "edge" band (outermost 3 cells of the finest grid,
+i.e. right at the level-0/level-1 interface): the edge band starts far
+below the core (2.4 vs 15.4 at t=5) and catches all the way up to it by
+t=20 (27.7 vs 30.0) -- panel B. That growth pattern pinpoints where the
+runaway energy comes from: this suite's broadband grid-scale vorticity
+noise (already documented to spread through the whole domain over time,
+SD7003/README.md "Limitations") eventually reaches the fine-grid boundary
+and starts being repeatedly round-tripped through coarsify()/getBC()'s
+bilinear restriction/interpolation every RK3 substep. Those operators are
+plain local averaging, not a clean low-pass filter, so they can alias
+high-wavenumber broadband content between grid levels; with no subgrid
+dissipation to damp it, the aliased energy compounds every step until it
+blows up. This also explains why halving dt didn't move the divergence
+time: the bottleneck is the physical/advective time for noise to reach the
+domain edge and begin compounding through the interface, not a per-step
+truncation-error threshold (which is what dt-dependent CFL blowup would
+look like).
+
+Why dx=0.01 shows larger vorticity fluctuations (see 3-dx0.01/summary.txt
+for the run details; stats also in instability_diagnostic.png panel C)
+----------------------------------------------------------------------------
+Comparing the dx=0.02 baseline and dx=0.01 fields at the same matched
+snapshot (t=30, both ngrid=1): max|omega| grows from 208 to 369, but
+domain-RMS |omega| is essentially flat (8.27 vs 7.62 -- if anything
+slightly lower). So the "larger fluctuations" visible in flow_evolution.png
+are peak-value spikes, not more total energy: a finer grid can represent
+sharper, more concentrated vortical structures (thinner shear layers,
+tighter vortex cores) that dx=0.02 simply smooths over by having fewer
+points to represent the same gradient. Because there's no subgrid
+dissipation and the boundary layer at Re~61100 isn't resolved at either
+dx=0.02 or dx=0.01, refining the grid doesn't converge the peak vorticity
+toward a fixed value -- it keeps sharpening whatever gradients the grid can
+now represent. This is the same underlying pathology documented in
+SD7003/README.md's "Limitations" section (under-resolved boundary layer,
+no subgrid dissipation), viewed from the resolution axis instead of the
+far-field-domain axis.

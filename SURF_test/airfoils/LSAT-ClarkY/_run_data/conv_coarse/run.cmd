@@ -1,0 +1,1 @@
+py.ibpm -name run -outdir SURF_test/low_re/ClarkY/_run_data/conv_coarse -tecplot 0 -restart 0 -force 1 -nx 150 -ny 75 -ngrid 1 -length 6.0 -xoffset -2.0 -yoffset -1.5 -alpha -0.45 -geom SURF_test/geom/clarky_dx0.0400.geom -Re 60700.0 -dt 0.005 -nsteps 6000

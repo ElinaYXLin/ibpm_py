@@ -5,4 +5,14 @@
 # does not need to be installed separately.
 
 numpy>=1.20
-scipy>=1.7
+
+# NOTE: scipy is no longer required. py/elliptic_solver_2d.py used to call
+# scipy.fft.dstn() for its discrete sine transform; it now calls the real
+# FFTW3 C library directly (via py/_fftw_dst_shim.c + py/_fftw_native.py),
+# for authenticity with src/EllipticSolver2d.cc's FFTW_EXHAUSTIVE planning
+# (see that file's port notes). This means running py/ibpm.py now requires
+# the SAME system-level FFTW3 dependency build/ibpm already needs (a C
+# compiler -- clang or gcc -- plus libfftw3 + fftw3.h; see the top-level
+# README's "Installation" section for how the C++ side gets these). The
+# shim is compiled on first use into build/ (gitignored), not at install
+# time.

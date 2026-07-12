@@ -64,21 +64,41 @@ back into other project code (`ParmParser`, `Grid`, `BaseFlow`), and
 `x.computeNetForce()` (a single vectorized reduction, confirmed by reading
 `state.py`).
 
-**Every rightward arrow is labeled with the `file:line` of the call site it
-leaves from** (i.e. the line in the *upstream* box's own code where the
-downstream box gets called -- not the line the downstream function is
-defined on). Box text itself is deliberately short (just the
-call/expression); look at the arrow feeding into a box to find out exactly
-where it's invoked. **Arrows only ever move left-to-right (a call) or
-straight down within one column (the next statement at the same call
-depth) -- the only backward-pointing arrows in the whole diagram are the
-two explicitly dashed loop-back arrows**, for the two real loops in this
-code (the outer `numSteps` loop and the inner RK/AB2 substep loop). An
-earlier version had a stray backward-pointing arrow for "after all
-substeps: `x.time += dt`" (it was drawn as if it were a deeper call out of
-the substep loop, when it's actually just the next statement in
-`IBSolver.advance()`'s own body after the loop finishes) -- fixed by
-routing it as a straight-down same-column arrow instead.
+**Every box carries a `file:line` tag** (small italic text above its
+top-left corner) citing exactly where the code *that box shows* is
+written -- e.g. the `NavierStokesModel.updateOperators(t)` box is tagged
+`navier_stokes_model.py:110-116`, the whole span of that method.
+**Every rightward arrow is additionally labeled with the `file:line` of the
+call site it leaves from** (i.e. the line in the *upstream* box's own code
+where the downstream box gets called -- not the line the downstream
+function is defined on). Box text itself is deliberately short (just the
+call/expression); the two citations together answer both "where is this
+defined" (the box's own tag) and "where is this called from" (the arrow's
+label) without needing to cross-reference a separate table.
+
+**Arrows are drawn as straight lines wherever geometrically possible.**
+Where a straight line from one box to another would pass behind a third,
+unrelated box that happens to sit in the way, that portion of the line is
+rendered **dashed** -- it's still visible, but the dashing makes clear it's
+merely passing behind that box, not connected to it (solid arrowheads only
+ever land on the box the arrow is actually going to). **Arrows only ever
+move left-to-right (a call) or straight down within one column (the next
+statement at the same call depth) -- the only backward-pointing arrows in
+the whole diagram are the two explicitly dashed loop-back arrows**, for the
+two real loops in this code (the outer `numSteps` loop and the inner
+RK/AB2 substep loop). An earlier version had a stray backward-pointing
+arrow for "after all substeps: `x.time += dt`" (it was drawn as if it were
+a deeper call out of the substep loop, when it's actually just the next
+statement in `IBSolver.advance()`'s own body after the loop finishes) --
+fixed by routing it as a straight-down same-column arrow instead.
+
+**Every box uses the same font size**, and its width/height are computed
+from its own text (not a fixed per-column size) so there's no wasted
+interior whitespace and no text overflow -- a box with one short line of
+text is small, a box with several long lines is bigger, but nothing is
+padded beyond what its own content needs. A color-coded **legend** (top
+right of the image) maps every box border color to the source file(s) it
+represents.
 
 The same citations are also listed in `execution_flow_refs.csv` in
 execution order (that file predates the full expansion below and covers

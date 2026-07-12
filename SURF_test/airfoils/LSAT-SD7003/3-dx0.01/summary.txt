@@ -1,0 +1,35 @@
+SD7003 flowfield case, dx=0.01 (fine grid) vs. dx=0.02 baseline
+alpha=4.60 deg, Re=61100, ngrid=1, nx=600, ny=300, dt=0.005 (halved from
+this suite's usual dt=0.01 -- SD7003/README.md documents that the dx=0.01
+level diverges to NaN at dt=0.01 in both implementations; the same halved-dt
+fix used for the polar/grid-convergence sweeps was applied here), nsteps=6000
+(t=30, same physical-time window and snapshot cadence -- t=0,5,...,30 -- as
+2-c++included/'s dx=0.02 baseline).
+
+Context: same mentor question as 3-ngrid=3/ (see that folder's summary.txt
+for the initial-condition check against the UIUC LSAT dataset -- unchanged
+here, Re=61100 already matches LSAT's own stated value, impulsive-start IC
+is standard and matches the C++ reference).
+
+Result: dx=0.01 ran stably for the full t=0..30 window in both
+implementations (no NaN; max |Cl| ~1.7, max |Cd| ~0.14 throughout -- see
+flow.force in _run_data_dx001{,_cpp}/flowfield/). py/ibpm.py and C++
+build/ibpm agree closely at every snapshot (flow_evolution.png).
+
+However, halving dx does NOT clean up the broadband vorticity speckle
+either -- if anything the finer grid resolves *more* small-scale structure
+in the noise, not less, consistent with SD7003/README.md's explanation that
+the speckle is a real feature of this Re/resolution regime (no subgrid
+dissipation to damp grid-scale noise) rather than a coarse-grid artifact
+that finer dx would remove.
+
+Why: quantified, at the matched t=30 snapshot, max|omega| grows from 208
+(dx=0.02) to 369 (dx=0.01), while domain-RMS |omega| stays essentially
+flat (8.27 vs 7.62) -- see ../3-ngrid=3/instability_diagnostic.png panel C
+and its summary.txt for the full explanation. The finer grid is not adding
+more total vortical energy; it's resolving sharper, more concentrated
+peaks in the same broadband field (thinner shear layers, tighter vortex
+cores) that dx=0.02 simply smooths over. Because neither resolution
+resolves the actual Re~61100 boundary layer and there's no subgrid
+dissipation, refining dx doesn't converge the peak vorticity to a fixed
+value -- it keeps sharpening whatever gradients the grid can represent.

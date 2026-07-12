@@ -12,20 +12,36 @@
 # ---------------------------------------------------------------------------
 # JUDGMENT CALLS / PORT NOTES (see also inline NOTE(port) comments):
 #
-#   1. FFTW -> scipy.fft.  The C++ code uses FFTW's real-to-real transform
-#      FFTW_RODFT00, which is the type-I discrete sine transform (DST-I).
-#      numpy has no DST, so the exact equivalent scipy.fft.dstn(..., type=1)
-#      is used instead. scipy's DST-I uses the same (unnormalized) convention
-#      as FFTW_RODFT00, so the normalization factor below is unchanged. This
-#      is the one dependency beyond numpy; it is isolated in sinTransform() so
-#      it is easy to swap later.
+#   1. FFTW, for real -- not scipy.fft.  The C++ code uses FFTW's
+#      real-to-real transform FFTW_RODFT00 (the type-I discrete sine
+#      transform, DST-I), planned with FFTW_EXHAUSTIVE: at construction time,
+#      FFTW actually times every algorithm ("codelet") it knows for this
+#      exact transform size and keeps whichever measured fastest, then reuses
+#      that plan for every subsequent solve. An earlier version of this port
+#      used scipy.fft.dstn(..., type=1) instead -- numerically equivalent
+#      (same unnormalized convention, verified to ~1e-15), but a different
+#      library (scipy's pocketfft) that never performs FFTW's own search.
+#      For full authenticity with src/EllipticSolver2d.cc, this port now
+#      calls FFTW3 itself, via a small C shim (py/_fftw_dst_shim.c, built and
+#      loaded by py/_fftw_native.py) that issues the exact same
+#      fftw_plan_r2r_2d(..., FFTW_RODFT00, FFTW_RODFT00, FFTW_EXHAUSTIVE)
+#      call C++ does. This is a deliberate trade-off: FFTW_EXHAUSTIVE's
+#      timed search is slow (it can dominate total wall-clock time for a
+#      short run), matching the real cost the C++ reference itself pays --
+#      not something to optimize away, since the point is authenticity, not
+#      speed. See py/_fftw_native.py's module docstring for why this does
+#      NOT fall back to scipy silently if FFTW3 isn't available on the
+#      machine.
 #
-#   2. FFTW plan machinery dropped.  The C++ constructor builds an
+#   2. FFTW plan lifecycle now matches C++.  The C++ constructor builds an
 #      fftw_plan (with FFTW_EXHAUSTIVE) and keeps a scratch array `_fft`;
-#      sinTransform copies in/out of that scratch buffer. scipy.fft plans
-#      internally and is functional, so `_FFTWPlan` and `_fft` have no Python
-#      counterpart and are omitted. The destructor (which only destroyed the
-#      plan) is therefore also omitted.
+#      sinTransform copies in/out of that scratch buffer, and the destructor
+#      calls fftw_destroy_plan. Reproduced here: `self._dst` (a
+#      `_fftw_native.NativeDST2D`) is built once in `__init__` (the
+#      expensive exhaustive search happens exactly once, at solver
+#      construction, same as C++) and reused by every `sinTransform` call
+#      for this object's lifetime; `__del__` releases the underlying FFTW
+#      plan, mirroring the C++ destructor.
 #
 #   3. Array2d indexing.  C++ uses Array::Array2<double> with offsets (1,1),
 #      i.e. valid indices are i in 1..nx-1, j in 1..ny-1. Here an Array2d is a
@@ -52,10 +68,12 @@
 #
 #   7. JAX-readiness.  All array work uses basic numpy operations (arange,
 #      cos, elementwise arithmetic, slicing) that have jax.numpy equivalents.
-#      The one exception is scipy.fft.dstn in sinTransform(); jax.scipy.fft
-#      does not currently expose a DST, so that single call is the place that
-#      will need attention when porting to JAX. It is deliberately kept in one
-#      small method to make that swap local.
+#      The one exception is the native FFTW call in sinTransform() (see port
+#      note 1) -- an opaque ctypes call into a C shim, definitely not
+#      jax-traceable. That single call is the place that will need attention
+#      when porting to JAX (e.g. reverting to jax's own FFT-based transform
+#      for that build, at the cost of this authenticity property). It is
+#      deliberately kept in one small method to make that swap local.
 # ---------------------------------------------------------------------------
 
 from __future__ import annotations
@@ -63,8 +81,8 @@ from __future__ import annotations
 import abc
 
 import numpy as np
-import scipy.fft
 
+from . import _fftw_native
 from .bc import BC
 
 # NOTE(port): the C++ typedef `Array::Array2<double> Array2d` becomes a plain
@@ -81,12 +99,24 @@ class EllipticSolver2d(abc.ABC):
     def __init__(self, nx: int, ny: int, dx: float) -> None:
         # Need only interior points, so eigenvalues are (nx-1) by (ny-1).
         # NOTE(port): the C++ Array2d has offsets (1,1); here it is a 0-based
-        # numpy array of shape (nx-1, ny-1). See also port note 2 for the
-        # dropped FFTW plan/scratch members.
+        # numpy array of shape (nx-1, ny-1).
         self._eigenvaluesOfInverse: Array2d = np.zeros((nx - 1, ny - 1), dtype=np.float64)
         self._nx: int = nx
         self._ny: int = ny
         self._dx: float = dx
+        # NOTE(port): matches the C++ constructor's
+        #   _FFTWPlan = fftw_plan_r2r_2d(nx-1, ny-1, _fft, _fft,
+        #       FFTW_RODFT00, FFTW_RODFT00, FFTW_EXHAUSTIVE);
+        # -- see port notes 1-2. The exhaustive algorithm search happens
+        # here, once, exactly as in C++; every sinTransform() call below
+        # reuses this plan.
+        self._dst: _fftw_native.NativeDST2D = _fftw_native.NativeDST2D(nx - 1, ny - 1)
+
+    def __del__(self) -> None:
+        # NOTE(port): matches the C++ destructor's fftw_destroy_plan call.
+        dst = getattr(self, "_dst", None)
+        if dst is not None:
+            dst.close()
 
     def getLaplacianEigenvalues(self) -> Array2d:
         # calculate eigenvalues of Laplacian
@@ -101,10 +131,11 @@ class EllipticSolver2d(abc.ABC):
     # Take discrete sin transform of u, leaving result in v
     def sinTransform(self, u: Array2d, v: Array2d) -> Array2d:
         assert u.size == v.size
-        # NOTE(port): FFTW_RODFT00 (DST-I) -> scipy.fft.dstn(type=1); see
-        # port notes 1 and 2. This replaces the copy-in / fftw_execute /
-        # copy-out sequence of the C++ code.
-        v[...] = scipy.fft.dstn(u, type=1)
+        # NOTE(port): FFTW_RODFT00 (DST-I), via the real FFTW3 library --
+        # see port notes 1-2. This replaces the copy-in / fftw_execute /
+        # copy-out sequence of the C++ code with the same sequence, just
+        # issued from Python via ctypes instead of C++ directly.
+        v[...] = self._dst.execute(u)
         return v
 
     # Take inverse sin transform of u, leaving result in v.

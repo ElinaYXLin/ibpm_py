@@ -56,7 +56,13 @@
       "Bash(../build/ibpm -h)",
       "Bash(time python3 -c ' *)",
       "Bash(python3 -c \"import matplotlib; print\\(matplotlib.__version__\\)\")",
-      "Bash(pip3 install *)"
+      "Bash(pip3 install *)",
+      "Bash(tail -30 /tmp/small_dt_full_log.txt; date)",
+      "WebFetch(domain:m-selig.ae.illinois.edu)",
+      "Bash(python3 -m py_compile SURF_test/run_naca0012_polar.py)",
+      "Bash(python3 SURF_test/run_naca0012_polar.py cpp)",
+      "Bash(python3 SURF_test/run_naca0012_polar.py py)",
+      "Bash(wait)"
     ]
   }
 }

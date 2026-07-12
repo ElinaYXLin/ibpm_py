@@ -4,7 +4,7 @@ restart cadence) so gen_flowfield_figs_v2.py can show a Python-vs-C++
 vorticity-field comparison.
 
 Usage: python3 SURF_test/run_flowfield_cpp.py
-Output: SURF_test/{SD7003,SD8000}/_run_data_cpp/flowfield/
+Output: SURF_test/airfoils/LSAT-{SD7003,SD8000}/_run_data_cpp/flowfield/
 """
 import pathlib
 import subprocess
@@ -28,7 +28,7 @@ def main():
         sys.exit(1)
 
     for name, cfg in CASES.items():
-        outdir = REPO / "SURF_test" / name / "_run_data_cpp" / "flowfield"
+        outdir = REPO / "SURF_test" / "airfoils" / f"LSAT-{name}" / "_run_data_cpp" / "flowfield"
         outdir.mkdir(parents=True, exist_ok=True)
         cmd = [str(CPP_BIN),
                "-geom", str(cfg["geom"]), "-name", "flow", "-outdir", str(outdir),

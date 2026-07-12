@@ -35,7 +35,7 @@ iterate generically over every implemented backend.
 - **Case**: cylinder (diameter 1), Re=100, RK3, single-domain
   (`ngrid=1`), domain `[-2,2]x[-2,2]`, 150 timesteps. Boundary point
   count is matched to grid spacing (`circle_n` count ~ `pi/dx`) at each
-  resolution, same reasoning as documented in `SURF_test/SD7003/README.md`
+  resolution, same reasoning as documented in `SURF_test/airfoils/LSAT-SD7003/README.md`
   (mismatched spacing makes the projection matrix singular).
 - **Grid sizes**: `nx=ny` in {100, 200, 300, 400}. `dt=0.01` at
   `nx=400` (else `0.02`) -- `SURF_test/built_in_tests/README.md` already documented
@@ -70,7 +70,7 @@ iterate generically over every implemented backend.
 | `backends.py` | Backend registry (C++, Python, JAX-stub) -- see "Architecture" above. |
 | `run_benchmark.py` | Runs every implemented backend x grid size, measures cost, writes `raw/cost_results.json`. |
 | `gen_cost_report.py` | Reads `raw/cost_results.json`, writes every table/figure below. |
-| `run_ibpm_case.py` | Tiny wrapper working around this environment's `py`-package-name shadowing issue (see `SURF_test/vortall/README.md`) so `py/ibpm.py` can be invoked as a plain subprocess. |
+| `run_ibpm_case.py` | Tiny wrapper working around this environment's `py`-package-name shadowing issue (see `SURF_test/vortall/1-baseline/README.md`) so `py/ibpm.py` can be invoked as a plain subprocess. |
 | `tables/cost_summary.csv`, `tables/cost_summary.md` | Full per-run numbers: wall time, phase breakdown, ms/step, CPU-seconds, peak RSS, CPU efficiency. |
 | `tables/cost_ratio_python_vs_cpp.md` | Head-to-head Python/C++ ratio table (the single most useful summary). |
 | `runtime_vs_gridsize.png` | Total wall time vs. grid size (misleading, dominated by C++'s FFTW planning) *and* timestepping-only wall time (the fair comparison), side by side. |
@@ -199,7 +199,7 @@ associations to the old implementation on 6 real geometries (including
 the non-circular SD7003 airfoil), and confirmed by direct measurement:
 `Regularizer.update()`'s own peak traced memory at nx=400 dropped from
 3330.77 MB to 0.55 MB. This means **the SD7003/SD8000 airfoil studies'
-nx<=600 cap** (`SURF_test/SD7003/`, `SURF_test/SD8000/`) **was
+nx<=600 cap** (`SURF_test/airfoils/LSAT-SD7003/`, `SURF_test/airfoils/LSAT-SD8000/`) **was
 conservative for a reason that no longer applies** -- it was sized
 around the old O(numPoints x nx x ny) blowup, not the (much smaller)
 O(nx*ny) grid-field memory that remains.

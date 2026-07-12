@@ -1,0 +1,6 @@
+Cylinder grid refinement (Re=5000): py/ibpm.py vs. C++ build/ibpm fidelity at t=30
+
+    dx     RMS_py    RMS_cpp     max_py    max_cpp    RMS(py-cpp)/RMS_cpp
+  0.04     4.0266     4.0260     83.061     84.031               20.1064%
+  0.02     3.4600     3.4600    123.020    123.020                0.0000%
+  0.01     3.4345     3.4345    162.090    162.090                0.0000%

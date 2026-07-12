@@ -1,0 +1,1 @@
+py.ibpm -name run -outdir /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/airfoils/SD8000/5-grid_refine/_run_data/dx0.01 -tecplot 0 -restart 1000 -force 1 -nx 600 -ny 300 -ngrid 1 -length 6.0 -xoffset -2.0 -yoffset -1.5 -alpha 5.36 -geom /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/geom/sd8000_dx0.0100.geom -Re 5000.0 -dt 0.005 -nsteps 6000

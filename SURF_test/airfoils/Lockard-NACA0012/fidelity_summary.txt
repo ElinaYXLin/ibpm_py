@@ -1,0 +1,21 @@
+NACA0012 low-Re validation: py/ibpm.py vs. C++ build/ibpm, and vs. CFD benchmark
+
+Polar (dx=0.02, nx=300, ny=150, t=30, mean over last 60%):
+    Re  alpha      Cl_py     Cl_cpp      Cd_py     Cd_cpp   |dCd|/Cd_cpp
+   500      0    -0.0056    -0.0056     0.1891     0.1891       0.00e+00
+   500      2     0.1264     0.1264     0.1907     0.1907       0.00e+00
+   500      4     0.2503     0.2503     0.1959     0.1959       0.00e+00
+   500      6     0.3578     0.3578     0.2049     0.2049       0.00e+00
+   500      8     0.4406     0.4406     0.2180     0.2180       0.00e+00
+   500     10     0.4951     0.4951     0.2354     0.2354       0.00e+00
+  1000      0    -0.0065    -0.0065     0.1283     0.1283       0.00e+00
+
+Drag benchmark comparison at alpha=0 (Cl=0 by symmetry):
+  Re=500: Cd_py=0.1891  Cd_cpp=0.1891
+      vs Lockard et al.         0.1762  (+7.3%)
+      vs Wu et al.              0.1759  (+7.5%)
+      vs Nita et al. (LBM)      0.1780  (+6.2%)
+  Re=1000: Cd_py=0.1283  Cd_cpp=0.1283
+      vs Di Ilio et al. (HLBM)  0.1190  (+7.8%)
+      vs Di Ilio et al. (XFOIL) 0.1190  (+7.8%)
+      vs Kurtulus (~)           0.1200  (+7.0%)

@@ -95,7 +95,7 @@ def make_circle_geom(dx: float, out_path: pathlib.Path, diameter: float = 1.0) -
     spacing is matched to grid spacing `dx` (spacing ~ dx avoids both the
     'leaky boundary' problem of too few points and the 'over-resolved
     boundary -> singular projection matrix' problem of too many -- see
-    SURF_test/SD7003/README.md for a worked example of the latter failure
+    SURF_test/airfoils/LSAT-SD7003/README.md for a worked example of the latter failure
     mode on a non-circular body)."""
     import math
     n = max(int(round(math.pi * diameter / dx)), 8)
