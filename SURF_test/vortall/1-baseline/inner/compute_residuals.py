@@ -68,7 +68,7 @@ import time
 
 import numpy as np
 
-REPO = pathlib.Path(__file__).resolve().parents[3]
+REPO = pathlib.Path(__file__).resolve().parents[4]
 sys.path.insert(0, str(REPO))
 
 from py.base_flow import BaseFlow  # noqa: E402

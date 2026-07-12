@@ -1,1 +1,1 @@
-./build/ibpm -name vortall -outdir results/vortall/_run_data_cpp -tecplot 0 -restart 100 -force 1 -nx 450 -ny 200 -ngrid 1 -length 9 -xoffset -1 -yoffset -2 -geom examples/cylinder.geom -Re 100 -dt 0.02 -nsteps 14000
+/Users/elina/Desktop/SURF2026/ibpm_py-main/build/ibpm -name vortall -outdir /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/vortall/1-baseline/_run_data_cpp -tecplot 0 -restart 100 -force 1 -nx 450 -ny 200 -ngrid 1 -length 9 -xoffset -1 -yoffset -2 -geom /Users/elina/Desktop/SURF2026/ibpm_py-main/examples/cylinder.geom -Re 100 -dt 0.02 -nsteps 14000

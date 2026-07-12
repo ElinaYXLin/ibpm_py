@@ -85,52 +85,95 @@ iterate generically over every implemented backend.
 
 ### Runtime
 
-**Total wall time is misleading, and this codebase already knows why**
-(`SURF_test/built_in_tests/README.md` covers the same finding at one resolution; this
-extends it across four): C++'s "model construction" phase is
-dominated by `FFTW_EXHAUSTIVE` plan search, a one-time cost that grows
-with grid size (4.3s at nx=100 up to 17.8s at nx=400) and has nothing
-to do with per-timestep algorithmic cost. Naively comparing total wall
-time makes Python look 2-4x faster overall (`tables/cost_ratio_python_vs_cpp.md`,
-"wall time ratio" column: 0.24-0.49x) purely because `scipy.fft` has no
-equivalent planning phase.
+**Update (re-verified from a from-scratch rerun): the "wall time is
+misleading" story below is now largely obsolete, for two independent
+reasons found while re-running this benchmark.** Both are corrections to
+this document, not to the benchmark's methodology going forward (the
+scripts themselves needed no code changes):
 
-**Timestepping-only cost is close to parity** (right panel of
-`runtime_vs_gridsize.png`; "timestepping-only ratio" column of the
-ratio table: 0.96x-1.86x) -- consistent with the existing 200x200
-finding in `SURF_test/built_in_tests/README.md`. ms/step numbers (`tables/cost_summary.md`):
+1. **`py/elliptic_solver_2d.py` now calls the real FFTW3 library with
+   `FFTW_EXHAUSTIVE` planning**, same as C++ (see
+   `SURF_test/airfoils/LSAT-SD7003/README.md`, "Port now calls the real
+   FFTW3 library"). This change post-dates the numbers originally quoted
+   in this section: at the time they were measured, Python still used
+   `scipy.fft`, which has no planning phase at all, so Python's "model
+   construction" phase was then near-instant while C++'s was not. That
+   asymmetry **no longer exists** -- both backends now pay the same
+   one-time `FFTW_EXHAUSTIVE` search, so total wall time is no longer a
+   misleading number the way it used to be.
+2. **A second, independent artifact was found in this benchmark's own
+   methodology**: `py/ibpm.py`/`build/ibpm` both auto-load a cached
+   `<name>_0N.cholesky` factorization file if one already exists at the
+   run's `outdir` (`py/ibpm.py`: `if not solver.load(...): solver.init();
+   solver.save(...)`), and `run_benchmark.py` reuses the same `raw/<backend>_nx<N>/`
+   output directory on every invocation. The very first time this
+   benchmark ran, "solver factorization" measured a genuine cold
+   computation; **every rerun since (including the one that produced the
+   numbers previously in this section) silently loaded the cached
+   `.cholesky` file instead of recomputing it**, making the "solver
+   factorization" timing an artifact of whichever run happened to populate
+   the cache first, not a fair, repeatable measurement. This was caught by
+   re-running with `raw/` deleted (moved aside, not caching-safe) and
+   comparing against a stale-cache rerun of the same code: the setup-phase
+   numbers changed by more than an order of magnitude with no code change
+   at all. Fixed for future runs: **delete/move aside `SURF_test/cost/raw/`
+   before re-running this benchmark if you want a genuinely cold-start
+   number** (the script itself doesn't do this automatically, since reuse
+   is otherwise a reasonable, intentional feature of `py/ibpm.py`/`build/ibpm`).
 
-| nx=ny | C++ ms/step | Python ms/step |
-|---|---|---|
-| 100 | 2.91 | 5.41 |
-| 200 | 11.39 | 11.11 |
-| 300 | 26.54 | 25.39 |
-| 400 | 46.95 | 48.97 |
+**Current (from-scratch, verified) numbers**, `tables/cost_ratio_python_vs_cpp.md`:
 
-Python has a fixed ~2-3ms interpreter/dispatch overhead per step that
-matters at nx=100 (its smallest case) but becomes negligible as grid
-size grows -- by nx=200 and up, the two are indistinguishable to within
-run-to-run noise.
+| nx=ny | wall time ratio | timestepping-only ratio | peak RSS ratio | CPU-seconds ratio |
+|---|---|---|---|---|
+| 100 | 1.17x | 1.77x | 10.43x | 1.49x |
+| 200 | 1.06x | 1.28x | 3.35x | 1.17x |
+| 300 | 1.03x | 1.15x | 1.61x | 1.08x |
+| 400 | 1.01x | 1.10x | 1.27x | 1.05x |
 
-**Python's "solver factorization" phase (between the "solver for
-projection step" and "Integrating for" markers -- the Cholesky
-`computeMatrixM`/`computeFactorization` calls for the 3 RK3 substeps)
-scales far worse with resolution than C++'s "model construction"
-phase**: 0.08s (nx=100) -> 4.70s (nx=400), a 59x increase for a 16x
-increase in cell count, vs. C++'s ~4x growth (4.26s -> 17.79s) in its
-analogous phase. This is real, but -- see the RAM section below -- it
-is *not* the same mechanism responsible for Python's RAM growth, which
-traces to a different, earlier phase entirely.
-`py/cholesky_solver.py`'s `computeFactorization` is a line-by-line
-faithful port of `src/CholeskySolver.cc`'s own dense O(size&sup3;)
-triple-nested loop (`size = 2 x numPoints`) -- both implementations
-store the *same* dense `size x size` factor (confirmed by inspecting
-both sources; verified negligible, ~9MB total across all 3 RK3
-substeps via `tracemalloc`, even at nx=400). Python's version is slower
-here for the mundane reason that a Python-level nested loop (even with
-`np.dot` doing the inner reduction) carries far more per-iteration
-interpreter overhead than compiled C++ -- not a data-structure or
-algorithmic difference.
+Total wall time is now **close to parity at every grid size** (1.01x-1.17x,
+not 0.24-0.49x) because both backends now pay the same FFTW planning cost
+in "model construction" -- see `tables/cost_summary.md`:
+
+| backend | nx=ny | model (s) | setup (s) | steps (s) | ms/step |
+|---|---|---|---|---|---|
+| cpp | 100 | 4.14 | 0.30 | 0.42 | 2.83 |
+| cpp | 200 | 9.13 | 2.02 | 1.76 | 11.74 |
+| cpp | 300 | 19.69 | 6.78 | 4.20 | 28.03 |
+| cpp | 400 | 17.76 | 15.38 | 7.55 | 50.35 |
+| python | 100 | 4.55 | 0.35 | 0.75 | 5.02 |
+| python | 200 | 9.32 | 2.15 | 2.25 | 15.00 |
+| python | 300 | 20.06 | 6.76 | 4.83 | 32.18 |
+| python | 400 | 18.12 | 14.65 | 8.33 | 55.54 |
+
+**Model construction** (the FFTW plan search) is now comparable between
+the two backends at every size, as expected once both call the same
+library the same way.
+
+**Solver factorization ("setup") is now ALSO comparable between the two
+backends** (0.30s->15.38s for C++, 0.35s->14.65s for Python, both roughly
+a 50x increase from nx=100 to nx=400) -- this **supersedes** the
+previously-reported finding that Python's factorization scaled far worse
+than C++'s due to Python-level interpreter loop overhead in
+`computeFactorization`'s triple-nested loop. That mechanism (a real,
+faithfully-ported O(size&sup3;) dense triple loop, `size = 2 x numPoints`)
+is still true of the code, but the *previous measurement* attributing
+nearly all of this phase's cost to it was contaminated by the `.cholesky`
+caching artifact described above: with a genuinely cold cache, both
+backends' "setup" phase turns out to scale similarly with resolution,
+consistent with both being dominated by the same mechanism (`computeMatrixM`'s
+`2*numPoints` calls to `model.M()`, each triggering an elliptic solve whose
+cost scales with grid resolution) rather than by a Python-vs-C++ loop-speed
+difference.
+
+**Timestepping-only cost remains close to parity** (right panel of
+`runtime_vs_gridsize.png`; "timestepping-only ratio" column above:
+1.10x-1.77x) -- unaffected by either correction above, since neither the
+FFTW authenticity switch nor the `.cholesky` caching bug touches the
+per-step integration loop. Python has a fixed ~2ms interpreter/dispatch
+overhead per step that matters most at nx=100 (its smallest case, where
+the ratio is largest, 1.77x) and matters progressively less as grid size
+grows (1.10x by nx=400) -- the per-cell cost of both backends converges,
+while Python's fixed per-step overhead does not grow with resolution.
 
 ### RAM: fixed -- was the headline finding, now close to parity
 
