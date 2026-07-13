@@ -106,9 +106,10 @@ Re~40,000-60,000, and the broader low-Re literature confirms Re=40k-60k
 is close to a hard floor for reliable force-balance/momentum-method
 measurement in a conventional wind tunnel. Genuinely low-Re (hundreds)
 Cl/Cd data, where it exists at all, is CFD/DNS-computed, not
-experimental, and not published in a machine-tabulated format. This
-directory is therefore a Python-vs-C++ fidelity + qualitative flow-field
-check, not a polar validation against a reference dataset.
+experimental, and not published in a machine-tabulated format. SD7003
+(a non-canonical, less-studied low-Re airfoil) has no such computational
+reference either, so it stays a Python-vs-C++ fidelity + qualitative
+flow-field check; NACA0012 does have one, quantitatively -- see 5b below.
 
 **Result**: both airfoils, at Re=500, show a smooth, coherent, laminar
 wake sheet -- no speckle at any of the 7 snapshots from t=0 to t=30, in
@@ -118,12 +119,14 @@ C++ build/ibpm at every timestep (`low_re/NACA0012/flow_evolution.png`,
 brand-new airfoil as well as the original one, exactly what
 `airfoils/LSAT-SD7003/4-Re_sweep/` already found from a coarser Re grid.
 
-## 5b. Quantitative low-Re validation against a NON-LSAT dataset: `airfoils/Lockard-NACA0012/`
+## 5b. Quantitative low-Re validation against a NON-LSAT dataset: `low_re/NACA0012/`
 
-The `low_re/` check above is qualitative (flow-field + fidelity). To also
-validate *quantitatively* at Re in the hundreds, `airfoils/Lockard-NACA0012/`
-compares NACA0012 drag against published **computational** benchmarks
-(the only kind that exist this low):
+The flow-field check above is qualitative. To also validate
+*quantitatively* at Re in the hundreds, `low_re/NACA0012/` (this content
+originally lived at `airfoils/Lockard-NACA0012/`, merged here since it's
+the same airfoil/Re as the qualitative check above -- see that folder's
+README for the full history) compares NACA0012 drag against published
+**computational** benchmarks (the only kind that exist this low):
 
 | Re | Cd(alpha=0) reference | Source |
 |---|---|---|
@@ -134,9 +137,8 @@ Result: at dx=0.02, py and C++ agree to machine precision (Cd=0.1891 both,
 at Re=500 alpha=0), ~7% above the benchmark band -- and grid-convergence
 (dx=0.04 -> 0.02 -> 0.01) drives Cd monotonically *toward* the reference,
 confirming the offset is the expected immersed-boundary resolution effect,
-not a modeling error. This is the first non-LSAT (computational-reference)
-validation in the suite; folders are now named `<dataset>-<airfoil>`
-(`LSAT-*` for the wind-tunnel cases, `Lockard-NACA0012` for this one).
+not a modeling error. This remains the suite's only non-LSAT
+(computational-reference) validation.
 
 ## 6. Where everything lives
 
@@ -153,9 +155,11 @@ SURF_test/
       5-grid_refine/   dx refined at fixed Re=5000, py vs. cpp
       6-explicit_dissipation/   (SD7003 only) post-hoc filter demo
     LSAT-ClarkY/, LSAT-GM15/     Re~41-61k, different-airfoil / lower-Re controls
-    Lockard-NACA0012/  NON-LSAT: NACA0012 Re=500/1000 vs. published CFD-benchmark drag
   low_re/
-    NACA0012/, SD7003/  genuinely low-Re (Re=500) airfoils, flow-field + py-vs-cpp check
+    NACA0012/  genuinely low-Re (Re=500) airfoil: flow-field + py-vs-cpp
+      check, PLUS quantitative Cl/Cd polar + grid convergence vs. published
+      CFD drag benchmarks (formerly airfoils/Lockard-NACA0012/)
+    SD7003/    genuinely low-Re (Re=500) airfoil, flow-field + py-vs-cpp check only
 ```
 
 Each folder's own `README.md` has the full detail; `airfoils/README.md`

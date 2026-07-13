@@ -17,7 +17,7 @@ Outputs:
                             reference band (if the grid-convergence runs exist)
   fidelity_summary.txt   -- py-vs-cpp Cl/Cd agreement table + benchmark comparison
 
-Usage: python3 SURF_test/airfoils/Lockard-NACA0012/gen_naca0012_report.py
+Usage: python3 SURF_test/low_re/NACA0012/gen_naca0012_report.py
 """
 import pathlib
 
@@ -27,7 +27,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 REPO = pathlib.Path("/Users/elina/Desktop/SURF2026/ibpm_py-main")
-OUTDIR = REPO / "SURF_test" / "airfoils" / "Lockard-NACA0012"
+OUTDIR = REPO / "SURF_test" / "low_re" / "NACA0012"
 AVG_FRAC = 0.6
 
 # Reference Cd at alpha=0 (Cl=0 by symmetry), non-LSAT CFD benchmarks

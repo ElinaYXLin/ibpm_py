@@ -87,7 +87,11 @@ def _writeTecplotFileASCII(filename: str, title: str, varlist: _VarList, lev: in
             [varlist.getVariable(ind)[lev] for ind in range(numVars)], axis=-1
         )  # shape (nx-1, ny-1, numVars); data[i-1, j-1, ind]
         ordered = np.transpose(data, (1, 0, 2)).reshape(-1, numVars)
-        fmt = " ".join(["%.5e "] * numVars)
+        # NOTE(port): C++ writes `fprintf(fp, "%.5e ", ...)` once per value
+        # (value + a single trailing space) with no additional separator, so
+        # the per-value tokens are concatenated with "" (not " ".join, which
+        # would insert a second space between values).
+        fmt = "".join(["%.5e "] * numVars)
         np.savetxt(fp, ordered, fmt=fmt)
 
     return True

@@ -142,6 +142,7 @@ class ParmParser:
         parm: str,
         defaultVal: _T,
         extractor: Callable[[str], Optional[_T]],
+        formatter: Callable[[_T], str] = str,
     ) -> _T:
         """Generic function to search for the given entry parm and return
         its argument or a default value.
@@ -153,6 +154,14 @@ class ParmParser:
         _extract_bool/_extract_str) instead, dispatched from
         getInt/getDouble/getString/getBool below (matching the
         overload-collapse convention used throughout this port).
+
+        NOTE(port): C++ echoes the found value into `_argOut` with
+        `_argOut << " " << parm << " " << val`, i.e. using `ostream::operator<<`
+        for the value's own type T. The `formatter` callable reproduces that
+        type-specific formatting (default `str`, matching `<< int`/`<< string`;
+        overridden for double -> `%.6g` and bool -> "1"/"0" by the callers), so
+        the saved/echoed parameter list matches C++ byte-for-byte rather than
+        using Python's fuller `str(float)` / "True"/"False" renderings.
         """
         target = "-" + parm
         tokens = self._args.split()
@@ -165,7 +174,7 @@ class ParmParser:
             if val is not None:
                 self._used[i] = True
                 self._used[i + 1] = True
-                self._argOut += f" {target} {val}"
+                self._argOut += f" {target} {formatter(val)}"
                 return val
             sys.stderr.write(f"Warning: cannot parse argument {i}: {target}\n")
             return defaultVal
@@ -183,7 +192,7 @@ class ParmParser:
         """Search the parameter list for description, and return the
         corresponding double value, or defaultVal if not specified."""
         self._appendUsageMessageParm(parm, "<real>", description, _format_default_double(defaultVal))
-        return self._getParm(parm, defaultVal, _extract_float)
+        return self._getParm(parm, defaultVal, _extract_float, _format_default_double)
 
     def getString(self, parm: str, description: str, defaultVal: str) -> str:
         """Search the parameter list for description, and return the
@@ -195,7 +204,7 @@ class ParmParser:
         """Search the parameter list for description, and return the
         corresponding boolean value, or defaultVal if not specified."""
         self._appendUsageMessageParm(parm, "[0 or 1]", description, "1" if defaultVal else "0")
-        return self._getParm(parm, defaultVal, _extract_bool)
+        return self._getParm(parm, defaultVal, _extract_bool, lambda v: "1" if v else "0")
 
     def inputIsValid(self) -> bool:
         """Check if any input parameters were invalid, or unused.

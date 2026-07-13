@@ -1,10 +1,10 @@
 Three-way comparison at t=280, Re=100, nx=450 ny=200, x in [-1,8], y in [-2,2]
 
 max |omega|, VORTALL.mat snapshot 150:      18.0910
-max |omega|, this repo's C++ build:          23.7218
-max |omega|, Python port:                    24.4917
+max |omega|, this repo's C++ build:          24.3522
+max |omega|, Python port:                    23.6263
 
-max |Python - C++| (same run, same t=280):   7.365e+00
+max |Python - C++| (same run, same t=280):   3.566e+00
   -> C++ and Python are two FULLY INDEPENDENT runs from a zero initial
      condition (see README's 'Correction' section -- an earlier version of
      this comparison seeded Python from C++'s own restart file, which made
@@ -19,7 +19,7 @@ max |Python - C++| (same run, same t=280):   7.365e+00
 
                              Python         C++
      Cl peak amplitude      0.84607     0.84607
-     Cd mean (t>=200)       1.91296     1.91261
+     Cd mean (t>=200)       1.91263     1.91251
      shedding period         4.6550      4.6538
      Strouhal number         0.2148      0.2149
   -> these agree to 4-5 significant figures between the two independent

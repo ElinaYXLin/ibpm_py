@@ -31,7 +31,7 @@ import subprocess
 import sys
 from typing import List, Optional, Tuple
 
-REPO = pathlib.Path(__file__).resolve().parents[2]
+REPO = pathlib.Path(__file__).resolve().parents[3]
 GEOM = REPO / "examples" / "cylinder.geom"
 OUTDIR_CPP = REPO / "SURF_test" / "vortall" / "1-baseline" / "_run_data_cpp"
 OUTDIR_PY = REPO / "SURF_test" / "vortall" / "1-baseline" / "_run_data"

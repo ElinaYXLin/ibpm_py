@@ -301,44 +301,52 @@ def FluxToXVelocity(q: Flux, u: Scalar) -> None:
     oneOver2Delta = 1.0 / (2 * q.Dx())
     X = _flux_x_views(q)
     U = _scalar_views(u)
-    grid = u.getGrid()
 
     # Compute interior points (A) -- finest grid only
     # u(0,i,j) = ( q(0,X,i,j) + q(0,X,i,j-1) ) * oneOver2Delta, i,j in [1,nx-1]
     U[0][:, :] = (X[0][1:nx, 1:ny] + X[0][1:nx, 0:ny - 1]) * oneOver2Delta
 
     # Compute border points for each coarse grid (B-F)
+    #
+    # NOTE(port): the C++ per-element (i,j) loops labeled B-E are vectorized
+    # here with numpy slicing (F, the four corners, stays scalar -- it is
+    # O(1) work). Regions B, C, D all apply the identical two-point average
+    # (X(i,j) + X(i,j-1)) * 0.5 * bydx, so a single full-level averaged array
+    # `avgU` is formed once and copied into each region's slice; region E is
+    # the cross-grid interface interpolation, expressed with fancy indexing.
+    # This reproduces exactly the same writes (same cells, same values) as
+    # the loop version, verified numerically against it for Ngrid > 1.
     for lev in range(1, q.Ngrid()):
         bydx = 1.0 / q.Dx(lev)
+        Xl = X[lev]
+        Ul = U[lev]
+        # avgU[i-1, j-1] = (X(i,j) + X(i,j-1)) * 0.5 * bydx, for i,j in [1, n-1]
+        avgU = (Xl[1:nx, 1:ny] + Xl[1:nx, 0:ny - 1]) * 0.5 * bydx
+
         # left and right borders (excluding interface) (B)
-        for j in range(1, ny):
-            for i in range(1, nx2):
-                U[lev][i - 1, j - 1] = (X[lev][i, j] + X[lev][i, j - 1]) * 0.5 * bydx
-            for i in range(nx // 2 + nx2 + 1, nx):
-                U[lev][i - 1, j - 1] = (X[lev][i, j] + X[lev][i, j - 1]) * 0.5 * bydx
+        Ul[0:nx2 - 1, :] = avgU[0:nx2 - 1, :]
+        Ul[nx // 2 + nx2:nx - 1, :] = avgU[nx // 2 + nx2:nx - 1, :]
         # top and bottom borders (excluding interfaces) (C)
-        for i in range(nx2, nx // 2 + nx2 + 1):
-            for j in range(1, ny2):
-                U[lev][i - 1, j - 1] = (X[lev][i, j] + X[lev][i, j - 1]) * 0.5 * bydx
-            for j in range(ny // 2 + ny2 + 1, ny):
-                U[lev][i - 1, j - 1] = (X[lev][i, j] + X[lev][i, j - 1]) * 0.5 * bydx
+        Ul[nx2 - 1:nx // 2 + nx2, 0:ny2 - 1] = avgU[nx2 - 1:nx // 2 + nx2, 0:ny2 - 1]
+        Ul[nx2 - 1:nx // 2 + nx2, ny // 2 + ny2:ny - 1] = avgU[nx2 - 1:nx // 2 + nx2, ny // 2 + ny2:ny - 1]
         # left and right interfaces, excluding corners (D)
-        for j in range(ny2 + 1, ny // 2 + ny2):
-            U[lev][nx2 - 1, j - 1] = (X[lev][nx2, j] + X[lev][nx2, j - 1]) * 0.5 * bydx
-            U[lev][nx // 2 + nx2 - 1, j - 1] = (
-                X[lev][nx // 2 + nx2, j] + X[lev][nx // 2 + nx2, j - 1]
-            ) * 0.5 * bydx
+        Ul[nx2 - 1, ny2:ny // 2 + ny2 - 1] = avgU[nx2 - 1, ny2:ny // 2 + ny2 - 1]
+        Ul[nx // 2 + nx2 - 1, ny2:ny // 2 + ny2 - 1] = avgU[nx // 2 + nx2 - 1, ny2:ny // 2 + ny2 - 1]
+
         # top and bottom interfaces, excluding corners (E)
-        for i in range(nx2 + 1, nx // 2 + nx2):
-            ii, jj = grid.c2f(i, ny2)  # fine coords
-            U[lev][i - 1, ny2 - 1] = (
-                X[lev][i, ny2 - 1] * 2.0 / 3 + X[lev - 1][ii, jj] * 1.0 / 3
-                + (X[lev - 1][ii - 1, jj] + X[lev - 1][ii + 1, jj]) * 1.0 / 6
+        Xf = X[lev - 1]
+        i_arr = np.arange(nx2 + 1, nx // 2 + nx2)
+        if i_arr.size:
+            ii = (i_arr - nx2) * 2  # c2f(i, ny2) -> (ii, 0); c2f(i, ny/2+ny2) -> (ii, ny)
+            # bottom interface (j = ny2, jj = 0)
+            Ul[i_arr - 1, ny2 - 1] = (
+                Xl[i_arr, ny2 - 1] * 2.0 / 3 + Xf[ii, 0] * 1.0 / 3
+                + (Xf[ii - 1, 0] + Xf[ii + 1, 0]) * 1.0 / 6
             ) * bydx
-            ii, jj = grid.c2f(i, ny // 2 + ny2)
-            U[lev][i - 1, ny // 2 + ny2 - 1] = (
-                X[lev][i, ny // 2 + ny2] * 2.0 / 3 + X[lev - 1][ii, jj - 1] * 1.0 / 3
-                + (X[lev - 1][ii - 1, jj - 1] + X[lev - 1][ii + 1, jj - 1]) * 1.0 / 6
+            # top interface (j = ny/2+ny2, jj = ny)
+            Ul[i_arr - 1, ny // 2 + ny2 - 1] = (
+                Xl[i_arr, ny // 2 + ny2] * 2.0 / 3 + Xf[ii, ny - 1] * 1.0 / 3
+                + (Xf[ii - 1, ny - 1] + Xf[ii + 1, ny - 1]) * 1.0 / 6
             ) * bydx
         # corners (F)
         # lower left
@@ -382,43 +390,46 @@ def FluxToYVelocity(q: Flux, v: Scalar) -> None:
     oneOver2Delta = 1.0 / (2 * q.Dx())
     Y = _flux_y_views(q)
     V = _scalar_views(v)
-    grid = v.getGrid()
 
     # Compute interior points (A) -- finest grid only
     # v(0,i,j) = ( q(0,Y,i-1,j) + q(0,Y,i,j) ) * oneOver2Delta, i,j in [1,nx-1]
     V[0][:, :] = (Y[0][0:nx - 1, 1:ny] + Y[0][1:nx, 1:ny]) * oneOver2Delta
 
+    # NOTE(port): C++ per-element loops B-E vectorized with numpy slicing
+    # (F corners kept scalar); see the analogous note in FluxToXVelocity.
+    # Regions B, C, D share the average (Y(i,j) + Y(i-1,j)) * 0.5 * bydx,
+    # formed once as `avgV`; E is the cross-grid interface interpolation.
     for lev in range(1, q.Ngrid()):
         bydx = 1.0 / q.Dx(lev)
+        Yl = Y[lev]
+        Vl = V[lev]
+        # avgV[i-1, j-1] = (Y(i,j) + Y(i-1,j)) * 0.5 * bydx, for i,j in [1, n-1]
+        avgV = (Yl[1:nx, 1:ny] + Yl[0:nx - 1, 1:ny]) * 0.5 * bydx
+
         # top and bottom borders (excluding interface) (B)
-        for i in range(1, nx):
-            for j in range(1, ny2):
-                V[lev][i - 1, j - 1] = (Y[lev][i, j] + Y[lev][i - 1, j]) * 0.5 * bydx
-            for j in range(ny // 2 + ny2 + 1, ny):
-                V[lev][i - 1, j - 1] = (Y[lev][i, j] + Y[lev][i - 1, j]) * 0.5 * bydx
+        Vl[:, 0:ny2 - 1] = avgV[:, 0:ny2 - 1]
+        Vl[:, ny // 2 + ny2:ny - 1] = avgV[:, ny // 2 + ny2:ny - 1]
         # left and right borders (excluding interfaces) (C)
-        for j in range(ny2, ny // 2 + ny2 + 1):
-            for i in range(1, nx2):
-                V[lev][i - 1, j - 1] = (Y[lev][i, j] + Y[lev][i - 1, j]) * 0.5 * bydx
-            for i in range(nx // 2 + nx2 + 1, nx):
-                V[lev][i - 1, j - 1] = (Y[lev][i, j] + Y[lev][i - 1, j]) * 0.5 * bydx
+        Vl[0:nx2 - 1, ny2 - 1:ny // 2 + ny2] = avgV[0:nx2 - 1, ny2 - 1:ny // 2 + ny2]
+        Vl[nx // 2 + nx2:nx - 1, ny2 - 1:ny // 2 + ny2] = avgV[nx // 2 + nx2:nx - 1, ny2 - 1:ny // 2 + ny2]
         # top and bottom interfaces, excluding corners (D)
-        for i in range(nx2 + 1, nx // 2 + nx2):
-            V[lev][i - 1, ny2 - 1] = (Y[lev][i, ny2] + Y[lev][i - 1, ny2]) * 0.5 * bydx
-            V[lev][i - 1, ny // 2 + ny2 - 1] = (
-                Y[lev][i, ny // 2 + ny2] + Y[lev][i - 1, ny // 2 + ny2]
-            ) * 0.5 * bydx
+        Vl[nx2:nx // 2 + nx2 - 1, ny2 - 1] = avgV[nx2:nx // 2 + nx2 - 1, ny2 - 1]
+        Vl[nx2:nx // 2 + nx2 - 1, ny // 2 + ny2 - 1] = avgV[nx2:nx // 2 + nx2 - 1, ny // 2 + ny2 - 1]
+
         # left and right interfaces, excluding corners (E)
-        for j in range(ny2 + 1, ny // 2 + ny2):
-            ii, jj = grid.c2f(nx2, j)  # fine coords
-            V[lev][nx2 - 1, j - 1] = (
-                Y[lev][nx2 - 1, j] * 2.0 / 3 + Y[lev - 1][ii, jj] * 1.0 / 3
-                + (Y[lev - 1][ii, jj - 1] + Y[lev - 1][ii, jj + 1]) * 1.0 / 6
+        Yf = Y[lev - 1]
+        j_arr = np.arange(ny2 + 1, ny // 2 + ny2)
+        if j_arr.size:
+            jj = (j_arr - ny2) * 2  # c2f(nx2, j) -> (0, jj); c2f(nx/2+nx2, j) -> (nx, jj)
+            # left interface (i = nx2, ii = 0)
+            Vl[nx2 - 1, j_arr - 1] = (
+                Yl[nx2 - 1, j_arr] * 2.0 / 3 + Yf[0, jj] * 1.0 / 3
+                + (Yf[0, jj - 1] + Yf[0, jj + 1]) * 1.0 / 6
             ) * bydx
-            ii, jj = grid.c2f(nx // 2 + nx2, j)
-            V[lev][nx // 2 + nx2 - 1, j - 1] = (
-                Y[lev][nx // 2 + nx2, j] * 2.0 / 3 + Y[lev - 1][ii - 1, jj] * 1.0 / 3
-                + (Y[lev - 1][ii - 1, jj - 1] + Y[lev - 1][ii - 1, jj + 1]) * 1.0 / 6
+            # right interface (i = nx/2+nx2, ii = nx)
+            Vl[nx // 2 + nx2 - 1, j_arr - 1] = (
+                Yl[nx // 2 + nx2, j_arr] * 2.0 / 3 + Yf[nx - 1, jj] * 1.0 / 3
+                + (Yf[nx - 1, jj - 1] + Yf[nx - 1, jj + 1]) * 1.0 / 6
             ) * bydx
         # corners (F)
         j = ny2
@@ -446,9 +457,10 @@ def XVelocityToFlux(u: Scalar, q: Flux) -> None:
     """Convert u-velocities at vertices to x-fluxes through edges (in place).
     Does not touch the y-component of q.
 
-    NOTE(port): `q` is an out-parameter (X-component only). The finest-grid
-    interior (D) and coarsest-grid zero-BC boundaries (A, C) are vectorized;
-    the intermediate-grid coupling loops (B, D, G, A, C) are kept explicit.
+    NOTE(port): `q` is an out-parameter (X-component only). All regions
+    (finest-grid interior D, coarse-grid B/D/G, and boundaries A/C) are
+    vectorized with numpy slicing/fancy-indexing; the C++ per-element (i,j)
+    loops are reproduced exactly (verified numerically for Ngrid > 1).
     """
     assert u.Nx() == q.Nx()
     assert u.Ny() == q.Ny()
@@ -469,23 +481,35 @@ def XVelocityToFlux(u: Scalar, q: Flux) -> None:
             # q(0,X,i,j) = ( u(0,i,j) + u(0,i,j+1) ) * 0.5 * dx, i in [1,nx-1], j in [1,ny-2]
             X[0][1:nx, 1:ny - 1] = (U[0][0:nx - 1, 0:ny - 2] + U[0][0:nx - 1, 1:ny - 1]) * 0.5 * dx
         else:  # not the finest grid
-            for i in range(1, nx):
-                # top and bottom portions of coarse grid, excluding outer interface (B)
-                for j in range(1, ny2):
-                    X[lev][i, j] = (U[lev][i - 1, j - 1] + U[lev][i - 1, j]) * 0.5 * dx
-                for j in range(ny // 2 + ny2, ny - 1):
-                    X[lev][i, j] = (U[lev][i - 1, j - 1] + U[lev][i - 1, j]) * 0.5 * dx
+            # NOTE(port): C++ per-element (i,j) loops B, D, G vectorized with
+            # numpy slicing (B and D share the average (u(i,j)+u(i,j+1))*0.5*dx,
+            # formed once as `avgX`; G copies from the finer grid). Verified
+            # numerically against the loop version for Ngrid > 1.
+            Xl = X[lev]
+            Ul = U[lev]
+            # avgX[i, j] = (u(i,j) + u(i,j+1)) * 0.5 * dx for i in [1,nx-1], j in [1,ny-2]
+            # (indexing Ul[i-1, j-1] for u(i,j)); built lazily per region below.
+            # top and bottom portions, excluding outer interface (B)
+            Xl[1:nx, 1:ny2] = (Ul[0:nx - 1, 0:ny2 - 1] + Ul[0:nx - 1, 1:ny2]) * 0.5 * dx
+            Xl[1:nx, ny // 2 + ny2:ny - 1] = (
+                Ul[0:nx - 1, ny // 2 + ny2 - 1:ny - 2] + Ul[0:nx - 1, ny // 2 + ny2:ny - 1]
+            ) * 0.5 * dx
             # left and right portions of coarse grid (D)
-            for j in range(ny2, ny // 2 + ny2):
-                for i in range(1, nx2 + 1):
-                    X[lev][i, j] = (U[lev][i - 1, j - 1] + U[lev][i - 1, j]) * 0.5 * dx
-                for i in range(nx // 2 + nx2, nx):
-                    X[lev][i, j] = (U[lev][i - 1, j - 1] + U[lev][i - 1, j]) * 0.5 * dx
+            Xl[1:nx2 + 1, ny2:ny // 2 + ny2] = (
+                Ul[0:nx2, ny2 - 1:ny // 2 + ny2 - 1] + Ul[0:nx2, ny2:ny // 2 + ny2]
+            ) * 0.5 * dx
+            Xl[nx // 2 + nx2:nx, ny2:ny // 2 + ny2] = (
+                Ul[nx // 2 + nx2 - 1:nx - 1, ny2 - 1:ny // 2 + ny2 - 1]
+                + Ul[nx // 2 + nx2 - 1:nx - 1, ny2:ny // 2 + ny2]
+            ) * 0.5 * dx
             # get interior portion of coarse grid from fine grid (G)
-            for i in range(nx2 + 1, nx // 2 + nx2):
-                for j in range(ny2, ny // 2 + ny2):
-                    ii, jj = g.c2f(i, j)  # fine gridpoints
-                    X[lev][i, j] = X[lev - 1][ii, jj] + X[lev - 1][ii, jj + 1]
+            Xf = X[lev - 1]
+            i_arr = np.arange(nx2 + 1, nx // 2 + nx2)
+            j_arr = np.arange(ny2, ny // 2 + ny2)
+            if i_arr.size and j_arr.size:
+                ii = (i_arr - nx2) * 2  # c2f(i,j) -> (ii, jj)
+                jj = (j_arr - ny2) * 2
+                Xl[np.ix_(i_arr, j_arr)] = Xf[np.ix_(ii, jj)] + Xf[np.ix_(ii, jj + 1)]
         # Boundary points
         # left and right boundaries of coarsest grid are zero (A)
         if lev == g.Ngrid() - 1:
@@ -493,16 +517,19 @@ def XVelocityToFlux(u: Scalar, q: Flux) -> None:
             X[lev][nx, 0:ny] = 0
         # left and right boundaries of finer grids take values from coarser grid (A)
         else:
-            for j in range(0, ny - 1, 2):
-                ii, jj = g.f2c(0, j)  # coarse indices
-                X[lev][0, j] = (0.75 * U[lev + 1][nx2 - 1, jj - 1] + 0.25 * U[lev + 1][nx2 - 1, jj]) * dx
-                X[lev][nx, j] = (
-                    0.75 * U[lev + 1][nx // 2 + nx2 - 1, jj - 1] + 0.25 * U[lev + 1][nx // 2 + nx2 - 1, jj]
-                ) * dx
-                X[lev][0, j + 1] = (0.25 * U[lev + 1][nx2 - 1, jj - 1] + 0.75 * U[lev + 1][nx2 - 1, jj]) * dx
-                X[lev][nx, j + 1] = (
-                    0.25 * U[lev + 1][nx // 2 + nx2 - 1, jj - 1] + 0.75 * U[lev + 1][nx // 2 + nx2 - 1, jj]
-                ) * dx
+            # NOTE(port): C++ `for j=0; j<ny-1; j+=2` loop vectorized; f2c(0,j)
+            # gives ii=nx2 (unused) and jj=j//2+ny2.
+            Uf = U[lev + 1]
+            j_arr = np.arange(0, ny - 1, 2)
+            jj = j_arr // 2 + ny2
+            a = Uf[nx2 - 1, jj - 1]
+            b = Uf[nx2 - 1, jj]
+            c = Uf[nx // 2 + nx2 - 1, jj - 1]
+            d = Uf[nx // 2 + nx2 - 1, jj]
+            X[lev][0, j_arr] = (0.75 * a + 0.25 * b) * dx
+            X[lev][nx, j_arr] = (0.75 * c + 0.25 * d) * dx
+            X[lev][0, j_arr + 1] = (0.25 * a + 0.75 * b) * dx
+            X[lev][nx, j_arr + 1] = (0.25 * c + 0.75 * d) * dx
         # outer interface (top/bottom), get values from coarser grid (or zero, for coarsest) (C)
         if lev == u.Ngrid() - 1:
             # on coarsest grid: zero bcs
@@ -510,35 +537,36 @@ def XVelocityToFlux(u: Scalar, q: Flux) -> None:
             X[lev][1:nx, 0] = U[lev][0:nx - 1, 0] * 0.5 * dx
             X[lev][1:nx, ny - 1] = U[lev][0:nx - 1, ny - 2] * 0.5 * dx
         else:
-            # on intermediate grid: get bcs from coarser grid
+            # on intermediate grid: get bcs from coarser grid.
             # NOTE(port): the C++ nests these two i-loops inside `for i=1;i<nx`
             # but re-declares `i` in the inner loops, so the outer i is unused;
-            # the inner loops run once each (per lev). Reproduced faithfully by
-            # running the inner loops once (no redundant outer sweep).
-            for i in range(2, nx, 2):
-                # points that correspond to coarse points
-                ii, jj = g.f2c(i, 0)  # coarse points
-                X[lev][i, 0] = (U[lev][i - 1, 0] + U[lev + 1][ii - 1, ny2 - 1]) * 0.5 * dx
-                X[lev][i, ny - 1] = (U[lev][i - 1, ny - 2] + U[lev + 1][ii - 1, ny // 2 + ny2 - 1]) * 0.5 * dx
-            for i in range(1, nx, 2):
-                # points that do not correspond to coarse points
-                ii, jj = g.f2c(i, 0)  # coarse points
-                X[lev][i, 0] = (
-                    0.5 * U[lev][i - 1, 0]
-                    + 0.25 * U[lev + 1][ii - 1, ny2 - 1] + 0.25 * U[lev + 1][ii, ny2 - 1]
-                ) * dx
-                X[lev][i, ny - 1] = (
-                    0.5 * U[lev][i - 1, ny - 2]
-                    + 0.25 * U[lev + 1][ii - 1, ny // 2 + ny2 - 1] + 0.25 * U[lev + 1][ii, ny // 2 + ny2 - 1]
-                ) * dx
+            # the inner loops run once each (per lev). Both are vectorized here.
+            Uf = U[lev + 1]
+            Ul = U[lev]
+            # points that correspond to coarse points (even i)
+            ie = np.arange(2, nx, 2)
+            iie = ie // 2 + nx2  # f2c(i,0) -> ii = i//2 + nx2
+            X[lev][ie, 0] = (Ul[ie - 1, 0] + Uf[iie - 1, ny2 - 1]) * 0.5 * dx
+            X[lev][ie, ny - 1] = (Ul[ie - 1, ny - 2] + Uf[iie - 1, ny // 2 + ny2 - 1]) * 0.5 * dx
+            # points that do not correspond to coarse points (odd i)
+            io = np.arange(1, nx, 2)
+            iio = io // 2 + nx2
+            X[lev][io, 0] = (
+                0.5 * Ul[io - 1, 0] + 0.25 * Uf[iio - 1, ny2 - 1] + 0.25 * Uf[iio, ny2 - 1]
+            ) * dx
+            X[lev][io, ny - 1] = (
+                0.5 * Ul[io - 1, ny - 2]
+                + 0.25 * Uf[iio - 1, ny // 2 + ny2 - 1] + 0.25 * Uf[iio, ny // 2 + ny2 - 1]
+            ) * dx
 
 
 def YVelocityToFlux(v: Scalar, q: Flux) -> None:
     """Convert v-velocities at vertices to y-fluxes through edges (in place).
     Does not touch the x-component of q.
 
-    NOTE(port): `q` is an out-parameter (Y-component only); see
-    XVelocityToFlux / the module vectorization note.
+    NOTE(port): `q` is an out-parameter (Y-component only). All regions are
+    vectorized with numpy slicing/fancy-indexing (see XVelocityToFlux);
+    verified numerically against the loop version for Ngrid > 1.
     """
     assert v.Nx() == q.Nx()
     assert v.Ny() == q.Ny()
@@ -559,23 +587,32 @@ def YVelocityToFlux(v: Scalar, q: Flux) -> None:
             # q(0,Y,i,j) = ( v(0,i,j) + v(0,i+1,j) ) * 0.5 * dx, j in [1,ny-1], i in [1,nx-2]
             Y[0][1:nx - 1, 1:ny] = (V[0][0:nx - 2, 0:ny - 1] + V[0][1:nx - 1, 0:ny - 1]) * 0.5 * dx
         else:  # not the finest grid
-            for j in range(1, ny):
-                # left and right portions of coarse grid, excluding outer interface (B)
-                for i in range(1, nx2):
-                    Y[lev][i, j] = (V[lev][i - 1, j - 1] + V[lev][i, j - 1]) * 0.5 * dx
-                for i in range(nx // 2 + nx2, nx - 1):
-                    Y[lev][i, j] = (V[lev][i - 1, j - 1] + V[lev][i, j - 1]) * 0.5 * dx
+            # NOTE(port): C++ per-element (i,j) loops B, D, G vectorized with
+            # numpy slicing (B and D share (v(i,j)+v(i+1,j))*0.5*dx; G copies
+            # from the finer grid). Verified numerically for Ngrid > 1.
+            Yl = Y[lev]
+            Vl = V[lev]
+            # left and right portions, excluding outer interface (B)
+            Yl[1:nx2, 1:ny] = (Vl[0:nx2 - 1, 0:ny - 1] + Vl[1:nx2, 0:ny - 1]) * 0.5 * dx
+            Yl[nx // 2 + nx2:nx - 1, 1:ny] = (
+                Vl[nx // 2 + nx2 - 1:nx - 2, 0:ny - 1] + Vl[nx // 2 + nx2:nx - 1, 0:ny - 1]
+            ) * 0.5 * dx
             # top and bottom portions of coarse grid (D)
-            for i in range(nx2, nx // 2 + nx2):
-                for j in range(1, ny2 + 1):
-                    Y[lev][i, j] = (V[lev][i - 1, j - 1] + V[lev][i, j - 1]) * 0.5 * dx
-                for j in range(ny // 2 + ny2, ny):
-                    Y[lev][i, j] = (V[lev][i - 1, j - 1] + V[lev][i, j - 1]) * 0.5 * dx
+            Yl[nx2:nx // 2 + nx2, 1:ny2 + 1] = (
+                Vl[nx2 - 1:nx // 2 + nx2 - 1, 0:ny2] + Vl[nx2:nx // 2 + nx2, 0:ny2]
+            ) * 0.5 * dx
+            Yl[nx2:nx // 2 + nx2, ny // 2 + ny2:ny] = (
+                Vl[nx2 - 1:nx // 2 + nx2 - 1, ny // 2 + ny2 - 1:ny - 1]
+                + Vl[nx2:nx // 2 + nx2, ny // 2 + ny2 - 1:ny - 1]
+            ) * 0.5 * dx
             # get interior portion of coarse grid from fine grid (G)
-            for j in range(ny2 + 1, ny // 2 + ny2):
-                for i in range(nx2, nx // 2 + nx2):
-                    ii, jj = g.c2f(i, j)  # fine gridpoints
-                    Y[lev][i, j] = Y[lev - 1][ii, jj] + Y[lev - 1][ii + 1, jj]
+            Yf = Y[lev - 1]
+            i_arr = np.arange(nx2, nx // 2 + nx2)
+            j_arr = np.arange(ny2 + 1, ny // 2 + ny2)
+            if i_arr.size and j_arr.size:
+                ii = (i_arr - nx2) * 2  # c2f(i,j) -> (ii, jj)
+                jj = (j_arr - ny2) * 2
+                Yl[np.ix_(i_arr, j_arr)] = Yf[np.ix_(ii, jj)] + Yf[np.ix_(ii + 1, jj)]
         # Boundary points
         # top and bottom boundaries of coarsest grid are zero (A)
         if lev == g.Ngrid() - 1:
@@ -583,40 +620,46 @@ def YVelocityToFlux(v: Scalar, q: Flux) -> None:
             Y[lev][0:nx, ny] = 0
         # top and bottom boundaries of finer grids take values from coarser grid (A)
         else:
-            for i in range(0, nx - 1, 2):
-                ii, jj = g.f2c(i, 0)  # coarse indices
-                Y[lev][i, 0] = (0.75 * V[lev + 1][ii - 1, ny2 - 1] + 0.25 * V[lev + 1][ii, ny2 - 1]) * dx
-                Y[lev][i, ny] = (
-                    0.75 * V[lev + 1][ii - 1, ny // 2 + ny2 - 1] + 0.25 * V[lev + 1][ii, ny // 2 + ny2 - 1]
-                ) * dx
-                Y[lev][i + 1, 0] = (0.25 * V[lev + 1][ii - 1, ny2 - 1] + 0.75 * V[lev + 1][ii, ny2 - 1]) * dx
-                Y[lev][i + 1, ny] = (
-                    0.25 * V[lev + 1][ii - 1, ny // 2 + ny2 - 1] + 0.75 * V[lev + 1][ii, ny // 2 + ny2 - 1]
-                ) * dx
+            # NOTE(port): C++ `for i=0; i<nx-1; i+=2` loop vectorized; f2c(i,0)
+            # gives ii=i//2+nx2 and jj=ny2 (unused).
+            Vf = V[lev + 1]
+            i_arr = np.arange(0, nx - 1, 2)
+            ii = i_arr // 2 + nx2
+            a = Vf[ii - 1, ny2 - 1]
+            b = Vf[ii, ny2 - 1]
+            c = Vf[ii - 1, ny // 2 + ny2 - 1]
+            d = Vf[ii, ny // 2 + ny2 - 1]
+            Y[lev][i_arr, 0] = (0.75 * a + 0.25 * b) * dx
+            Y[lev][i_arr, ny] = (0.75 * c + 0.25 * d) * dx
+            Y[lev][i_arr + 1, 0] = (0.25 * a + 0.75 * b) * dx
+            Y[lev][i_arr + 1, ny] = (0.25 * c + 0.75 * d) * dx
         # outer interface (left/right), get values from coarser grid (or zero, for coarsest) (C)
         if lev == g.Ngrid() - 1:
             # on coarsest grid: zero bcs
             Y[lev][0, 1:ny] = V[lev][0, 0:ny - 1] * 0.5 * dx
             Y[lev][nx - 1, 1:ny] = V[lev][nx - 2, 0:ny - 1] * 0.5 * dx
         else:
-            # on intermediate grid: get bcs from coarser grid
+            # on intermediate grid: get bcs from coarser grid.
             # NOTE(port): as in XVelocityToFlux, the C++ nests these inside an
             # outer `for j=1;j<ny` with a re-declared inner `j`; the outer j is
-            # unused, so the inner loops run once. Reproduced faithfully.
-            for j in range(2, ny, 2):
-                ii, jj = g.f2c(0, j)  # coarse points
-                Y[lev][0, j] = (V[lev][0, j - 1] + V[lev + 1][nx2 - 1, jj - 1]) * 0.5 * dx
-                Y[lev][nx - 1, j] = (V[lev][nx - 2, j - 1] + V[lev + 1][nx // 2 + nx2 - 1, jj - 1]) * 0.5 * dx
-            for j in range(1, ny, 2):
-                ii, jj = g.f2c(0, j)  # coarse points
-                Y[lev][0, j] = (
-                    0.5 * V[lev][0, j - 1]
-                    + 0.25 * V[lev + 1][nx2 - 1, jj - 1] + 0.25 * V[lev + 1][nx2 - 1, jj]
-                ) * dx
-                Y[lev][nx - 1, j] = (
-                    0.5 * V[lev][nx - 2, j - 1]
-                    + 0.25 * V[lev + 1][nx // 2 + nx2 - 1, jj - 1] + 0.25 * V[lev + 1][nx // 2 + nx2 - 1, jj]
-                ) * dx
+            # unused, so the inner loops run once. Both are vectorized here.
+            Vf = V[lev + 1]
+            Vl = V[lev]
+            # points that correspond to coarse points (even j)
+            je = np.arange(2, ny, 2)
+            jje = je // 2 + ny2  # f2c(0,j) -> jj = j//2 + ny2
+            Y[lev][0, je] = (Vl[0, je - 1] + Vf[nx2 - 1, jje - 1]) * 0.5 * dx
+            Y[lev][nx - 1, je] = (Vl[nx - 2, je - 1] + Vf[nx // 2 + nx2 - 1, jje - 1]) * 0.5 * dx
+            # points that do not correspond to coarse points (odd j)
+            jo = np.arange(1, ny, 2)
+            jjo = jo // 2 + ny2
+            Y[lev][0, jo] = (
+                0.5 * Vl[0, jo - 1] + 0.25 * Vf[nx2 - 1, jjo - 1] + 0.25 * Vf[nx2 - 1, jjo]
+            ) * dx
+            Y[lev][nx - 1, jo] = (
+                0.5 * Vl[nx - 2, jo - 1]
+                + 0.25 * Vf[nx // 2 + nx2 - 1, jjo - 1] + 0.25 * Vf[nx // 2 + nx2 - 1, jjo]
+            ) * dx
 
 
 def VelocityToFlux(u: Scalar, v: Scalar, q: Flux) -> None:
