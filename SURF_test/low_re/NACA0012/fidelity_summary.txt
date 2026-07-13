@@ -19,3 +19,14 @@ Drag benchmark comparison at alpha=0 (Cl=0 by symmetry):
       vs Di Ilio et al. (HLBM)  0.1190  (+7.8%)
       vs Di Ilio et al. (XFOIL) 0.1190  (+7.8%)
       vs Kurtulus (~)           0.1200  (+7.0%)
+
+Grid convergence at Re=500, alpha=0 (dx halved each row):
+      dx      Cd_py     Cd_cpp       dCd_py      dCd_cpp
+  0.0400   0.191858   0.191858                          
+  0.0200   0.189095   0.189095    -0.002763    -0.002763
+  0.0100   0.183971   0.183971    -0.005124    -0.005124
+  0.0050   0.183510   0.183510    -0.000461    -0.000461
+
+  |dCd| step sizes (py, successive halvings): 0.002763 -> 0.005124 -> 0.000461
+  (a shrinking step size after growth here indicates the sequence has
+   entered its asymptotic convergence regime -- see README for discussion)

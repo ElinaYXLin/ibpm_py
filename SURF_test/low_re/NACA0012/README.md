@@ -69,9 +69,15 @@ nsteps=3000 = t=30, Cl/Cd time-averaged over the last 60%). Driver:
 
 - **Re=500 polar**: alpha = 0, 2, 4, 6, 8, 10 deg -> `polar_comparison.png`
 - **Re=1000, alpha=0**: a second independent drag anchor
-- **Re=500, alpha=0 grid convergence**: dx = 0.04, 0.02, 0.01 ->
+- **Re=500, alpha=0 grid convergence**: dx = 0.04, 0.02, 0.01, 0.005 ->
   `grid_convergence.png` (does the immersed-boundary drag converge toward
-  the benchmark as the grid refines?)
+  the benchmark as the grid refines?). Each level halves dx (and,
+  starting at dx=0.02, halves dt to keep the run CFL-stable and rescales
+  nsteps to hold t=30 fixed); driven by
+  [`run_gridconv.py`](run_gridconv.py), which regenerates the matching
+  resampled-boundary-point geometry for each new dx via
+  [`../../make_airfoil_raw.py`](../../make_airfoil_raw.py) and skips any
+  dx already present on disk.
 
 ## Results
 
@@ -85,14 +91,53 @@ no chaos to amplify differences (unlike the high-Re cases in
 statistical.
 
 **Vs. the CFD benchmark.** At dx=0.02, the immersed-boundary drag at
-Re=500, alpha=0 is Cd~0.189, about 7% above the benchmark band
-(0.176-0.178). That offset is the expected direction and magnitude for an
+Re=500, alpha=0 is Cd~0.189, about 6-7% above the benchmark band
+(0.176-0.178). That offset is the expected direction for an
 immersed-boundary method at this resolution: the regularized (smeared)
 boundary adds a small spurious drag that shrinks as dx -> 0. See
-`grid_convergence.png` -- refining dx moves Cd toward the reference band,
-confirming the offset is a resolution effect, not a modeling error, and
-that both implementations converge identically. (See the `fidelity_summary.txt`
-for the exact per-dx numbers.)
+`grid_convergence.png`/`fidelity_summary.txt` for the exact per-dx
+numbers; both implementations converge identically (Cd_py=Cd_cpp at
+every dx tested, to 6 decimal places -- Re=500 is steady/deterministic,
+so there's no chaos to cause disagreement here, same as the polar above).
+
+**The convergence is not monotonic in step size, and that's worth
+showing rather than hiding.** Cd(dx): 0.191858 (dx=0.04) -> 0.189095
+(dx=0.02) -> 0.183971 (dx=0.01) -> 0.183510 (dx=0.005). The successive
+differences (`|dCd|` per halving) are 0.002763, then 0.005124, then
+0.000461 -- the step size nearly *doubled* between the first two
+halvings before dropping to under a tenth of its previous size at the
+third. A 3-point sequence (dx=0.04/0.02/0.01 only, as this study
+originally had) can look like it's "converging" just because Cd is
+monotonically decreasing, while actually still growing in *how much* it
+moves each halving -- which is not yet asymptotic convergence, just a
+still-changing trend that happens to be pointed the right direction.
+Extending to dx=0.005 resolves this: the large dx=0.02->0.01 jump
+turned out to be a pre-asymptotic transient (this resolution range is
+where the immersed boundary's regularized delta-function support first
+becomes narrow enough, relative to the body's curvature, to resolve
+some feature it previously smeared over -- plausible but not
+independently isolated here), and by dx=0.005 the sequence has entered
+a genuinely flattening regime: the last step is small relative to Cd's
+own magnitude, and the offset from the benchmark band has closed from
++6.2% (dx=0.02) to +3.1% (dx=0.005) -- essentially halved. This is
+consistent with (not conclusive proof of) approaching a converged
+Cd asymptotically as dx -> 0, which is what "resolution effect, not a
+modeling error" requires as evidence.
+
+**Why the sweep stops at dx=0.005, not dx=0.0025.** Wall-clock time per
+grid level was measured directly (not estimated): dx=0.01 took ~6.7 min
+per implementation; dx=0.005 (4x the cells, 2x the timesteps to hold
+t=30 fixed at the smaller CFL-stable dt) took ~53 min -- an ~8x
+increase, matching the 4x(cells) * 2x(steps) expectation almost exactly.
+Extrapolating that same, empirically-consistent 8x-per-halving scaling,
+dx=0.0025 (nx=2400, ny=1200) would cost roughly 7 hours per
+implementation, ~14 hours total for both -- and by dx=0.005 the
+turnover in step size described above is already large and unambiguous
+(an 11x drop, not a marginal one), so a 5th point was judged not to
+justify roughly half a day of additional compute. `run_gridconv.py`
+already lists 0.0025 in its `GRID_DX`, so `python3
+SURF_test/low_re/NACA0012/run_gridconv.py 0.0025` reproduces this
+decision point exactly and extends the sequence further if wanted.
 
 **Lift curve.** Cl(alpha) at Re=500 is smooth, near-linear at small alpha
 with a reduced (sub-2*pi) slope characteristic of this low-Re regime, and
