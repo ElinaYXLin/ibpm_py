@@ -1,6 +1,6 @@
 import sys, types, pathlib
 
-repo_root = pathlib.Path(__file__).resolve().parents[2]
+repo_root = pathlib.Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(repo_root))
 
 # Some Python environments have an unrelated PyPI package literally named

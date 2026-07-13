@@ -93,7 +93,7 @@ red flags.
 
 `figures/04` compares this script's independently-written driver against
 the archived `SURF_test/vortall/1-baseline/_run_data/vortall.force` (produced by
-`run_vortall.py` via `SURF_test/cost/run_ibpm_case.py`). Both run the exact
+`run_vortall.py` via `SURF_test/cost/1-multi-core/run_ibpm_case.py`). Both run the exact
 same deterministic algorithm from the same zero initial condition, so in
 principle they should be identical -- but they're two different Python
 processes/driver code paths, and per `../README.md`, this Re=100 case's
@@ -141,7 +141,7 @@ evidence of a porting bug anywhere in the code path this test exercises.
 vortall.** Checking every test driver in this repository
 (`SURF_test/vortall/1-baseline/run_vortall.py`, `SURF_test/airfoil_driver.py`,
 `SURF_test/built_in_tests/generate_validation_report.py`,
-`SURF_test/cost/backends.py`) shows **every single one passes `-ngrid 1`**
+`SURF_test/cost/1-multi-core/backends.py`) shows **every single one passes `-ngrid 1`**
 -- no test anywhere in this repository runs the multi-domain grid path. And
 of the geometry files available, only `benchmarking/cylinder2PaPlunge.geom`
 specifies genuine time-varying body motion (`motion PitchPlunge 0 0 0.5

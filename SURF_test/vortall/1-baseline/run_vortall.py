@@ -95,7 +95,7 @@ def main() -> None:
 
     run_to([str(cpp_bin)], OUTDIR_CPP, "vortall", TARGET_STEPS, OUTDIR_CPP / "run_log.txt")
 
-    run_ibpm_runner = REPO / "SURF_test" / "cost" / "run_ibpm_case.py"
+    run_ibpm_runner = REPO / "SURF_test" / "cost" / "1-multi-core" / "run_ibpm_case.py"
     run_to([sys.executable, "-u", str(run_ibpm_runner)], OUTDIR_PY, "vortall", TARGET_STEPS,
            OUTDIR_PY / "run_log.txt")
 

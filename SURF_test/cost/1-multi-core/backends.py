@@ -19,7 +19,7 @@ import pathlib
 from dataclasses import dataclass
 from typing import Callable, List, Optional
 
-REPO_ROOT = pathlib.Path(__file__).resolve().parents[2]
+REPO_ROOT = pathlib.Path(__file__).resolve().parents[3]
 COST_DIR = pathlib.Path(__file__).resolve().parent
 
 DOMAIN = dict(length=4.0, xoffset=-2.0, yoffset=-2.0)
