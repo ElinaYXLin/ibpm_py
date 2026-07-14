@@ -104,6 +104,46 @@ implementations** (dx=0.01 diverged to `NaN` at `dt=0.01`, fixed the same
 way with `dt=0.005`) — see `SURF_test/rerun_fine_log.txt` (Python) and
 `run_all_airfoils_cpp.py` (C++).
 
+## Extended grid convergence: dx=0.005 and dx=0.0025
+
+Extended two levels finer than the three-point sweep above, same
+convention/driver/rationale as
+[`../LSAT-SD7003/README.md`](../LSAT-SD7003/README.md)'s "Extended grid
+convergence" section (read that section for the full methodology; this
+is the SD8000-specific numbers). Figures:
+`grid_convergence_extended.png` / `grid_convergence_extended_summary.txt`.
+
+| dx | Cd (py) | \|dCd\| (py) | Cd (cpp) | \|dCd\| (cpp) |
+|---|---|---|---|---|
+| 0.04 | −0.023999 | — | 0.024432 | — |
+| 0.02 | 0.012985 | 0.036984 (285%) | 0.017014 | 0.007418 (43.6%) |
+| 0.01 | 0.012107 | 0.000878 (7.2%) | 0.012339 | 0.004675 (37.9%) |
+| 0.005 | 0.014598 | 0.002491 (17.1%) | 0.014705 | 0.002366 (16.1%) |
+| 0.0025 | 0.013677 | 0.000920 (6.7%) | 0.013661 | 0.001044 (7.6%) |
+
+Same story as SD7003, if anything noisier: the dx=0.04 point is the wild
+outlier already characterized in
+[`../8-dt_refinement_and_spectra/`](../8-dt_refinement_and_spectra/README.md)
+as a numerical (aliasing) instability, not physical; from dx=0.02 onward
+the step size oscillates (7.2% → 17.1% → 6.7% for py) rather than
+shrinking monotonically -- **not cleanly flattened** by the
+successive-step-size test.
+
+**py-vs-cpp agreement, though, tightens sharply and monotonically**
+(198% → 23.7% → 1.9% → 0.7% → **0.1%**, dx=0.04 down to 0.0025) --
+by dx=0.0025 the two independent implementations land on Cd=0.013677 (py)
+vs. 0.013661 (cpp), essentially the same value SD7003 converges to at the
+same dx (0.013657 / 0.013659) despite being a different airfoil at a
+different Re and alpha. That two unrelated cases landing on nearly
+identical Cd at the same finest resolution, with both implementations
+agreeing to 0.1%, is hard to explain as coincidence -- it reads as a real
+(if not yet asymptotically converged) signal, not noise.
+
+Same cost caveat as SD7003: dx=0.0025 took ~7.6-7.9 hours per
+(implementation, airfoil) run; a further dx=0.00125 level would cost an
+estimated ~2.5-3 days per run and hasn't been launched pending a decision
+on whether it's worth it given the step size isn't yet shrinking.
+
 ## Limitations
 
 Identical caveat to SD7003: `2-c++included/flow_evolution.png` shows the same

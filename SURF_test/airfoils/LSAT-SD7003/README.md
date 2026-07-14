@@ -289,6 +289,82 @@ alone would suggest. Fixed by halving `dt` to 0.005 (and doubling
 `run_all_airfoils_cpp.py` (C++, which applies the same fix from the
 start rather than as a follow-up rerun).
 
+## Extended grid convergence: dx=0.005 and dx=0.0025
+
+The three-point sweep above (dx=0.04/0.02/0.01) was extended two more
+levels finer, following the same rationale as
+[`../../low_re/NACA0012/README.md`](../../low_re/NACA0012/README.md)'s
+own extension: a 3-point monotonic-looking sequence can still be
+pre-asymptotic. Driven by
+[`../../run_sd_gridconv_extended.py`](../../run_sd_gridconv_extended.py)
+(same `dt=dx/2`, `t_final=30` convention as the NACA0012 sweep), both
+implementations, both airfoils; figures via
+[`../../gen_sd_gridconv_extended_figs.py`](../../gen_sd_gridconv_extended_figs.py)
+→ `grid_convergence_extended.png` / `grid_convergence_extended_summary.txt`.
+
+**The |dCd| step size does NOT cleanly shrink the way NACA0012's did:**
+
+| dx | Cd (py) | \|dCd\| (py) | Cd (cpp) | \|dCd\| (cpp) |
+|---|---|---|---|---|
+| 0.04 | 0.010921 | — | 0.012262 | — |
+| 0.02 | 0.015486 | 0.004566 (29.5%) | 0.012151 | 0.000110 (0.9%) |
+| 0.01 | 0.014368 | 0.001118 (7.8%) | 0.014280 | 0.002129 (14.9%) |
+| 0.005 | 0.014732 | 0.000364 (2.5%) | 0.014737 | 0.000456 (3.1%) |
+| 0.0025 | 0.013657 | 0.001075 (7.9%) | 0.013659 | 0.001078 (7.9%) |
+
+By dx=0.005 the step had shrunk to ~2.5-3% of Cd (looked converged, by
+NACA0012's criterion) -- then dx=0.0025 jumps back up to ~8%. By the
+successive-step-size test alone, **this has not flattened.**
+
+**But there's a second, independent convergence signal that has:**
+py-vs-cpp agreement at each dx. Two independently-written implementations
+starting from the same Cd would only track each other this closely by
+chance if something genuinely convergent were happening:
+
+| dx | \|Cd_py − Cd_cpp\| / Cd_cpp |
+|---|---|
+| 0.04 | 10.9% |
+| 0.02 | 27.5% |
+| 0.01 | 0.6% |
+| 0.005 | 0.03% |
+| 0.0025 | **0.01%** |
+
+At the two finest levels the two implementations agree to 1-3 parts in
+10,000 -- essentially exact, given each is a genuinely independent
+timestepping run of an unsteady flow (no shared random seed or state).
+That the dx=0.005→0.0025 Cd shift (~8%, ~0.0011) lands at the *same*
+new value in both implementations, simultaneously, is strong evidence
+this is a real, reproducible feature of the discretized equations at
+that resolution -- not run-to-run noise -- even though it means the
+sequence hasn't yet entered a clean asymptotic regime.
+
+**Why this is plausible here specifically (unlike NACA0012):**
+[`5-grid_refine/README.md`](5-grid_refine/README.md) already found that
+the controlling parameter at this airfoil's real operating Reynolds
+number (~61,100) is resolution *relative to* Re (boundary-layer
+thickness ~ c/sqrt(Re) ~ 0.004c) -- at Re=5,000 (a different case
+examined there) dx=0.02 was already enough to resolve the boundary layer
+cleanly, but at the real Re=61,100 used here, even dx=0.01 was found
+"nowhere near fine enough." dx=0.0025 is finer still, but may simply be
+resolving another layer of genuine shear-layer/boundary-layer structure
+each time it's refined, rather than approaching a converged mean drag --
+plausible, not conclusively isolated here. Also see
+[`../8-dt_refinement_and_spectra/`](../8-dt_refinement_and_spectra/README.md):
+the finest-grid instability question this airfoil originally raised
+(dx=0.04's blow-up) has separately been shown there to be a
+grid-resolution artifact cured by refining dx, consistent with a flow
+that is genuinely sensitive to resolution well past dx=0.01 here.
+
+**Cost, and why this stops at dx=0.0025 for now.** dx=0.0025
+(nx=2400, ny=1200) took ~7.7-7.9 hours per (implementation, airfoil)
+combination -- run in parallel across both airfoils/implementations, so
+~8 hours wall-clock total, not ~31. Extrapolating the same ~8x-per-halving
+scaling seen in the NACA0012 sweep, dx=0.00125 would cost roughly
+2.5-3 days per run. Given the step size did not shrink at dx=0.0025 (so a
+6th point isn't obviously going to resolve the picture either), this is
+a genuine open question rather than a settled one -- left here rather
+than extended further without checking in first.
+
 ## Limitations (read before quoting these numbers)
 
 The vorticity field itself (`2-c++included/flow_evolution.png`) shows **broadband,
