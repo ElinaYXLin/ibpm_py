@@ -1,0 +1,1 @@
+py.ibpm -name run -outdir /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/airfoils/LSAT-SD7003/_run_data/conv_dx0.005 -tecplot 0 -restart 0 -force 1 -nx 1200 -ny 600 -ngrid 1 -length 6 -xoffset -2 -yoffset -1.5 -alpha -0.09 -geom /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/geom/sd7003_dx0.0050.geom -Re 61100 -dt 0.0025 -nsteps 12000
