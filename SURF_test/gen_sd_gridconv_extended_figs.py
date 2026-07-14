@@ -66,9 +66,8 @@ def main():
                 rows = [p for p in pts[impl] if not (skip_coarse and p[0] == 0.04)]
                 dxs = [p[0] for p in rows]
                 cds = [p[1] for p in rows]
-                stds = [p[2] for p in rows]
-                ax.errorbar(dxs, cds, yerr=stds, fmt=f"{marker}-", color=color, capsize=3,
-                            label=f"{'py/ibpm.py' if impl == 'py' else 'C++ build/ibpm'}")
+                ax.plot(dxs, cds, f"{marker}-", color=color,
+                        label=f"{'py/ibpm.py' if impl == 'py' else 'C++ build/ibpm'}")
             ax.axhline(exp_cd_at_alpha, color="k", ls="--", lw=1.2,
                        label=f"UIUC LSAT exp. ($\\alpha$={exp_alpha[exp_row]:.2f}°, Re={exp['Re']:.0f})")
             ax.invert_xaxis()
@@ -77,11 +76,12 @@ def main():
             ax.set_ylabel("$C_d$")
             ax.legend(fontsize=8)
             ax.grid(alpha=0.3, which="both")
-            ax.set_title("dx=0.04 excluded (zoomed; dx=0.04's huge error bars\n"
-                         "are the numerical-instability blow-up, see ../8-dt_refinement_and_spectra/)"
+            ax.set_title("dx=0.04 excluded (zoomed; dx=0.04's mean Cd is itself\n"
+                         "the numerical-instability blow-up, see ../8-dt_refinement_and_spectra/)"
                          if skip_coarse else "full range (dx=0.04 included)")
         fig.suptitle(f"{name}: extended grid convergence, $\\alpha$={cfg['conv_alpha']}°, "
-                     f"Re={cfg['Re']}\n(dx=0.04 to 0.0025; error bars = ±1 std. dev. of unsteady force trace)")
+                     f"Re={cfg['Re']}\n(dx=0.04 to 0.0025; time-averaged $C_d$, no error bars -- "
+                     f"see grid_convergence_extended_summary.txt for std. dev. numbers)")
         fig.tight_layout(rect=(0, 0, 1, 0.90))
         outp = outdir / "grid_convergence_extended.png"
         fig.savefig(outp, dpi=150, bbox_inches="tight")
