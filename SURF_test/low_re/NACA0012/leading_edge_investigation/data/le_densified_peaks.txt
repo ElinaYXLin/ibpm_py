@@ -1,0 +1,2 @@
+uniform (baseline): peak|omega| near LE = +64.7111
+LE-densified boundary: peak|omega| near LE = -89.8779

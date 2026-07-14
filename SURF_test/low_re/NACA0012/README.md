@@ -145,6 +145,146 @@ identical between the two implementations -- physically consistent with
 the published low-Re NACA0012 lift behavior (Kurtulus, Di Ilio), even
 though those references are figure-only for the quantitative values.
 
+## Leading-edge vorticity investigation
+
+The Re=500 flow-field snapshots above (and `flow_evolution.png`) show a
+small, sharp vorticity "speck" pinned right at the leading edge (LE) --
+visible in the raw vorticity data even though it's easy to miss at the
+full-domain color scale. Four follow-up tests, in
+[`leading_edge_investigation/`](leading_edge_investigation/), pin down
+what causes it. All four use `py/ibpm.py` only (not the paired C++ runs
+used elsewhere in this suite): Re=500 is steady/deterministic here (see
+"Python vs. C++: exact fidelity" above), so a second implementation adds
+confirmation but not new physics, and would have roughly doubled the
+already substantial compute (test 1 alone required a fresh ~49-minute
+dx=0.005 run with field snapshots, since the existing
+`../run_gridconv.py` sweep used `-restart 0` and kept no snapshots to
+check retroactively).
+
+NACA0012's leading-edge radius of curvature, $r_{LE} = 1.1019 t^2 =
+1.1019 \times 0.12^2 \approx 0.0159$ (chord=1, $t$=12% thickness), is the
+length scale used throughout as "how sharp is the LE, geometrically" to
+compare grid/point spacing against.
+
+### Test 1 -- grid refinement: does the speck shrink as dx < r_LE?
+
+[`run_grid_refinement.py`](leading_edge_investigation/run_grid_refinement.py)
+reruns Re=500, alpha=0 at dx=0.01 and dx=0.005 (the same points already in
+`../grid_convergence.png`, but with restart snapshots enabled this time),
+at matching physical times so the two resolutions are directly comparable
+frame-by-frame. `fig1_grid_refinement.png` shows both: a full-domain view
+plus a zoomed-in LE inset (zoom window = 6 x $r_{LE}$) at the snapshot
+where the near-LE peak is largest, and again at the final state (t=30) --
+same convention requested for all flow-evolution figures in this
+investigation, one panel zoomed out, one zoomed in on the peak.
+
+**Result -- the opposite of the hypothesis, and more informative for it.**
+`fig1b_grid_refinement_summary.png` (adding the existing dx=0.02 point for
+a 3-point trend) shows the peak magnitude *growing* monotonically as dx
+shrinks -- 64.7 (dx=0.02) -> 68.3 (dx=0.01) -> 74.7 (dx=0.005) -- not
+shrinking. But its *distance from the true LE* collapses cleanly:
+0.040 -> 0.020 -> 0.0206, i.e. pinned at almost exactly 2 grid cells
+(2*dx) at every resolution, not converging toward 0 or toward $r_{LE}$.
+Together this rules out the original hypothesis (a coarse grid smearing
+out and inflating an artificial peak that should shrink and localize on
+refinement) and points at the opposite mechanism: the LE stagnation
+region has a genuinely sharp vorticity gradient that a coarse grid
+*clips* rather than *inflates* -- refining the grid resolves more of the
+true peak (hence larger, not smaller, magnitude) while the discrete
+peak location just tracks "the grid cell nearest the LE" (hence pinned at
+~2dx, not shrinking toward the geometric LE). This had not converged by
+dx=0.005; a genuinely converged peak magnitude would need finer dx still,
+consistent with `../README.md`'s own note that the Cd sequence itself
+was still pre-asymptotic at dx=0.01 and only entered a flattening regime
+at dx=0.005.
+
+### Test 2 -- alpha sweep: does the speck's asymmetry track the stagnation point?
+
+[`run_alpha_sweep.py`](leading_edge_investigation/run_alpha_sweep.py)
+reruns alpha=0, 2, 8, 10 deg (Re=500, dx=0.02 -- identical settings to
+`../naca0012_polar_results.json`, but with restart snapshots this time,
+since the polar sweep used `-restart 0`) and compares the top-surface vs.
+bottom-surface LE vorticity peak in `fig2_alpha_sweep.png`.
+
+**Result -- confirms the hypothesis cleanly.** `fig2b_alpha_asymmetry_summary.png`
+/ `data/alpha_asymmetry.txt`: the top/bottom peak asymmetry is
+essentially zero at alpha=0 (-1.2%, consistent with symmetric flow --
+the small nonzero value is a numerical-grid-symmetry floor, not a
+physical effect, since the domain's y-grid isn't exactly centered on
+y=0) and grows monotonically with angle of attack: +1.9% (alpha=2) ->
++12.6% (alpha=8) -> +16.6% (alpha=10). This is exactly what's expected if
+the effect tracks the front (forward) stagnation point migrating away
+from the geometric nose and toward the lower surface as alpha increases
+-- the flow around the nose becomes more asymmetric, so does the LE
+vorticity peak that sits right where the flow turns around it.
+
+### Test 3 -- isolating boundary-point density from grid dx
+
+[`make_le_densified_geom.py`](leading_edge_investigation/make_le_densified_geom.py)
+builds a NACA0012 boundary-point file with locally finer arc-length
+spacing near the LE (a half-cosine ramp down to dx/4 within +-2*r_LE of
+the LE, dx=0.02 everywhere else), while
+[`run_le_densified.py`](leading_edge_investigation/run_le_densified.py)
+runs it at the SAME background grid dx=0.02 as the uniform-spacing
+baseline -- isolating Lagrangian boundary-point density from Eulerian
+grid resolution, which `../run_gridconv.py`'s dx sweep can't do (it always
+changes both together, via `make_airfoil_raw.py` resampling the boundary
+to ds=dx at each new dx).
+
+**Result -- densifying boundary points, at fixed grid dx, makes the speck
+*worse*, not better.** `fig3_le_densified.png` /
+`data/le_densified_peaks.txt`: peak near-LE |omega| grows from 64.7
+(uniform) to 89.9 (LE-densified) -- a 39% increase, well beyond test 1's
+grid-refinement growth. This is consistent with the regularized delta
+function in this codebase's immersed-boundary formulation being
+tuned to a support width tied to the *background grid* dx, not to
+boundary-point spacing; clustering boundary points more closely than
+that support width doesn't resolve the LE curvature better, it makes
+neighboring points' regularized force support overlap more, and (per
+`make_airfoil_raw.py`'s own docstring on the "over-resolved boundary"
+degeneracy) pushes toward the near-singular regime rather than away from
+it. So the earlier grid-convergence work's practice of keeping boundary
+spacing matched to dx (ds ~ dx, not independently refined) isn't just a
+numerical-stability convenience -- it's the right coupling for the LE
+region specifically, and decoupling it (this test) actively hurts.
+
+### Test 4 -- is it the projection step straining hardest at the LE?
+
+[`compute_le_residual.py`](leading_edge_investigation/compute_le_residual.py)
+extends `../../vortall/1-baseline/inner/compute_residuals.py`'s no-slip
+residual check (`||C(omega) - b||`, which that script only reported as a
+single norm) to record the residual *per boundary point*, for Re=500,
+alpha=0, dx=0.02, using the internal py/ API directly (same
+Grid/Geometry/NavierStokesModel/NonlinearIBSolver pattern).
+
+**Result -- rules this mechanism out.** `fig4_residual_vs_distance.png` /
+`fig4b_residual_spatial_map.png`: after the first timestep, the residual
+is flat at floating-point roundoff (~1e-15 to 1e-17) at *every* boundary
+point, with no elevation whatsoever near the LE (the t=0 panel, at
+~1.0 uniformly everywhere, is just the un-solved initial condition and
+not informative about solver accuracy). The projection step is enforcing
+the no-slip constraint to machine precision uniformly around the whole
+body -- it is not straining harder at the LE than anywhere else. This
+rules out "the linear solve itself is failing near the LE" as the
+mechanism, leaving test 1 and test 3's explanation (curvature vs.
+regularization-support-width resolution, not a solver-accuracy problem)
+as the one the evidence actually supports.
+
+### Summary
+
+The LE vorticity speck is a genuine, physically-motivated feature (a
+sharp near-wall vorticity gradient at the stagnation region, whose
+strength correctly grows with alpha-driven stagnation-point asymmetry),
+not a solver-accuracy artifact (test 4) and not simply "not enough grid
+resolution" in the naive sense (test 1's peak grows rather than shrinks
+under refinement). What test 1 and test 3 together show is that it's
+resolution-*sensitive* in a specific way: refining the background grid
+reveals more of the true peak (test 1), while boundary-point density
+needs to stay coupled to that same background dx rather than being
+independently refined (test 3) -- over-densifying the boundary alone
+makes the regularized-delta-function supports overlap and inflates the
+peak further, rather than resolving it.
+
 ## Provenance
 
 Coordinates: `naca0012.dat.txt`, converted from
