@@ -59,13 +59,16 @@ LEVELS = np.linspace(-VMAX, VMAX, 41)
 
 
 def draw_field(ax, field, title, airfoil_pts, alpha_deg):
+    # NOTE(fix): py/ibpm.py's `-alpha` only tilts the free-stream (BaseFlow);
+    # it is never applied to the geometry, so `field` is in the frame where
+    # the body sits at its raw, UNROTATED orientation. This used to rotate
+    # only the drawn outline by -alpha_deg without rotating `field` to
+    # match -- inconsistent, and equivalent to plotting the body about one
+    # grid cell away from where it truly sits (at this dx, alpha). Plotting
+    # the raw points directly matches what was actually solved. `alpha_deg`
+    # is kept for call-site compatibility but no longer used for a rotation.
     im = ax.contourf(X, Y, np.clip(field, -VMAX, VMAX), levels=LEVELS, cmap="RdBu_r", extend="both")
-    th = -np.deg2rad(alpha_deg)
-    c, sn = np.cos(th), np.sin(th)
-    xc, yc = airfoil_pts[:, 0] - 0.25, airfoil_pts[:, 1]
-    xr = xc * c - yc * sn + 0.25
-    yr = xc * sn + yc * c
-    ax.fill(xr, yr, color="0.15", zorder=5)
+    ax.fill(airfoil_pts[:, 0], airfoil_pts[:, 1], color="0.15", zorder=5)
     ax.set_xlim(-2, 4)
     ax.set_ylim(-1.5, 1.5)
     ax.set_aspect("equal")
