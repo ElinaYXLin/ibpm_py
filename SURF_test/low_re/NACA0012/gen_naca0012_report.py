@@ -36,7 +36,7 @@ REF_CD = {
     1000: {"Di Ilio et al. (HLBM)": 0.119, "Di Ilio et al. (XFOIL)": 0.119, "Kurtulus (~)": 0.12},
 }
 POLAR_ALPHAS = [0, 2, 4, 6, 8, 10]
-GRID_DX = [0.04, 0.02, 0.01]
+GRID_DX = [0.04, 0.02, 0.01, 0.005]
 
 
 def mean_force(force_path, frac=AVG_FRAC):
@@ -140,6 +140,26 @@ def main():
                 f.write(f"  Re={Re}: Cd_py={cd_py:.4f}  Cd_cpp={cd_cpp:.4f}\n")
                 for ref, val in REF_CD[Re].items():
                     f.write(f"      vs {ref:22s} {val:.4f}  ({(cd_py-val)/val:+.1%})\n")
+
+        # ---------- grid-convergence numeric table (dx, Cd, successive dCd) ----------
+        if gc_py and gc_cpp:
+            f.write("\nGrid convergence at Re=500, alpha=0 (dx halved each row):\n")
+            f.write(f"{'dx':>8} {'Cd_py':>10} {'Cd_cpp':>10} {'dCd_py':>12} {'dCd_cpp':>12}\n")
+            dxs_desc = sorted(set(gc_py) & set(gc_cpp), reverse=True)
+            prev_py = prev_cpp = None
+            for dx in dxs_desc:
+                cd_p = gc_py[dx][1]; cd_c = gc_cpp[dx][1]
+                dcd_p = "" if prev_py is None else f"{cd_p - prev_py:+.6f}"
+                dcd_c = "" if prev_cpp is None else f"{cd_c - prev_cpp:+.6f}"
+                f.write(f"{dx:8.4f} {cd_p:10.6f} {cd_c:10.6f} {dcd_p:>12} {dcd_c:>12}\n")
+                prev_py, prev_cpp = cd_p, cd_c
+            if len(dxs_desc) >= 3:
+                d = [gc_py[dx][1] for dx in dxs_desc]
+                steps = [d[i + 1] - d[i] for i in range(len(d) - 1)]
+                f.write("\n  |dCd| step sizes (py, successive halvings): "
+                         + " -> ".join(f"{abs(s):.6f}" for s in steps) + "\n")
+                f.write("  (a shrinking step size after growth here indicates the sequence has\n"
+                        "   entered its asymptotic convergence regime -- see README for discussion)\n")
     print(f"wrote {OUTDIR / 'fidelity_summary.txt'}")
     print(open(OUTDIR / "fidelity_summary.txt").read())
 

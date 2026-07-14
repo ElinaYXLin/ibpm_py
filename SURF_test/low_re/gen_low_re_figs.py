@@ -56,12 +56,19 @@ def load_dat_pts(path):
 
 
 def draw(ax, field, title, pts, alpha_deg):
+    # NOTE(fix): py/ibpm.py's `-alpha` only tilts the free-stream (BaseFlow);
+    # it is never applied to the geometry (confirmed: `geom.load(...)` in
+    # ibpm.py never sees alpha). The solved vorticity field `field` is
+    # therefore in the frame where the body sits at its raw, UNROTATED
+    # orientation. This function used to rotate only the drawn outline by
+    # -alpha_deg without rotating `field` to match -- inconsistent, and
+    # equivalent to plotting the body about one grid cell away from where
+    # it truly sits (at this dx, alpha) in the field being drawn. Plotting
+    # the raw points directly (no rotation) matches what was actually
+    # solved. `alpha_deg` is kept as a parameter for call-site compatibility
+    # but is no longer used for a rotation.
     ax.contourf(X, Y, np.clip(field, -VMAX, VMAX), levels=41, cmap="RdBu_r", extend="both")
-    th = -np.deg2rad(alpha_deg)
-    c, sn = np.cos(th), np.sin(th)
-    xc, yc = pts[:, 0] - 0.25, pts[:, 1]
-    xr, yr = xc * c - yc * sn + 0.25, xc * sn + yc * c
-    ax.fill(xr, yr, color="0.15", zorder=5)
+    ax.fill(pts[:, 0], pts[:, 1], color="0.15", zorder=5)
     ax.set_xlim(-2, 4); ax.set_ylim(-1.5, 1.5); ax.set_aspect("equal")
     ax.set_title(title, fontsize=9)
 

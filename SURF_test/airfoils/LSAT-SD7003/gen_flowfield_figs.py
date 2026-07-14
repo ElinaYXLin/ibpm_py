@@ -47,14 +47,18 @@ LEVELS = np.linspace(-VMAX, VMAX, 41)
 
 def draw_field(ax, field, title, airfoil_pts, alpha_deg):
     im = ax.contourf(X, Y, np.clip(field, -VMAX, VMAX), levels=LEVELS, cmap="RdBu_r", extend="both")
-    # rotate airfoil outline into the lab frame the same way the solver rotates the freestream
-    # (body fixed at alpha=0, flow rotated by +alpha -> equivalent lab-frame body rotation is -alpha)
-    th = -np.deg2rad(alpha_deg)
-    c, sn = np.cos(th), np.sin(th)
-    xc, yc = airfoil_pts[:, 0] - 0.25, airfoil_pts[:, 1]
-    xr = xc * c - yc * sn + 0.25
-    yr = xc * sn + yc * c
-    ax.fill(xr, yr, color="0.15", zorder=5)
+    # NOTE(fix): the comment this replaces argued for rotating the drawn
+    # outline by -alpha to match "the lab frame the solver rotates the
+    # freestream into" -- but that reasoning doesn't hold: py/ibpm.py's
+    # `-alpha` only tilts the free-stream (BaseFlow), never the geometry
+    # (confirmed: geom.load(...) never sees alpha), so `field` is already
+    # in the frame where the body sits at its raw, UNROTATED orientation.
+    # Rotating only the outline (not `field` too) was inconsistent, and
+    # equivalent to plotting the body about one grid cell away from where
+    # it truly sits (at this dx, alpha). Plotting the raw points directly
+    # matches what was actually solved. `alpha_deg` is kept for call-site
+    # compatibility but no longer used for a rotation.
+    ax.fill(airfoil_pts[:, 0], airfoil_pts[:, 1], color="0.15", zorder=5)
     ax.set_xlim(-2, 4)
     ax.set_ylim(-1.5, 1.5)
     ax.set_aspect("equal")
