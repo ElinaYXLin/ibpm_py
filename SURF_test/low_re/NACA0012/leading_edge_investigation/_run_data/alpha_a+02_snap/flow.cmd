@@ -1,0 +1,1 @@
+py.ibpm -name flow -outdir /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/leading_edge_investigation/_run_data/alpha_a+02_snap -tecplot 0 -restart 500 -force 1 -nx 300 -ny 150 -ngrid 1 -length 6 -xoffset -2 -yoffset -1.5 -alpha 2 -geom /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/geom/naca0012_dx0.0200.geom -Re 500 -dt 0.01 -nsteps 3000
