@@ -1,0 +1,27 @@
+258 jobs, 8-way parallel
+[10/258] done=10 skip=0 fail=0 elapsed=161s
+[20/258] done=20 skip=0 fail=0 elapsed=240s
+[30/258] done=30 skip=0 fail=0 elapsed=309s
+[40/258] done=40 skip=0 fail=0 elapsed=380s
+[50/258] done=50 skip=0 fail=0 elapsed=493s
+[60/258] done=60 skip=0 fail=0 elapsed=554s
+[70/258] done=70 skip=0 fail=0 elapsed=633s
+[80/258] done=80 skip=0 fail=0 elapsed=694s
+[90/258] done=90 skip=0 fail=0 elapsed=6674s
+[100/258] done=100 skip=0 fail=0 elapsed=12895s
+[110/258] done=110 skip=0 fail=0 elapsed=19243s
+[120/258] done=120 skip=0 fail=0 elapsed=31169s
+[130/258] done=130 skip=0 fail=0 elapsed=37516s
+[140/258] done=140 skip=0 fail=0 elapsed=44067s
+[150/258] done=150 skip=0 fail=0 elapsed=51799s
+[160/258] done=160 skip=0 fail=0 elapsed=61962s
+[170/258] done=170 skip=0 fail=0 elapsed=68191s
+[180/258] done=180 skip=0 fail=0 elapsed=75311s
+[190/258] done=190 skip=0 fail=0 elapsed=83297s
+[200/258] done=200 skip=0 fail=0 elapsed=93822s
+[210/258] done=210 skip=0 fail=0 elapsed=100301s
+[220/258] done=220 skip=0 fail=0 elapsed=106958s
+[230/258] done=230 skip=0 fail=0 elapsed=114556s
+[240/258] done=240 skip=0 fail=0 elapsed=125615s
+[250/258] done=250 skip=0 fail=0 elapsed=132519s
+DONE. ran=258 skipped=0 failed=0 in 138868s

@@ -1,0 +1,40 @@
+# Digitized from Kurtulus (2019) Figure 19: vortex-shedding frequency f [Hz] vs
+# mean AoA for the STEADY NACA0012 at Re=1000. Source graphical (~+/-0.02 Hz).
+# Strouhal St = f * c / U_inf = f * 0.1/0.146 = f * 0.684932 (dimensionless).
+# In the IBPM solver (c=1, U=1), the measured non-dim shedding frequency EQUALS
+# this Strouhal number, so compare St_kurt against f_nondim_ibpm directly.
+# Text anchors: onset alpha=8deg f=1.28Hz (St=0.876); peak alpha=9deg f=1.30Hz.
+alpha_deg,f_hz,strouhal
+0,0.00,0.000
+7,0.00,0.000
+8,1.28,0.877
+9,1.30,0.890
+10,1.28,0.877
+11,1.22,0.836
+12,1.16,0.795
+13,1.10,0.753
+14,1.06,0.726
+15,1.00,0.685
+16,0.94,0.644
+17,0.88,0.603
+18,0.84,0.575
+19,0.79,0.541
+20,0.72,0.493
+21,0.68,0.466
+22,0.66,0.452
+23,0.68,0.466
+24,0.68,0.466
+25,0.34,0.233
+26,0.35,0.240
+27,0.54,0.370
+28,0.46,0.315
+29,0.50,0.342
+30,0.50,0.342
+31,0.36,0.247
+33,0.37,0.253
+35,0.37,0.253
+38,0.36,0.247
+40,0.35,0.240
+41,0.34,0.233
+50,0.24,0.164
+60,0.22,0.151
