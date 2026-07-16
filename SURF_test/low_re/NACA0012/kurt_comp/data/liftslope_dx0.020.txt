@@ -1,0 +1,5 @@
+Lift-curve slope dCl/dalpha near alpha=0, steady NACA0012 Re=1000
+(paper: approximately pi = 3.1416 per rad)
+
+py: dCl/dalpha = 3.5720 per rad  (1.137 x pi)
+cpp: dCl/dalpha = 3.5720 per rad  (1.137 x pi)
