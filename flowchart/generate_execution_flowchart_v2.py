@@ -2,21 +2,21 @@
 generate_execution_flowchart_v2.py
 
 "More user-friendly" simplified version of main_execution_flowchart.png,
-built from a mentor's draft outline (flowchart_draft.docx) rather than an
-exhaustive call-graph trace. Same underlying run (py/ibpm.py's main()), but
-pruned to ~29 boxes instead of V1's ~60+, and only 3 levels of call depth
-(vs. V1's up to 8): a numbered top-level step, an optional lettered
-sub-step one layer in, and an optional roman-numeral sub-sub-step one more
-layer in. Numbering key (matches the draft):
-    1, 2, 3, ...      -- first layer (leftmost column in each section)
-    a, b, c, ...       -- one layer to the right of its parent number
-    i, ii, iii, ...    -- one more layer to the right of its parent letter
+built from a draft outline (flowchart_draft.docx) rather than an exhaustive
+call-graph trace. Same underlying run (py/ibpm.py's main()), but pruned to
+~29 boxes instead of V1's ~60+, and only 3 layers of call depth (vs. V1's up
+to 8). Depth is conveyed purely by column position and rightward arrows (no
+number/letter/roman-numeral labels on the boxes themselves): column 0 is a
+top-level step (source order in ibpm.py's main()), column 1 is one call
+deeper, column 2 is one call deeper still.
 
-Box text is the mentor's own draft wording verbatim, EXCEPT boxes that were
-marked "(unsure)" in the draft -- those were corrected against the actual
-source and the tag is dropped from the box (the correction, and why, is in
-flowchart/output_V2/README.md). Every box still carries a file:line tag,
-matching the citation style of V1's diagram (see generate_execution_flowchart.py).
+Box text is the draft's own wording verbatim, EXCEPT boxes that were marked
+"(unsure)" in the draft -- those were corrected against the actual source
+(the correction, and why, is in flowchart/output_V2/README.md). Every box
+still carries a file:line tag, positioned close above the box it cites,
+matching the citation style of V1's diagram (see
+generate_execution_flowchart.py) -- with enough vertical clearance from the
+box above it in the same column that the two never overlap.
 
 Usage:
     python3 flowchart/generate_execution_flowchart_v2.py
@@ -55,7 +55,9 @@ COL_X = [3.0, 13.5, 24.0]
 
 BODY_FS = 8.4
 TAG_FS = 6.8
-NUM_FS = 8.4          # the "1", "5a", "15biii" number/letter/roman label
+TAG_GAP = 0.24         # vertical gap between a box's top edge and its file:line tag
+                        # (large enough that an incoming arrowhead landing at
+                        # top-center never pokes into the tag text on narrow boxes)
 
 DATA_PER_INCH = 1.55
 _PT_PER_INCH = 72.0
@@ -78,12 +80,24 @@ def _text_size_data(lines, fontsize):
     return w, h
 
 
-def box(ax, col, y, lines, edgecolor, file, tag_lines, num, facecolor="white",
+def box_height(lines):
+    _, th = _text_size_data(lines, BODY_FS)
+    return max(th + 0.34, 0.66)
+
+
+def tag_height():
+    return TAG_FS * _LINE_H_PT_FRAC * _data_per_pt()
+
+
+def box(ax, col, y, lines, edgecolor, file, tag_lines, facecolor="white",
         linewidth=1.5, zorder=2, x=None):
-    """One flowchart box. `num` (e.g. "5", "5a", "15biii") is drawn as a
-    small circled/boxed label at the top-left, matching the draft's own
-    outline numbering; `file:tag_lines` is drawn top-right, citing exactly
-    where the code this box shows is written (same convention as V1)."""
+    """One flowchart box. `file:tag_lines` is drawn just above the box's
+    top-left corner (small gap, TAG_GAP), citing exactly where the code this
+    box shows is written (same convention as V1) -- no number/letter/roman
+    label; depth is conveyed by column position and the rightward arrows
+    alone. Callers are responsible for leaving enough vertical room in the
+    same column that this tag doesn't collide with the box placed above it
+    (see the dy spacing used in main(), sized for this)."""
     cx = COL_X[col] if x is None else x
     tw, th = _text_size_data(lines, BODY_FS)
     w = max(tw + 0.55, 2.0)
@@ -95,15 +109,9 @@ def box(ax, col, y, lines, edgecolor, file, tag_lines, num, facecolor="white",
     ax.add_patch(b)
     ax.text(cx, y, "\n".join(lines), ha="center", va="center", fontsize=BODY_FS,
              color="#222222", zorder=zorder + 1, linespacing=_LINE_H_PT_FRAC)
-    # num + file:line tag are STACKED (not left/right split) above the box's
-    # top-left corner, so a long tag on a narrow box never overlaps the num
-    # label -- both are left-anchored at the same x, tag directly above num.
     tag = f"{file}:{tag_lines}"
-    tag_h = TAG_FS * _LINE_H_PT_FRAC * _data_per_pt()
-    ax.text(cx - w / 2 + 0.08, y + h / 2 + 0.07 + tag_h, tag, ha="left", va="bottom",
-             fontsize=TAG_FS, style="italic", color="#555555", zorder=zorder + 1)
-    ax.text(cx - w / 2 + 0.08, y + h / 2 + 0.07, num, ha="left", va="bottom",
-             fontsize=NUM_FS, fontweight="bold", color=edgecolor, zorder=zorder + 1)
+    ax.text(cx - w / 2 + 0.08, y + h / 2 + TAG_GAP, tag, ha="left", va="bottom",
+             fontsize=TAG_FS, style="italic", color=edgecolor, zorder=zorder + 1)
     rec = (cx, y, w, h)
     ALL_BOXES.append(rec)
     return rec
@@ -191,15 +199,15 @@ def draw_legend(ax, x, y_top):
                  color="#222222", zorder=2)
         y -= row_h
     ax.text(x, y - 0.25,
-            "Numbering: 1,2,3 = top-level step (source order in ibpm.py's main()).\n"
-            "a,b,c = one layer of function-call depth to the right.\n"
-            "i,ii,iii = one more layer of call depth to the right.\n"
-            "Every box cites file:line for the code IT shows (top-right).\n"
+            "Column 0 = a top-level step (source order in ibpm.py's main()).\n"
+            "Column 1 = one layer of function-call depth to the right.\n"
+            "Column 2 = one more layer of call depth to the right.\n"
+            "Every box cites file:line for the code IT shows, just above it.\n"
             "Dashed arrow = loop-back (repeat).\n\n"
-            "Box text = mentor's draft, verbatim, EXCEPT boxes originally\n"
-            "marked \"(unsure)\" in the draft -- those were corrected against\n"
+            "Box text = the draft's own wording, verbatim, EXCEPT boxes\n"
+            "originally marked \"(unsure)\" -- those were corrected against\n"
             "the source code; see output_V2/README.md for what changed and why,\n"
-            "and for other draft inaccuracies flagged but NOT auto-corrected here.",
+            "and for other draft inaccuracies that were fixed here too.",
             ha="left", va="top", fontsize=7.6, color="#444444", style="italic")
 
 
@@ -214,21 +222,21 @@ def main() -> None:
     section_header(ax, y, "SECTION 1: preparation")
     y -= 1.4
 
-    b1 = box(ax, 0, y, ["Read arguments"], COLOR_DRIVER, FILE_IBPM, "166", "1")
+    b1 = box(ax, 0, y, ["Read arguments"], COLOR_DRIVER, FILE_IBPM, "166")
     y -= dy
-    b2 = box(ax, 0, y, ["Build grid"], COLOR_DRIVER, FILE_IBPM, "280", "2")
+    b2 = box(ax, 0, y, ["Build grid"], COLOR_DRIVER, FILE_IBPM, "280")
     y -= dy
-    b3 = box(ax, 0, y, ["Load .geom file"], COLOR_DRIVER, FILE_IBPM, "285", "3")
+    b3 = box(ax, 0, y, ["Load .geom file"], COLOR_DRIVER, FILE_IBPM, "285")
     y -= dy
     b4 = box(ax, 0, y, ["Create the free-stream", "(\"base\") flow, at the", "given angle of attack"],
-             COLOR_DRIVER, FILE_IBPM, "298", "4")
+             COLOR_DRIVER, FILE_IBPM, "298")
     y -= dy
-    b5 = box(ax, 0, y, ["Build model and solver"], COLOR_DRIVER, FILE_IBPM, "318-347", "5")
-    b5a = box(ax, 1, y + 0.55, ["Build a Navier-Stokes model"], COLOR_MODEL, FILE_NSM, "37-64", "5a")
+    b5 = box(ax, 0, y, ["Build model and solver"], COLOR_DRIVER, FILE_IBPM, "318-347")
+    b5a = box(ax, 1, y + 0.85, ["Build a Navier-Stokes model"], COLOR_MODEL, FILE_NSM, "37-64")
     call_arrow(ax, b5, b5a, color=COLOR_MODEL)
-    b5b = box(ax, 1, y - 0.55,
+    b5b = box(ax, 1, y - 0.85,
               ["Build a solver, like Nonlinear,", "Linearized, Adjoint, Periodic, or SFD"],
-              COLOR_SOLVER, FILE_IBS, "84-104,230-408", "5b")
+              COLOR_SOLVER, FILE_IBS, "84-104,230-408")
     call_arrow(ax, b5, b5b, color=COLOR_SOLVER)
 
     # ============================== SECTION 2: initialization ==============================
@@ -237,22 +245,22 @@ def main() -> None:
     y -= 1.4
 
     b6 = box(ax, 0, y, ["Initialize state and load", "initial conditions"], COLOR_DRIVER,
-             FILE_IBPM, "361-369", "6")
+             FILE_IBPM, "361-369")
     y -= dy
     b7 = box(ax, 0, y, ["Move bodies to their", "position at the current time"], COLOR_DRIVER,
-             FILE_IBPM, "394", "7")
+             FILE_IBPM, "394")
     y -= dy
-    b8 = box(ax, 0, y, ["Initialize the model"], COLOR_DRIVER, FILE_IBPM, "397", "8")
+    b8 = box(ax, 0, y, ["Initialize the model"], COLOR_DRIVER, FILE_IBPM, "397")
     y -= dy
     b9 = box(ax, 0, y, ["Load solver if available,", "else initialize and save it"],
-             COLOR_DRIVER, FILE_IBPM, "400-405", "9")
+             COLOR_DRIVER, FILE_IBPM, "400-405")
     y -= dy
     b10 = box(ax, 0, y, ["Update operators: re-sync the", "base flow / body positions /",
-              "regularizer to the current time"], COLOR_DRIVER, FILE_IBPM, "411", "10")
+              "regularizer to the current time"], COLOR_DRIVER, FILE_IBPM, "411")
     y -= dy
     b11 = box(ax, 0, y, ["Refresh state in the", "Navier-Stokes model"], COLOR_DRIVER,
-              FILE_IBPM, "412", "11")
-    b11a = box(ax, 1, y, ["Compute the flux"], COLOR_MODEL, FILE_NSM, "158-166", "11a")
+              FILE_IBPM, "412")
+    b11a = box(ax, 1, y, ["Compute the flux"], COLOR_MODEL, FILE_NSM, "158-166")
     call_arrow(ax, b11, b11a, color=COLOR_MODEL)
 
     # ============================== SECTION 3: first round of outputs ==============================
@@ -261,42 +269,45 @@ def main() -> None:
     y -= 1.4
 
     b12 = box(ax, 0, y, ["Set up output objects", "(Tecplot/Restart/Force/Energy)", "and add to logger"],
-              COLOR_DRIVER, FILE_IBPM, "417-443", "12")
+              COLOR_DRIVER, FILE_IBPM, "417-443")
     y -= dy
-    b13 = box(ax, 0, y, ["Initialize the logger"], COLOR_DRIVER, FILE_IBPM, "445", "13")
+    b13 = box(ax, 0, y, ["Initialize the logger"], COLOR_DRIVER, FILE_IBPM, "445")
     y -= dy
-    b14 = box(ax, 0, y, ["Perform initial output"], COLOR_DRIVER, FILE_IBPM, "446", "14")
+    b14 = box(ax, 0, y, ["Perform initial output"], COLOR_DRIVER, FILE_IBPM, "446")
     b14a = box(ax, 1, y, ["Call each entry that needs", "to be outputted, and do the output"],
-               COLOR_IO, FILE_LOGGER, "66-70", "14a")
+               COLOR_IO, FILE_LOGGER, "66-70")
     call_arrow(ax, b14, b14a, color=COLOR_IO)
 
     # ============================== SECTION 4: solver loop ==============================
     y -= dy + 1.5
     section_header(ax, y, "SECTION 4: solver loop, for every step up to numSteps")
     y -= 1.4
-    loop_top_y = y
 
-    b15 = box(ax, 0, y, ["Advance the solver"], COLOR_DRIVER, FILE_IBPM, "452", "15",
+    b_loophead = box(ax, 0, y, ["For each step,", "1 to numSteps:"], COLOR_DRIVER, FILE_IBPM,
+                      "449", facecolor="#fdf2ef")
+    y -= dy
+
+    b15 = box(ax, 0, y, ["Advance the solver"], COLOR_DRIVER, FILE_IBPM, "452",
               facecolor="#f5eefb")
-    b15a = box(ax, 1, y + 0.55, ["For every substep, set the", "nonlinear term based on the solver"],
-               COLOR_SOLVER, FILE_IBS, "175,177", "15a")
+    b15a = box(ax, 1, y + 0.85, ["For every substep, set the", "nonlinear term based on the solver"],
+               COLOR_SOLVER, FILE_IBS, "175,177")
     call_arrow(ax, b15, b15a, color=COLOR_SOLVER)
-    b15b = box(ax, 1, y - 0.85, ["For each substep,", "do the following:"], COLOR_SOLVER,
-               FILE_IBS, "185-216", "15b")
+    b15b = box(ax, 1, y - 1.25, ["For each substep,", "do the following:"], COLOR_SOLVER,
+               FILE_IBS, "185-216")
     call_arrow(ax, b15, b15b, color=COLOR_SOLVER)
 
     ry = y + 1.6
     romans = [
-        (["Update operators, if the model", "is time dependent"], "187-188", "15bi"),
+        (["Update operators, if the model", "is time dependent"], "187-188"),
         (["Calculate the \"a\" and \"b\"", "right-hand-side terms for the", "constrained (projection) solve"],
-         "191-203,206", "15bii"),
-        (["Solve using the projection", "solver, given a and b"], "209", "15biii"),
-        (["Refresh the state"], "212", "15biv"),
-        (["If SFD solver: also integrate", "the filtered state ωhat"], "354-386", "15bv"),
+         "191-203,206"),
+        (["Solve using the projection", "solver, given a and b"], "209"),
+        (["Refresh the state"], "212"),
+        (["If SFD solver: also integrate", "the filtered state ωhat"], "354-386"),
     ]
     roman_boxes = []
-    for lines_, ln, num in romans:
-        rb = box(ax, 2, ry, lines_, COLOR_SOLVER, FILE_IBS, ln, num)
+    for lines_, ln in romans:
+        rb = box(ax, 2, ry, lines_, COLOR_SOLVER, FILE_IBS, ln)
         call_arrow(ax, b15b, rb, color=COLOR_SOLVER, mutation_scale=10)
         roman_boxes.append(rb)
         ry -= 1.55
@@ -304,20 +315,31 @@ def main() -> None:
     branch_bottom = roman_boxes[-1][1] - roman_boxes[-1][3] / 2
 
     y = min(branch_bottom, b15b[1] - b15b[3] / 2) - dy
-    b16 = box(ax, 0, y, ["Compute net force"], COLOR_DRIVER, FILE_IBPM, "453", "16")
+    b16 = box(ax, 0, y, ["Compute net force"], COLOR_DRIVER, FILE_IBPM, "453")
     y -= dy
-    b17 = box(ax, 0, y, ["Use logger to output results,", "and clean up the logger"], COLOR_DRIVER,
-              FILE_IBPM, "462,480", "17")
-    loop_bottom_y = y
+    # Split from a single "output + cleanup" box (flagged as an error in the
+    # draft): logger.doOutput (462) runs EVERY step, inside the loop -- it's
+    # what the loop-back arrow wraps around, along with b_loophead/b15/b16.
+    # logger.cleanup (480) runs ONCE, after the loop is entirely done, so
+    # it's drawn OUTSIDE the loop-back and not part of the repeated cycle.
+    b17 = box(ax, 0, y, ["Output results for this step"], COLOR_DRIVER,
+              FILE_IBPM, "462")
 
+    seq_arrow(ax, b_loophead, b15, COLOR_DRIVER)
     seq_arrow(ax, b15, b16, COLOR_DRIVER)
     seq_arrow(ax, b16, b17, COLOR_DRIVER)
-    loop_arrow(ax, b17, b15, COLOR_DRIVER, x_offset=-2.2, label="repeat until step = numSteps")
+    loop_arrow(ax, b17, b_loophead, COLOR_DRIVER, x_offset=-2.2,
+               label="repeat until step = numSteps")
+
+    y -= dy + 1.3
+    b18 = box(ax, 0, y, ["Clean up the logger", "(once, after the loop)"], COLOR_DRIVER,
+              FILE_IBPM, "480")
+    seq_arrow(ax, b17, b18, COLOR_DRIVER)
 
     # ============================== column-0 sequencing (top to bottom, section by section) ==============================
     for p, q in [(b1, b2), (b2, b3), (b3, b4), (b4, b5), (b5, b6), (b6, b7), (b7, b8),
                  (b8, b9), (b9, b10), (b10, b11), (b11, b12), (b12, b13), (b13, b14),
-                 (b14, b15)]:
+                 (b14, b_loophead)]:
         seq_arrow(ax, p, q, COLOR_DRIVER)
 
     draw_legend(ax, COL_X[2] + 1.6, b1[1] + 0.3)
@@ -326,9 +348,9 @@ def main() -> None:
 
     ax.set_title(
         "ibpm_py -- execution flow (simplified / \"user-friendly\" version, V2)\n"
-        "Based on a mentor's draft outline, cross-checked against the source. Numbering: "
-        "1,2,3 = top-level step; a,b,c = one call-layer right; i,ii,iii = one more call-layer "
-        "right. See legend for what was corrected vs. the original draft.",
+        "Based on a draft outline, cross-checked against the source. Column 0 = a top-level "
+        "step; column 1 = one call-layer right; column 2 = one more call-layer right. See "
+        "legend for what was corrected vs. the original draft.",
         fontsize=12.5, pad=8,
     )
 
