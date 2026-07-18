@@ -1,0 +1,7 @@
+Lift-curve slope dCl/dalpha vs ngrid (far-field/blockage treatment),
+steady NACA0012 Re=1000, dx=0.02, py_static only
+(paper: ~pi = 3.1416 per rad; 1-paper_based ngrid=1 baseline: 3.5720)
+
+ngrid=1: dCl/dalpha = 3.5720 per rad  (1.137 x pi)
+ngrid=2: dCl/dalpha = 3.3710 per rad  (1.073 x pi)
+ngrid=3: dCl/dalpha = 3.3122 per rad  (1.054 x pi)

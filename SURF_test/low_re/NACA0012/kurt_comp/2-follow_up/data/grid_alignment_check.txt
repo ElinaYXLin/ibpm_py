@@ -1,0 +1,7 @@
+Grid-alignment check: Cl(alpha=0) with domain shifted by dx/2=0.01 in y,
+steady NACA0012 Re=1000, dx=0.02, py_static only
+
+baseline   (yoffset=-1.50): Cl(0) = -0.00648
+half-cell-shifted (yoffset=-1.49): Cl(0) = -0.02325
+
+difference: -0.01677  (sign flip: False)

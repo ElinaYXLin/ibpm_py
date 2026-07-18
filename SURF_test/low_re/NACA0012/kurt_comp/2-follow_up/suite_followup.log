@@ -1,0 +1,18 @@
+20 jobs, 4-way parallel
+  FAIL: ngrid_sweep/ngrid2_a02
+  FAIL: ngrid_sweep/ngrid2_a00
+  FAIL: ngrid_sweep/ngrid2_a01
+  FAIL: ngrid_sweep/ngrid2_a03
+  FAIL: ngrid_sweep/ngrid2_a05
+[5/20] done=0 skip=0 fail=5 elapsed=1s
+  FAIL: ngrid_sweep/ngrid2_a04
+  FAIL: ngrid_sweep/ngrid3_a01
+  FAIL: ngrid_sweep/ngrid3_a00
+  FAIL: ngrid_sweep/ngrid3_a05
+  FAIL: ngrid_sweep/ngrid3_a04
+[10/20] done=0 skip=0 fail=10 elapsed=1s
+  FAIL: ngrid_sweep/ngrid3_a03
+  FAIL: ngrid_sweep/ngrid3_a02
+[15/20] done=3 skip=0 fail=12 elapsed=207s
+[20/20] done=8 skip=0 fail=12 elapsed=675s
+DONE. ran=8 skipped=0 failed=12 in 675s
