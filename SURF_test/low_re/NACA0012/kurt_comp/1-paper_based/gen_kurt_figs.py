@@ -23,7 +23,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 REPO = pathlib.Path("/Users/elina/Desktop/SURF2026/ibpm_py-main")
-KURT = REPO / "SURF_test" / "low_re" / "NACA0012" / "kurt_comp"
+KURT = REPO / "SURF_test" / "low_re" / "NACA0012" / "kurt_comp" / "1-paper_based"
 RUNS = KURT / "runs"
 DATA = KURT / "data"
 FIGS = KURT / "figures"

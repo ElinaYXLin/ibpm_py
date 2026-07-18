@@ -206,7 +206,10 @@ def test_c_fine_strouhal():
                 delta = 0.5 * (y0 - y2) / denom if abs(denom) > 1e-12 else 0.0
             else:
                 delta = 0.0
-            st_fine = float(freqs[idx] + delta * (freqs[1] - freqs[0]))
+            # clip at 0: a negative Strouhal number is nonsensical -- can occur
+            # right at the shedding onset, where the parabolic fit undershoots
+            # across the sharp step from St=0 to the onset spike
+            st_fine = max(0.0, float(freqs[idx] + delta * (freqs[1] - freqs[0])))
             out.append(f"{impl},{a},{st_raw:.4f},{st_fine:.4f}")
     (DATA / "strouhal_fine_reanalysis.csv").write_text("\n".join(out) + "\n")
     print("wrote strouhal_fine_reanalysis.csv")

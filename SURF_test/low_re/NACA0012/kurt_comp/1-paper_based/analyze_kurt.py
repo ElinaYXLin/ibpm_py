@@ -14,13 +14,26 @@ Outputs:
 
 Usage: python3 SURF_test/low_re/NACA0012/kurt_comp/analyze_kurt.py
 """
+import io
 import pathlib
 import numpy as np
 
-KURT = pathlib.Path("/Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp")
+KURT = pathlib.Path("/Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/1-paper_based")
 RUNS = KURT / "runs"
 DATA = KURT / "data"
 DATA.mkdir(exist_ok=True)
+
+
+def read_csv_with_comments(path):
+    """np.genfromtxt(..., names=True, comments='#') mis-parses files that
+    have '#'-prefixed description lines ABOVE a real (uncommented) header
+    row -- strip full-line comments ourselves first, then hand genfromtxt a
+    clean names=True table. Same fix as gen_kurt_figs.py's helper of the
+    same name."""
+    lines = [l for l in pathlib.Path(path).read_text().splitlines()
+             if l.strip() and not l.lstrip().startswith("#")]
+    return np.genfromtxt(io.StringIO("\n".join(lines)), delimiter=",",
+                         names=True, dtype=None, encoding="utf-8")
 
 FREQ = {"f1hz": 0.684931506849315, "f4hz": 2.73972602739726}
 AVG_FRAC = 0.5  # average over the last 50% of the run
@@ -152,9 +165,7 @@ def collect(grid):
 
 
 def fig1314_compare(entries):
-    kt = np.genfromtxt(DATA / "kurtulus_fig13_14_table.csv", delimiter=",",
-                       dtype=None, encoding="utf-8", comments="#",
-                       names=["branch", "t_s", "alpha", "omega", "cl", "cd", "clcd"])
+    kt = read_csv_with_comments(DATA / "kurtulus_fig13_14_table.csv")
     out_lines = ["branch,alpha_deg,kurt_cl,py_cl,cpp_cl,kurt_cd,py_cd,cpp_cd"]
     for impl in ("py", "cpp"):
         key = ("f4hz", impl, 0)
@@ -189,10 +200,10 @@ def fig1314_compare(entries):
 
     for row in kt:
         want_down = (row["branch"] == "down")
-        py_cl, py_cd = branch_interp("py", row["alpha"], want_down)
-        cpp_cl, cpp_cd = branch_interp("cpp", row["alpha"], want_down)
+        py_cl, py_cd = branch_interp("py", row["alpha_deg"], want_down)
+        cpp_cl, cpp_cd = branch_interp("cpp", row["alpha_deg"], want_down)
         out_lines.append("%s,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f" % (
-            row["branch"], row["alpha"], row["cl"], py_cl, cpp_cl,
+            row["branch"], row["alpha_deg"], row["cl"], py_cl, cpp_cl,
             row["cd"], py_cd, cpp_cd))
     (DATA / "fig13_14_comparison.csv").write_text("\n".join(out_lines) + "\n")
     print("wrote fig13_14_comparison.csv")

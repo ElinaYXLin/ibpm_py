@@ -4,7 +4,7 @@ Reproduces every test case in Kurtulus, D.F. (2019), "Unsteady aerodynamics
 of a pitching NACA 0012 airfoil at low Reynolds number," *Int. J. Micro Air
 Vehicles* 11:1-21, DOI [10.1177/1756829319890609](https://doi.org/10.1177/1756829319890609),
 using both `py_static` and `cpp_static` (the fixed-algorithm builds from
-[`../../../../static_test/`](../../../../static_test/)).
+[`../../../../../static_test/`](../../../../../static_test/)).
 
 ## Important correction: this paper is numerical, not experimental
 
@@ -37,12 +37,39 @@ our own solver, not new information about matching Kurtulus's trends (their
 mesh is a different discretization entirely, so there's no literal
 resolution to "match"). The comparison below is entirely from dx=0.02.
 
-Non-dimensionalization (solver uses chord=1, U∞=1; paper uses c=0.1 m,
-U∞=0.146 m/s): pitch frequency $f_{nondim} = f \cdot c/U_\infty$ → 0.684932
-(1 Hz) / 2.739726 (4 Hz). Pitch phase set to π so the effective AoA matches
-the paper's convention ($\alpha_0 + A\sin(2\pi ft)$, not $\alpha_0 -
-A\sin(\cdot)$, which is what phase=0 would give with this solver's sign
-convention — verified against a short pilot run before the full sweep).
+**Non-dimensionalization, explained term by term.** $c$ is the airfoil's
+chord length (the straight-line distance from leading to trailing edge —
+the paper's physical airfoil has $c=0.1$ m) and $U_\infty$ is the
+free-stream speed the air approaches at ($U_\infty=0.146$ m/s in the
+paper). Neither this solver nor most CFD codes work in physical units
+directly — instead they solve in *non-dimensional* units where the chord is
+rescaled to exactly 1 and the free-stream speed to exactly 1 ("solver uses
+chord=1, U∞=1"). This is standard practice (it's what makes Reynolds number
+comparisons meaningful in the first place) but it means any frequency given
+in physical Hz has to be converted before it means anything to the solver:
+the *non-dimensional* pitch frequency is $f_{nondim} = f \cdot c/U_\infty$
+— literally "how many chord-lengths of flow pass by per pitch cycle."
+Plugging in the paper's $c$ and $U_\infty$: 1 Hz → 0.684932, 4 Hz →
+2.739726 (these are the frequency values actually passed to ibpm). This
+same non-dimensional frequency, written as $k = 2\pi f c/U_\infty$ instead
+(same idea, different normalization convention), is what the paper calls
+the "reduced frequency" — $k=4.3$ and $k=17.2$ for 1 Hz and 4 Hz, quoted in
+the "Test case" paragraph above as a cross-check that the conversion here
+matches the paper's own numbers.
+
+Separately, **pitch phase** controls *when in the cycle* the pitching
+starts, and it's not just a bookkeeping detail — it can flip the sign of
+the whole motion. The paper defines instantaneous angle of attack as
+$\alpha(t) = \alpha_0 + A\sin(2\pi f t)$ (starts at the mean angle $\alpha_0$
+and increases first). This solver's own sign convention for the pitching
+motion, with phase left at its default of 0, would instead produce
+$\alpha_0 - A\sin(2\pi f t)$ — the mirror image, decreasing first instead
+of increasing. Setting phase $=\pi$ (180°) flips that back to match the
+paper's convention (since $-\sin(x) = \sin(x+\pi)$). This was confirmed by
+running one short pilot case and checking the sign of the resulting motion
+directly, before committing to the full 258-run sweep — getting this wrong
+wouldn't crash anything or produce obviously-bad numbers, it would just
+silently compare against the paper's motion running backwards.
 
 ## Run summary
 
@@ -58,7 +85,7 @@ is, compute-cost-wise, a few hours of work). Reduced to comparison tables by
 **py_static and cpp_static agree essentially everywhere** — visually
 indistinguishable in every figure below (the blue py_static curve is
 consistently hidden directly under the red cpp_static curve). This is
-expected and is exactly what [`../../../../static_test/`](../../../../static_test/)
+expected and is exactly what [`../../../../../static_test/`](../../../../../static_test/)
 already established: with the DST planner fixed (`FFTW_ESTIMATE` instead of
 `FFTW_EXHAUSTIVE`), both implementations are deterministic and agree to
 floating-point precision.
@@ -83,9 +110,17 @@ Digitized from the paper's Fig 1 (graphical only, no table — see
 - **0°-15°**: good quantitative agreement — both $C_l(\alpha)$ curves track
   closely to nearly-linear thin-airfoil behavior, $C_d(\alpha)$ magnitudes
   comparable.
-- **15°-40°**: the two solvers diverge structurally. The paper's curves show
-  a single sharp jump around 30°-35° (post-stall reattachment/regime
-  change), climbing cleanly to $\overline{C_l}\approx 2.0$. IBPM's curve in
+- **15°-40°**: the two solvers diverge structurally. **"Stall"** is the
+  point where lift stops increasing smoothly with angle of attack because
+  the flow can no longer stay attached to the airfoil's upper surface and
+  separates instead (this is the same separation event that starts the
+  vortex shedding described below); **"post-stall"** just means the angle
+  range past that point, where the airfoil is operating in this
+  separated-flow regime rather than the smooth, thin-airfoil-theory regime
+  below stall. The paper's curves show a single sharp jump around 30°-35°
+  (post-stall reattachment/regime change — lift recovering as the flow
+  restructures itself further past stall), climbing cleanly to
+  $\overline{C_l}\approx 2.0$. IBPM's curve in
   this range is **oscillatory/jagged rather than smooth** and plateaus
   lower, around $\overline{C_l}\approx1.5-1.75$, never showing the paper's
   sharp jump. This is a genuine structural difference, not just a numerical
@@ -97,6 +132,23 @@ Digitized from the paper's Fig 1 (graphical only, no table — see
   resolves differently.
 
 ### Vortex-shedding Strouhal number — `figures/fig19_shedding_strouhal.png`
+
+**What "vortex shedding" and "Strouhal number" mean, for anyone new to
+this**: past a certain angle of attack, the flow separates from the top of
+the airfoil and the wake stops being a smooth, steady sheet — instead,
+swirling vortices peel off alternately (first from one side, then the
+other) at a regular rate, like a flag flapping. This alternating shedding
+makes the lift and drag forces oscillate in time even when the airfoil
+itself is held perfectly still ("steady" in this file's terminology means
+the *airfoil* isn't moving — the *flow* around it can still be, and
+usually is, unsteady). The **Strouhal number** ($St = f_{shed}\cdot
+c/U_\infty$) is just that shedding rate, non-dimensionalized the same way
+as the pitch frequency above — but here it's a property the *flow itself*
+settles into, not something imposed from outside. It's measured, not set:
+by watching how the lift coefficient oscillates over time and finding the
+dominant frequency in that signal (via an FFT — see "Post-stall region"
+below and `2-follow_up/README.md` for more on how, and where that
+frequency-finding step itself can be a source of error).
 
 Digitized from the paper's Fig 19 (`data/kurtulus_fig19_digitized.csv`),
 compared against IBPM's own FFT-of-$C_l$ peak-frequency estimate
@@ -133,6 +185,23 @@ throughout the cycle outside that range.
   in IBPM than reported) — see "Anomalies."
 
 ### Instantaneous forces and hysteresis — `figures/fig11_instantaneous_pitch.png`, `figures/fig13_14_hysteresis.png`
+
+**What this section is about**: everywhere else in this file, $C_l$/$C_d$
+mean *time-averaged* lift/drag — one number per run, summarizing the whole
+oscillating cycle. "Instantaneous" here means the opposite: the raw,
+moment-by-moment force values as the airfoil actually pitches back and
+forth, not yet averaged away. Plotting instantaneous $C_l$ or $C_d$ against
+the *instantaneous* angle of attack $\alpha(t)$ (rather than against time)
+produces a **hysteresis loop**: because the flow has "memory" (it responds
+to how the airfoil got to its current angle, not just the angle itself),
+the force on the way up ($\alpha$ increasing) differs from the force on the
+way down ($\alpha$ decreasing) at that *same* instantaneous angle — so
+instead of the up-stroke and down-stroke tracing the same line back and
+forth, they trace two different paths that together form a loop. The shape
+and width of that loop is itself physically meaningful (a wider loop means
+a bigger difference between the up- and down-stroke response, i.e. a more
+history-dependent, less quasi-steady flow), which is why the paper reports
+it and why it's compared here.
 
 At α₀=0° (the one case the paper gives an actual numeric table for, its
 Fig 13/14 caption — `data/kurtulus_fig13_14_table.csv`, 15 instantaneous
@@ -186,16 +255,32 @@ matching the paper's own figures (blue=negative, green≈0, red=positive).
   grid/discretization asymmetry (the resampled boundary-point geometry isn't
   perfectly symmetric about y=0 at this dx), not a solver bug. Not
   investigated further here.
-- **Post-stall region (15°-40°) is oscillatory/jagged in IBPM's mean
-  coefficients**, unlike the paper's single clean jump. Plausibly the same
-  phenomenon this repo has already characterized at higher Re elsewhere
-  (`SURF_test/airfoils/README.md`'s "mentor question" investigation):
-  resolution relative to the boundary-layer/shear-layer length scale, not Re
-  in isolation, controls how cleanly a Cartesian IB solver resolves
-  separated flow at a fixed dx. Re=1000 here is far more benign than the
-  Re≈40-61k cases studied there, but the post-stall regime at high α is
-  exactly where shear-layer resolution starts to matter even at low Re — a
-  plausible, not conclusively isolated, explanation.
+- **Post-stall region (15°-40°, see "post-stall" defined above) is
+  oscillatory/jagged in IBPM's mean coefficients**, unlike the paper's
+  single clean jump. Plausibly the same phenomenon this repo has already
+  characterized at higher Re elsewhere (`SURF_test/airfoils/README.md`'s
+  "mentor question" investigation) — worth spelling out the connection,
+  since it's not obvious at a glance: that investigation found that a
+  Cartesian immersed-boundary solver like this one only resolves separated
+  flow *cleanly* (smooth, non-chaotic) when the grid is fine enough,
+  *relative to the boundary-layer thickness*, to actually capture the thin
+  shear layer at the point of separation — not resolution or Reynolds
+  number in isolation, but the two together (boundary-layer thickness
+  itself shrinks as Re grows, so a fixed grid resolves it worse and worse
+  as Re increases). That investigation worked at Re≈40,000-61,000, where
+  under-resolution was severe enough to produce visibly broadband,
+  grid-scale-speckled noise across the whole flow field. Re=1000 here is
+  far more benign — nowhere near that speckled regime — but stall and
+  post-stall angles are specifically where the flow separates and the
+  boundary layer becomes a thin shear layer requiring finer resolution to
+  capture cleanly than the smooth, attached flow at low angles does. So the
+  same underlying mechanism (grid resolution relative to a shrinking
+  length scale) could plausibly still be operating here in a much milder
+  form — jagged, angle-to-angle-sensitive averages instead of the
+  higher-Re case's outright visible speckle — even though Re=1000 is
+  otherwise well-resolved. This is a plausible mechanism, not a
+  conclusively isolated one — see `2-follow_up/README.md` for a direct test
+  of whether this jaggedness is real or just a measurement artifact.
 - **Faint background striping visible in the wake-contour figures**, even
   in nominally-uniform far-field regions. Same class of grid-scale numerical
   noise documented and explained elsewhere in this repo for other airfoil

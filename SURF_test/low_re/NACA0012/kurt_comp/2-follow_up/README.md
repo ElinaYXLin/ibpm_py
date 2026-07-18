@@ -95,6 +95,13 @@ in the pitch cycle* it occurs (phase-averaging out the run-to-run noise),
 then takes the minimum of that averaged curve — a much more robust
 statistic for a noisy signal.
 
+![Test A: raw minimum vs. phase-averaged minimum drag, both vs. mean angle of attack](figures/test_A_thrust_window.png)
+
+The red line (`1-paper_based`'s original measurement) stays negative
+(thrust) all the way to 50°, but the blue line (this test's phase-averaged
+measurement) crosses back to zero around the paper's claimed 33-37°
+cutoff, shaded gray.
+
 | Mean angle | Raw minimum drag | Phase-averaged minimum drag |
 |---|---|---|
 | 30° | −0.360 | −0.195 |
@@ -122,6 +129,12 @@ jumpiness seen in the anomaly.
 This test instead locks the averaging window to a whole number of measured
 shedding periods (using each run's own measured shedding frequency).
 
+![Test B: mean lift coefficient vs. angle of attack, fixed window vs. period-locked window](figures/test_B_period_locked_mean.png)
+
+The two lines sit almost exactly on top of each other, including through
+the jagged post-stall region (shaded gray) — visual confirmation that
+changing the averaging window doesn't smooth anything out.
+
 **Result: barely any difference.** For example at 37°, the fixed-window
 average gives 1.313 and the period-locked average gives 1.397 — about a 6%
 difference, similar in size to the jaggedness itself, and it doesn't
@@ -143,11 +156,36 @@ This test re-estimates the same frequency with 8x finer resolution
 (zero-padding the signal before the FFT, then interpolating between the two
 closest points to the peak).
 
+**Why didn't `1-paper_based` just use finer resolution the first time?**
+Not to save compute — zero-padding an FFT and interpolating the peak is
+essentially free (a fraction of a second per case; it doesn't rerun the
+simulation, it's pure post-processing on data that already existed). The
+real reason is more mundane: `1-paper_based`'s analysis script used the FFT
+output directly, without adding this refinement step, because getting a
+first-pass comparison against the paper didn't call for sub-bin frequency
+precision. It's worth being precise about what "finer resolution" actually
+buys you here, though: **the fundamental frequency resolution of an FFT is
+set by how much physical time was simulated** (a longer run naturally gives
+finer bins; that part *would* cost more compute). Zero-padding doesn't add
+new information beyond what's already in the existing (shorter) run — it's
+a smoother, more precise *estimate* of where the peak sits given the same
+data, similar to fitting a curve through a few points rather than only
+reading values at those exact points. That's why it can fix the small
+"staircase" artifact for free, but can't be expected to resolve anything
+genuinely finer than the original run length allows.
+
 | Angle range | Coarse estimate | Fine estimate |
 |---|---|---|
 | 19°-25° | flat at exactly 0.1999 | smoothly rising, 0.217 → 0.232 |
 | 26°-28° | spurious jump up then back down | smooth, no jump |
 | 35°-40° | flat at exactly 0.3331 | nearly identical, 0.326-0.334 |
+
+![Test C: shedding Strouhal number vs. angle of attack, raw FFT bin vs. zero-padded/interpolated](figures/test_C_strouhal_resolution.png)
+
+The staircase steps in the red (raw) line smooth into the blue (fine) line
+in a few places (e.g. 26°-28°'s spurious up-down jump vanishes), but the
+overall multi-plateau shape — peak, sharp drop, low plateau, second rise —
+is the same in both.
 
 The small staircase jumps do disappear with finer resolution — some of
 that was indeed just measurement coarseness. **But** the larger pattern —
@@ -171,15 +209,36 @@ single small domain, `ngrid=1`) to save compute time. If a small domain is
 (a classic wind-tunnel-blockage effect), using more domain levels should
 measurably reduce it.
 
+**What does `ngrid=2` or `ngrid=3` actually mean?** ibpm's grid is a set of
+`ngrid` nested boxes, all with the *same number of grid cells* (e.g.
+300×150 here), stacked around the body like Russian dolls: the innermost
+box is the one you specify directly (`length`, `xoffset`, `yoffset` — the
+finest resolution, right around the airfoil), and each successive box
+outward covers exactly **2x the physical width and height** of the one
+inside it, using the *same cell count* — so each added box is 2x coarser in
+physical grid spacing but reaches twice as far from the body before its own
+boundary condition (typically a simple decay/potential-flow far-field
+approximation) has to kick in. `ngrid=1` means only the finest, innermost
+box exists, and its own outer edge — only 6 chords wide here — is where the
+(comparatively crude) far-field approximation gets applied, close enough to
+the body to noticeably affect the flow (the "blockage" this test is
+checking for). `ngrid=2`/`3` add one/two more of these coarser outer boxes,
+pushing that boundary much farther away (each level doubles the reach)
+*without* the cost of a uniformly fine grid all the way out — that's the
+actual point of the scheme this solver was built around.
+
 | Domain levels (`ngrid`) | Lift-curve slope | As a multiple of π (the textbook value) |
 |---|---|---|
 | 1 (what the main comparison used) | 3.572 | 1.137× |
 | 2 | 3.371 | 1.073× |
 | 3 | 3.312 | 1.054× |
 
-**The slope moves steadily toward the correct value as more domain levels
-are added.** (Full numbers: `data/ngrid_sweep_reanalysis.csv`,
-`data/ngrid_liftslope.txt`.)
+![Tests D & E: lift-curve slope by domain configuration, with pi marked for reference](figures/test_DE_blockage_liftslope.png)
+
+**The slope moves steadily toward the correct value (dashed line) as more
+domain levels are added** — this bar chart covers both D (the first three
+bars, `ngrid`) and E (the fourth bar, larger single domain) below. (Full
+numbers: `data/ngrid_sweep_reanalysis.csv`, `data/ngrid_liftslope.txt`.)
 
 **Conclusion**: confirmed — a real effect of the cost-saving domain choice,
 not a fundamental flaw in ibpm.
@@ -188,6 +247,7 @@ not a fundamental flaw in ibpm.
 
 Same question as D, tested a different way: instead of using more domain
 levels, just use one much bigger uniform domain (about 2.8x the area).
+(Same figure as D, above — the fourth bar.)
 
 | Domain | Lift-curve slope | As a multiple of π |
 |---|---|---|
@@ -214,6 +274,8 @@ Original grid position: lift = -0.00648
 Grid shifted by half a cell: lift = -0.02325
 ```
 
+![Tests F & G: Cl(0) under a half-cell grid shift and under grid refinement](figures/test_FG_alpha0_offset.png)
+
 The value didn't flip sign, but it **more than tripled** just from that
 tiny shift. A real physical asymmetry wouldn't be this sensitive to an
 arbitrary shift of the whole computational grid.
@@ -225,7 +287,8 @@ physical asymmetry — confirmed further by test G.
 
 If F is right, refining the grid (making the cells smaller) should shrink
 the offset, since it's an artifact of the grid's finite resolution rather
-than a real effect that would persist at any resolution.
+than a real effect that would persist at any resolution. (Same figure as
+F, above — the third bar.)
 
 ```
 Coarser grid (what the main comparison used): lift = -0.00648
@@ -289,5 +352,9 @@ where this method (at this resolution) can be trusted.
   `1-paper_based/runs/`, tests D-G need `run_followup.py` to have been run
   first.
 - `data/` — every test's numeric output (CSV/txt), referenced above.
+- `gen_followup_figs.py` — generates all figures in `figures/` from
+  `data/`.
+- `figures/` — the 5 figures embedded above (one each for A, B, C; one
+  shared by D+E; one shared by F+G).
 - `runs/` — raw simulation output for the new D/E/F/G runs (`.cholesky`
   cache files excluded, matching this repo's convention elsewhere).

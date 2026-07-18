@@ -43,7 +43,7 @@ import time
 from concurrent.futures import ProcessPoolExecutor, as_completed
 
 REPO = pathlib.Path("/Users/elina/Desktop/SURF2026/ibpm_py-main")
-KURT = REPO / "SURF_test" / "low_re" / "NACA0012" / "kurt_comp"
+KURT = REPO / "SURF_test" / "low_re" / "NACA0012" / "kurt_comp" / "1-paper_based"
 GEOMDIR = KURT / "geom"
 RUNS = KURT / "runs"
 CPP_BIN = REPO / "build_static" / "ibpm"
