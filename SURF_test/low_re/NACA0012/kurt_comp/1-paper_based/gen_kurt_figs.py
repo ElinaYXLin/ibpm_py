@@ -249,9 +249,12 @@ def wake_contours():
     pts = np.genfromtxt(REPO / "SURF_test" / "low_re" / "NACA0012" / "1-basics" /
                         "naca0012.dat.txt", skip_header=1)
     angles = [0, 9, 12]
+    # third column = the paper's own figure, cropped by extract_paper_figs.py
+    # (Figure 2 for steady, Figure 6 for f4hz -- see paper_figs/README.md)
+    paper_dir = pathlib.Path(__file__).resolve().parent / "paper_figs"
     motions = [("steady", "steady"), ("f4hz", "f4hz (t=dev)")]
     for mot, mlabel in motions:
-        fig, axes = plt.subplots(len(angles), 2, figsize=(11, 2.4 * len(angles)))
+        fig, axes = plt.subplots(len(angles), 3, figsize=(15.5, 2.4 * len(angles)))
         axes = np.atleast_2d(axes)
         for r, ang in enumerate(angles):
             for c, impl in enumerate(("py", "cpp")):
@@ -268,9 +271,22 @@ def wake_contours():
                 ax.fill(pts[:, 0], pts[:, 1], color="0.1", zorder=5)
                 ax.set_xlim(-1, 4); ax.set_ylim(-1.2, 1.2); ax.set_aspect("equal")
                 ax.set_title(f"{IMPL_LABEL[impl]}, $\\alpha_0$={ang}deg", fontsize=9)
-        fig.suptitle(f"Wake vorticity, {mlabel}, NACA0012 Re=1000 "
-                     f"(jet: blue=-, green=0, red=+, matching Kurtulus Figs)", fontsize=11)
-        fig.tight_layout(rect=[0, 0, 1, 0.96])
+            # third column: what we're actually comparing against
+            ax = axes[r, 2]
+            paper_png = paper_dir / f"{mot}_a{ang:02d}.png"
+            if paper_png.exists():
+                ax.imshow(plt.imread(paper_png))
+                ax.set_title(f"Kurtulus (2019), $\\alpha_0$={ang}deg", fontsize=9)
+            else:
+                ax.text(0.5, 0.5, "paper crop missing", ha="center", va="center")
+            ax.set_xticks([]); ax.set_yticks([])
+            for spine in ax.spines.values():
+                spine.set_visible(False)
+        fig.suptitle(f"Wake vorticity, {mlabel}, NACA0012 Re=1000 -- ibpm (py_static/cpp_static) "
+                     f"vs. the paper's own figure\n(jet: blue=-, green=0, red=+, matching Kurtulus Figs; "
+                     f"third column cropped directly from Kurtulus 2019 Fig. {'2' if mot == 'steady' else '6'})",
+                     fontsize=11)
+        fig.tight_layout(rect=[0, 0, 1, 0.94])
         out = FIGS / f"wake_{mot}.png"
         fig.savefig(out, dpi=130)
         plt.close(fig)
