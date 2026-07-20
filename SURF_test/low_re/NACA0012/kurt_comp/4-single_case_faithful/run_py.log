@@ -1,0 +1,3 @@
+py: launching (1700x1500 grid, 14600 steps) ...
+py: OK in 16493s (4.58h)
+SUMMARY: {'py': True}
