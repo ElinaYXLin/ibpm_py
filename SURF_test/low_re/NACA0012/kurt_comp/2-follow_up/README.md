@@ -64,7 +64,7 @@ disk, zero-new-run tests included).
 |---|---|---|---|
 | A | #1, thrust window too wide | Use a phase-average instead of the raw minimum instantaneous drag | **Mostly a measurement artifact** — the window shrinks back close to the paper's range |
 | B | #2, jagged post-stall forces | Average over a whole number of shedding cycles instead of a fixed time window | **Not a measurement artifact** — jaggedness is a real feature of the flow at this resolution |
-| C | #3, shedding-frequency plateaus | Use a finer-resolution frequency estimate (zero-padded FFT) | **Partly a measurement artifact** — the fine stair-steps disappear, but the larger mismatch with the paper remains |
+| C | #3, shedding-frequency plateaus | Use a finer-resolution frequency estimate (zero-padded FFT) | **Mostly NOT a measurement artifact** — raw and fine estimates are nearly identical almost everywhere (a few isolated points differ); the mismatch with the paper's curve is real and dominant |
 | D | #4, lift slope 14% high | Use ibpm's own multi-domain far-field scheme (`ngrid`) instead of a single small domain | **Confirmed real limitation of our chosen settings** — using more domain levels moves the slope back toward the textbook value |
 | E | #4, lift slope 14% high | Just use a bigger single domain | **Confirms D** — same improvement, different knob |
 | F | #4, small nonzero Cl at α=0° | Shift the whole grid by half a cell | Confirms the offset is sensitive to exactly where the grid sits, not a real physical effect |
@@ -177,26 +177,43 @@ genuinely finer than the original run length allows.
 | Angle range | Coarse estimate | Fine estimate |
 |---|---|---|
 | 19°-25° | flat at exactly 0.1999 | smoothly rising, 0.217 → 0.232 |
-| 26°-28° | spurious jump up then back down | smooth, no jump |
+| 26°-28° | spurious jump up (0.2665 at 26°) then back down | smooth, no jump (0.234 → 0.228) |
 | 35°-40° | flat at exactly 0.3331 | nearly identical, 0.326-0.334 |
 
-![Test C: shedding Strouhal number vs. angle of attack, raw FFT bin vs. zero-padded/interpolated](figures/test_C_strouhal_resolution.png)
+**Correction:** an earlier version of this figure drew the raw-bin series
+with `drawstyle="steps-mid"` (right-angle stair-step connectors between
+points) while the fine series used a direct point-to-point line — two
+different rendering methods for what should be a fair visual comparison.
+That mismatch manufactured the appearance of a "staircase that smooths
+out" across the *whole* curve, when in fact (see the regenerated figure
+below, both series now drawn identically) the raw and fine estimates are
+nearly coincident almost everywhere. The three numeric differences in the
+table above are real (they don't depend on how the lines are drawn) but
+they are isolated, narrow exceptions, not a pervasive stair-step-to-smooth
+transformation. The README's former claim that "the fine stair-steps
+disappear" overstated a rendering choice as a data finding — that specific
+phrasing was unfounded and has been removed.
 
-The staircase steps in the red (raw) line smooth into the blue (fine) line
-in a few places (e.g. 26°-28°'s spurious up-down jump vanishes), but the
-overall multi-plateau shape — peak, sharp drop, low plateau, second rise —
-is the same in both.
+![Test C: shedding Strouhal number vs. angle of attack, raw FFT bin, zero-padded/interpolated, and Kurtulus (2019)'s own digitized curve](figures/test_C_strouhal_resolution.png)
 
-The small staircase jumps do disappear with finer resolution — some of
-that was indeed just measurement coarseness. **But** the larger pattern —
-frequency peaks near onset, drops sharply, then rises again in stages,
-instead of decaying smoothly like the paper's curve — is present in *both*
-the coarse and fine versions. (Full numbers:
-`data/strouhal_fine_reanalysis.csv`.)
+With the paper's own Fig. 19 curve now plotted alongside (gray), the real,
+large-scale mismatch is directly visible rather than only inferred: the
+paper's Strouhal number decays fairly continuously from its peak (~0.87 at
+α≈9°) down through the 20s-60° range (with its own small local bump near
+α≈27°, reaching as low as ~0.15-0.17 by α=50-60°). IBPM's curve, by
+contrast, holds two distinct near-flat plateaus (≈0.20-0.23 for α=19-28°,
+then ≈0.25-0.33 for α=29-60°) separated by a sharp transition, and —
+notably — does **not** decay at high angles the way the paper's does
+(ibpm stays ≈0.27-0.33 through α=35-60° vs. the paper's drop to
+≈0.15-0.17). (Full numbers: `data/strouhal_fine_reanalysis.csv`.)
 
-**Conclusion**: the small-scale staircase was an artifact, but the
-large-scale mismatch with the paper's smooth curve is real and unexplained
-by this test.
+**Conclusion**: the small numeric differences between the raw and
+zero-padded frequency estimates are real but minor and localized — not the
+across-the-board "staircase artifact" previously described. The dominant,
+unexplained effect is the large-scale mismatch with the paper's curve:
+IBPM's multi-plateau shape and its failure to decay at high angle of
+attack, both clearly visible now that the paper's curve is plotted
+directly alongside instead of only described in prose.
 
 ### D. Does ibpm's multi-domain far-field scheme fix the lift-slope offset?
 

@@ -67,9 +67,36 @@ to a new, higher plateau (0.241→0.333), and the thrust dip reappears
 (+0.026→−0.180). **Conclusion: the residual 35° thrust dip isn't a
 separate mystery — it's a direct consequence of the same wake-mode
 transition responsible for the Strouhal jump documented in `2-follow_up`'s
-Test C.** Question 1 is resolved: mostly noise (test 1a), and what's left
-is explained by Question 2's mode transition (test 1b), not a new,
-independent phenomenon.
+Test C.**
+
+**What this "wake-mode transition" actually is, and why it's ibpm's, not
+necessarily the paper's:** this section names the transition before
+explaining it — Question 2 below is where that gets justified, so here is
+the short version up front. Test 2a (below) shows ibpm's shedding
+frequency doesn't drift continuously with angle; it locks onto a specific,
+internally-flat frequency plateau over a whole range of angles, then jumps
+abruptly to a different plateau, rather than transitioning smoothly.
+Tests 2b/2c then show this is a **grid/domain-resolution artifact**: at
+the representative angle checked (20°, inside the low plateau), refining
+the grid (dx=0.02→0.01) more than *doubles* the reading (0.225→0.584),
+and it keeps changing until dx=0.005 (0.584→0.592) — i.e., the dx=0.02
+grid used throughout this sweep is too coarse to resolve the true shedding
+mode at that angle, and "locks in" a specific wrong, quantized answer
+instead. **That is why ibpm shows a sharp mode transition where the
+paper's own curve (plotted directly in the updated
+`2-follow_up/figures/test_C_strouhal_resolution.png`) decays more
+continuously**: the paper uses a much finer, curvature-graded mesh near
+the body and wake (see `1-paper_based/README.md`'s "grid could not be
+matched" note), which isn't forced into the same discrete, coarse-grid
+quantization that this solver's uniform dx=0.02 grid is. The transition
+being real (not a plotting or measurement artifact) does not mean it
+reflects true physics at Re=1000 — it's a genuine feature of *this
+specific under-resolved configuration*, confirmed grid-dependent by
+Question 2's tests below. Question 1 is resolved: mostly noise (test 1a),
+and what's left is explained by Question 2's grid-resolution-driven mode
+transition (test 1b), not a new, independent physical phenomenon — and
+not evidence that the paper's own simulation undergoes the same abrupt
+jump.
 
 ## Question 2: why does the shedding frequency have this multi-plateau shape?
 

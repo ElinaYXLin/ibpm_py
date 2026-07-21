@@ -178,11 +178,45 @@ def fig11_instantaneous():
 
 
 # --------------------------------- Figure 13/14: hysteresis loop vs table
+def _hysteresis_error_metrics(kt, t, cd_m, cl_m, alpha, f):
+    """Peak-to-peak amplitude ratio (ibpm/paper) and RMS absolute error
+    (ibpm interpolated onto the paper's own alpha, matched by branch so the
+    double-valued loop isn't averaged across both halves), for both Cl and
+    Cd. Written out and printed so a "which one matches better" claim in
+    the README is checked against numbers instead of a visual impression --
+    see kurt_comp/1-paper_based/README.md's "Instantaneous forces and
+    hysteresis" section for why this matters (a prior version of that
+    section had Cl/Cd's relative agreement backwards).
+    """
+    dadt = np.cos(2 * np.pi * f * t)
+    rows = []
+    for name, paper_col, arr in [("Cl", "cl", cl_m), ("Cd", "cd", cd_m)]:
+        errs = []
+        for i in range(len(kt)):
+            a0 = kt["alpha_deg"][i]
+            br = kt["branch"][i]
+            mask = (dadt > 0) if br == "up" else (dadt < 0)
+            if mask.sum() < 2:
+                continue
+            idx = np.argsort(alpha[mask])
+            val = np.interp(a0, alpha[mask][idx], arr[mask][idx])
+            errs.append(val - kt[paper_col][i])
+        errs = np.array(errs)
+        rms = float(np.sqrt(np.mean(errs ** 2)))
+        paper_range = float(kt[paper_col].max() - kt[paper_col].min())
+        ibpm_range = float(arr.max() - arr.min())
+        rows.append(dict(coef=name, ibpm_pk2pk=ibpm_range, paper_pk2pk=paper_range,
+                          pk2pk_ratio=ibpm_range / paper_range,
+                          rms_abs_error=rms, rms_error_pct_of_paper_range=100 * rms / paper_range))
+    return rows
+
+
 def fig1314_hysteresis():
     tabp = DATA / "fig13_14_comparison.csv"
     kt = read_csv_with_comments(DATA / "kurtulus_fig13_14_table.csv")
     fig, axes = plt.subplots(1, 2, figsize=(13, 5.2))
     f = FREQ["f4hz"]; period = 1.0 / f
+    metrics = None
     for impl in ("py", "cpp"):
         run = RUNS / GRID / f"f4hz_{impl}_a00"
         fp = run / "flow.force"
@@ -194,6 +228,8 @@ def fig1314_hysteresis():
         alpha = np.sin(2 * np.pi * f * t[m])  # deg, amplitude 1
         axes[0].plot(alpha, cl[m], color=IMPL_COLOR[impl], lw=1.2, label=IMPL_LABEL[impl])
         axes[1].plot(alpha, cd[m], color=IMPL_COLOR[impl], lw=1.2, label=IMPL_LABEL[impl])
+        if impl == "py":  # py/cpp are identical here (see 5-leading_edge's Test 1a); one is enough
+            metrics = _hysteresis_error_metrics(kt, t[m], cd[m], cl[m], alpha, f)
     # paper points
     for br, mk in [("down", "v"), ("up", "^")]:
         mb = kt["branch"] == br
@@ -201,7 +237,26 @@ def fig1314_hysteresis():
                      ls="none", label=f"Kurtulus ({br})")
         axes[1].plot(kt["alpha_deg"][mb], kt["cd"][mb], mk, color="k", mfc="0.7", ms=7,
                      ls="none")
-    axes[0].set_ylabel("$C_l$"); axes[1].set_ylabel("$C_d$")
+    if metrics:
+        with open(DATA / "hysteresis_error_metrics.csv", "w", newline="") as fh:
+            import csv as _csv
+            w = _csv.DictWriter(fh, fieldnames=list(metrics[0].keys()))
+            w.writeheader(); w.writerows(metrics)
+        by_coef = {r["coef"]: r for r in metrics}
+        axes[0].set_ylabel("$C_l$")
+        axes[1].set_ylabel("$C_d$")
+        axes[0].set_title(f"pk-pk: ibpm/paper = {by_coef['Cl']['pk2pk_ratio']:.2f}x "
+                          f"(+{100*(by_coef['Cl']['pk2pk_ratio']-1):.0f}%), "
+                          f"RMS err = {by_coef['Cl']['rms_error_pct_of_paper_range']:.0f}% of paper range", fontsize=9)
+        axes[1].set_title(f"pk-pk: ibpm/paper = {by_coef['Cd']['pk2pk_ratio']:.2f}x "
+                          f"(+{100*(by_coef['Cd']['pk2pk_ratio']-1):.0f}%), "
+                          f"RMS err = {by_coef['Cd']['rms_error_pct_of_paper_range']:.0f}% of paper range", fontsize=9)
+        print(f"  Cl: pk2pk ratio={by_coef['Cl']['pk2pk_ratio']:.3f}, "
+              f"RMS error={by_coef['Cl']['rms_error_pct_of_paper_range']:.1f}% of paper range")
+        print(f"  Cd: pk2pk ratio={by_coef['Cd']['pk2pk_ratio']:.3f}, "
+              f"RMS error={by_coef['Cd']['rms_error_pct_of_paper_range']:.1f}% of paper range")
+    else:
+        axes[0].set_ylabel("$C_l$"); axes[1].set_ylabel("$C_d$")
     for ax in axes:
         ax.set_xlabel(r"instantaneous $\alpha$ [deg]"); ax.grid(alpha=0.3)
     axes[0].legend(fontsize=7)
@@ -293,6 +348,84 @@ def wake_contours():
         print(f"wrote {out.name}")
 
 
+# ---------------------------------------- wake vorticity, paper's own frame
+def wake_contours_paperframe():
+    """Same wake data as wake_contours(), but rotated into the frame the
+    paper actually plots in.
+
+    The solver imposes alpha0 by rotating the *free-stream* to angle alpha0
+    relative to the fixed grid/body (BaseFlow builds Flux.UniformFlow(grid,
+    mag, alpha), and ibpm.py's drag/lift split -- drag = Fx*cos(a)+Fy*sin(a),
+    lift = -Fx*sin(a)+Fy*cos(a) -- confirms (cos a, sin a) is the free-stream
+    direction in grid coordinates); the .geom file itself is never rotated
+    per alpha0 (run_kurt_suite.py's ensure_geom reuses the same raw geometry
+    for every angle). Kurtulus's own figures do the opposite: free-stream
+    horizontal, body pitched to alpha0. Both are the same flow field up to a
+    rigid rotation of the whole picture by alpha0, so we undo it here by
+    applying R(-alpha0) to the grid coordinates and the airfoil outline
+    (vorticity is a scalar and doesn't transform) before plotting -- this
+    should reproduce the paper's layout if (and only if) the discrepancy the
+    mentor flagged is a plotting convention, not a solver difference.
+    """
+    NX, NY = 300, 150
+    dx = 6.0 / NX
+    xs = -2 + np.arange(1, NX) * dx
+    ys = -1.5 + np.arange(1, NY) * dx
+    X, Y = np.meshgrid(xs, ys, indexing="ij")
+    pts = np.genfromtxt(REPO / "SURF_test" / "low_re" / "NACA0012" / "1-basics" /
+                        "naca0012.dat.txt", skip_header=1)
+    angles = [0, 9, 12]
+    paper_dir = pathlib.Path(__file__).resolve().parent / "paper_figs"
+    motions = [("steady", "steady"), ("f4hz", "f4hz (t=dev)")]
+    for mot, mlabel in motions:
+        fig, axes = plt.subplots(len(angles), 3, figsize=(15.5, 3.2 * len(angles)))
+        axes = np.atleast_2d(axes)
+        for r, ang in enumerate(angles):
+            a = ang * np.pi / 180.0
+            ca, sa = np.cos(a), np.sin(a)
+            # R(-alpha0): undoes the solver's flow-rotation convention so the
+            # free-stream direction (cos a, sin a) in grid coords becomes (1, 0)
+            Xr = X * ca + Y * sa
+            Yr = -X * sa + Y * ca
+            ptsr = np.column_stack([pts[:, 0] * ca + pts[:, 1] * sa,
+                                     -pts[:, 0] * sa + pts[:, 1] * ca])
+            for c, impl in enumerate(("py", "cpp")):
+                ax = axes[r, c]
+                run = RUNS / GRID / f"{mot}_{impl}_a{ang:02d}"
+                snaps = sorted(run.glob("flow[0-9]*.bin"))
+                if not snaps:
+                    ax.text(0.5, 0.5, "no snapshot", ha="center", va="center")
+                    ax.set_xticks([]); ax.set_yticks([]); continue
+                w = State(filename=str(snaps[-1])).omega._data[0]
+                V = 8.0
+                ax.contourf(Xr, Yr, np.clip(w, -V, V), levels=41, cmap="jet",
+                            extend="both")
+                ax.fill(ptsr[:, 0], ptsr[:, 1], color="0.1", zorder=5)
+                ax.set_xlim(-1, 4); ax.set_ylim(-1.5, 1.5); ax.set_aspect("equal")
+                ax.set_title(f"{IMPL_LABEL[impl]}, $\\alpha_0$={ang}deg "
+                             f"(rotated -{ang}deg to paper frame)", fontsize=9)
+            ax = axes[r, 2]
+            paper_png = paper_dir / f"{mot}_a{ang:02d}.png"
+            if paper_png.exists():
+                ax.imshow(plt.imread(paper_png))
+                ax.set_title(f"Kurtulus (2019), $\\alpha_0$={ang}deg", fontsize=9)
+            else:
+                ax.text(0.5, 0.5, "paper crop missing", ha="center", va="center")
+            ax.set_xticks([]); ax.set_yticks([])
+            for spine in ax.spines.values():
+                spine.set_visible(False)
+        fig.suptitle(f"Wake vorticity, {mlabel}, NACA0012 Re=1000 -- ibpm rotated into the "
+                     f"paper's plotting frame (free-stream horizontal, body pitched)\n"
+                     f"(jet: blue=-, green=0, red=+; third column cropped directly from "
+                     f"Kurtulus 2019 Fig. {'2' if mot == 'steady' else '6'})",
+                     fontsize=11)
+        fig.tight_layout(rect=[0, 0, 1, 0.94])
+        out = FIGS / f"wake_{mot}_paperframe.png"
+        fig.savefig(out, dpi=130)
+        plt.close(fig)
+        print(f"wrote {out.name}")
+
+
 if __name__ == "__main__":
     fig1_mean()
     fig19_shedding()
@@ -300,3 +433,4 @@ if __name__ == "__main__":
     fig1314_hysteresis()
     thrust_fig()
     wake_contours()
+    wake_contours_paperframe()

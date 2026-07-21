@@ -215,15 +215,30 @@ Fig 13/14 caption — `data/kurtulus_fig13_14_table.csv`, 15 instantaneous
 - $C_d$ **stays strictly positive throughout** at α₀=0° for both frequencies
   in IBPM's data — matching the paper's specific claim that α₀=0°, 1°, 2°
   at f=4Hz (and all angles at f=1Hz) never generate thrust.
-- The **$C_d$-vs-α hysteresis loop** (`fig13_14_hysteresis.png`, right panel)
-  matches the paper's 15 tabulated points closely in both shape and
-  magnitude — the strongest quantitative agreement in this whole
-  comparison.
+- **Correction:** an earlier version of this section claimed the opposite
+  of what the numbers below show — that $C_d$ was the strongest
+  quantitative match and $C_l$ ran 20-25% high. Actually measuring it
+  (`hysteresis_error_metrics.csv`, computed by interpolating the IBPM
+  curve onto the paper's own tabulated α values, matched by up/down branch
+  so the double-valued loop isn't averaged across both halves) shows the
+  reverse: $C_d$ is the *worse* match by a wide margin. This was caught
+  because the figure itself visibly shows $C_d$'s "tent" rising well above
+  the paper's points at its peak, which is inconsistent with the old
+  "closely matches" claim — the plot was right, the prose describing it
+  was not.
+- The **$C_d$-vs-α hysteresis loop** (`fig13_14_hysteresis.png`, right
+  panel, now annotated with these numbers directly): IBPM's peak-to-peak
+  $C_d$ oscillation is **2.23x the paper's (+123%)** — more than double —
+  and the RMS error between the IBPM curve and the paper's 15 points is
+  **42% of the paper's own $C_d$ range**. The shape (a symmetric "tent"
+  peaking near α=0) matches qualitatively, but the amplitude does not.
 - The **$C_l$-vs-α hysteresis loop** (left panel) has the correct shape and
   orientation (same tilted-ellipse sense, same phase relationship to
-  instantaneous α) but IBPM's amplitude runs ~20-25% larger than the paper's
-  points (peak $|C_l|\approx2.5$ vs. the paper's $\approx2.0-2.1$) —
-  consistent with the same ~14% lift-slope excess noted above.
+  instantaneous α), and is the *better*-matching of the two: IBPM's
+  peak-to-peak $C_l$ oscillation is **1.31x the paper's (+31%)**, with RMS
+  error **11% of the paper's own $C_l$ range** — consistent with (if
+  somewhat larger than) the ~14% lift-slope excess noted above for the
+  mean coefficients.
 
 ### Wake vorticity fields — `figures/wake_steady.png`, `figures/wake_f4hz.png`
 
@@ -231,6 +246,39 @@ Qualitative comparison at α₀=0°, 9°, 12° (0° = attached, 9° = right at t
 paper's reported shedding onset, 12° = clearly post-onset), py_static vs.
 cpp_static (indistinguishable, as expected), colored with a jet colormap
 matching the paper's own figures (blue=negative, green≈0, red=positive).
+
+**Mentor note, resolved: the airfoil-horizontal/flow-tilted look is a
+plotting reference frame, not a solver difference.** `wake_steady.png` and
+`wake_f4hz.png` plot the raw solver grid, in which the airfoil is horizontal
+and the wake bends upward by ≈α₀. Kurtulus's own Fig. 2/Fig. 6 instead hold
+the free-stream horizontal and pitch the airfoil. Tracing why: the solver
+imposes α₀ by rotating the **free-stream**, not the body — `BaseFlow`
+constructs `Flux.UniformFlow(grid, mag, alpha)` at angle α₀ relative to the
+fixed grid axes, and `ibpm.py`'s force decomposition
+(`drag = Fx·cos(a)+Fy·sin(a)`, `lift = -Fx·sin(a)+Fy·cos(a)`) confirms
+`(cos α, sin α)` is the free-stream direction in grid coordinates. The
+`.geom` file itself is never rotated per α₀ (`run_kurt_suite.py`'s
+`ensure_geom` reuses the same raw NACA0012 geometry at every angle — this is
+also why the airfoil silhouette in `wake_*.png` is horizontal in every row).
+Kurtulus's figures use the opposite, more visually intuitive convention. Both
+describe the exact same flow field, just related by a rigid rotation of the
+whole picture by α₀ — not a physical discrepancy between the two ways of
+imposing angle of attack.
+
+To confirm this is *only* a plotting convention (and not, say, the solver
+secretly producing an asymmetric or wrongly-rotated flow field),
+`figures/wake_steady_paperframe.png` and `figures/wake_f4hz_paperframe.png`
+re-plot the identical snapshots with `R(-α₀)` applied to the grid coordinates
+and the airfoil outline before drawing (vorticity itself is a scalar and
+doesn't transform). If the mismatch were a solver-level issue, rotating the
+plot coordinates couldn't fix it — the wake would still fail to line up with
+Kurtulus's layout. Instead, the rotated figures land on the paper's frame
+almost exactly: free-stream horizontal, airfoil pitched nose-up by α₀, wake
+undulating about the horizontal centerline rather than deflecting away from
+it. This confirms the discrepancy is entirely the plotting frame; no solver
+or physics difference is implicated. (The `*_paperframe.png` panels show a
+white triangular gap at two corners — that's just the rotated square domain
+no longer filling a rectangular axes bounding box, not missing data.)
 
 - **α₀=0°**: clean, coherent, unseparated wake sheet in both motions —
   matches the paper's Fig 2/Fig 4 at 0° closely.

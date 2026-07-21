@@ -69,6 +69,17 @@ digitized) — 7.7% low. The closest of the three comparisons here.
 
 ### Vorticity field — this is where the real story is
 
+**Plotting frame, resolved.** The figures below are now rotated into
+Kurtulus's own plotting frame (free-stream horizontal, airfoil pitched to
+alpha0), the same fix applied in `1-paper_based` (see that README's "Wake
+vorticity fields" section for the full derivation). This solver imposes
+alpha0 by rotating the free-stream relative to a body that is never itself
+rotated, so the raw solver-frame plots showed the airfoil horizontal and
+the wake bent upward — purely a plotting convention, not a solver
+difference. `gen_faithful_figs.py` now applies `R(-alpha0)` to the grid
+coordinates and airfoil outline before drawing (vorticity itself doesn't
+transform), matching the rotation protocol from `1-paper_based`.
+
 ![py_static vs Kurtulus (2019), instantaneous and mean](figures/wake_faithful_py.png)
 
 (`wake_faithful_cpp.png` is visually indistinguishable from the py version,
@@ -84,21 +95,32 @@ the same snapshot out to the full simulated 19c downstream:
 
 ![Full downstream extent, x up to 19c](figures/wake_faithful_py_wide.png)
 
-Vortices *do* keep shedding — visible out to roughly x≈9-10 — but they
-grow larger, drift upward away from the wake centerline, and fully
-dissipate into a quiet, featureless field well before the domain ends at
-x=19. The paper's crop (which only shows a similar near-field window)
-appears to sustain a dense, undiminished street throughout. So the
-difference isn't "not enough space to develop" — it's that **our vortices
-spread and dissipate faster, in physical (chord) units, than the paper's
-do**, most plausibly because dx=0.02 numerical dissipation accumulates
-over the wake's long convection distance, with no local refinement
-following the shed vortices the way the paper's graded mesh would provide.
+**Correcting the plotting frame changes this part of the story, and it's
+worth flagging explicitly rather than quietly carrying the old
+conclusion forward.** The previous (solver-frame) version of this figure
+was read as: vortices "grow larger, drift upward away from the wake
+centerline, and fully dissipate into a quiet, featureless field well
+before the domain ends at x=19." In the corrected, paper-matched frame,
+that's not what the field shows — the alternating vortices instead persist
+as discrete structures sitting close to a roughly constant offset
+(y≈-0.4) essentially all the way to x≈19, gradually fading in
+saturation/intensity (redder/bluer near the body, more washed-out/yellow
+far downstream) rather than visibly drifting away or vanishing into
+noise. Some of what previously read as "drift upward, then dissipate" was
+apparently an artifact of plotting the wake in a frame tilted relative to
+its own direction of travel. **This doesn't necessarily overturn the
+grid-resolution explanation below** — the far-downstream vortices are
+still clearly weaker/more diffuse than the paper's crop suggests theirs
+are — but the *specific* claim of upward drift and full dissipation by
+x≈10 should be treated as unconfirmed pending a closer look (e.g.
+quantitative peak-vorticity-vs-x decay) rather than taken as established.
 
 **Mean field** (bottom row): the paper's mean (right) is a smooth,
 symmetric, cleanly-diffusing sheet. Ours (left) is visibly noisier and
-less smooth, consistent with the same faster-dissipating, less-organized
-shedding seen in the instantaneous field feeding into a messier average.
+less smooth, consistent with the same less-organized shedding seen in the
+instantaneous field feeding into a messier average. This observation is
+unaffected by the frame correction (both versions showed the same
+near-body noise pattern).
 
 ## What this one case actually answers
 
@@ -111,10 +133,16 @@ directly in the vorticity field rather than only inferred from force
 statistics, is **grid resolution**: the one thing that couldn't be matched
 (dx=0.02 uniform vs. the paper's 0.0015c-at-the-wall graded mesh) is the
 most likely remaining explanation, and the field comparison shows *where*
-it bites — not at the leading edge this time, but in how far a shed
-vortex survives before numerically dissipating. This connects back to the
-mentor's original leading-edge/trailing-edge question: same underlying
-theme (near-body/wake resolution), different visible symptom.
+it bites — not at the leading edge this time, but in the wake, where our
+vortices look weaker/more diffuse far downstream than the paper's crop
+suggests theirs are. (The earlier, stronger claim that they visibly drift
+upward and fully dissipate by x≈10 turned out to be partly a plotting-frame
+artifact — see the corrected `wake_faithful_py_wide.png` discussion above —
+so the "how far downstream" part of this story is softer than originally
+written and would benefit from a quantitative decay check, not just visual
+inspection.) This connects back to the mentor's original
+leading-edge/trailing-edge question: same underlying theme (near-body/wake
+resolution), different visible symptom.
 
 ## Files
 

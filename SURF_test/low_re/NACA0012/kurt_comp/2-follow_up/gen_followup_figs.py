@@ -103,15 +103,34 @@ def fig_c_strouhal_resolution():
     order = np.argsort(a)
     a, st_raw, st_fine = a[order], st_raw[order], st_fine[order]
 
+    kurt_path = HERE.parents[0] / "1-paper_based" / "data" / "kurtulus_fig19_digitized.csv"
+    # np.genfromtxt(..., names=True, comments='#') mis-parses this file's
+    # '#'-prefixed description lines ABOVE the real header row (same issue
+    # ../1-paper_based/gen_kurt_figs.py's read_csv_with_comments() works
+    # around) -- strip full-line comments first, then parse the clean table
+    import io as _io
+    _lines = [l for l in kurt_path.read_text().splitlines()
+              if l.strip() and not l.lstrip().startswith("#")]
+    kurt = np.genfromtxt(_io.StringIO("\n".join(_lines)), delimiter=",",
+                          names=True, dtype=None, encoding="utf-8")
+
     fig, ax = plt.subplots(figsize=(8.5, 5))
     style_ax(ax)
+    # both ibpm series use the SAME drawing method (direct point-to-point
+    # line, no drawstyle="steps-mid") -- an earlier version of this figure
+    # rendered the raw-bin series with steps-mid and the fine series with a
+    # direct line, which manufactured visual "stair-steps" for the raw
+    # series that were partly a rendering choice, not purely the data (see
+    # README's correction note in the Test C section)
     ax.plot(a, st_raw, color=C_RAW, linewidth=1.5, marker="o", markersize=3,
-            drawstyle="steps-mid", label="raw FFT bin (1-paper_based)")
+            label="raw FFT bin (1-paper_based)")
     ax.plot(a, st_fine, color=C_ALT, linewidth=2, marker="o", markersize=3,
             label="zero-padded + interpolated (this follow-up)")
+    ax.plot(kurt["alpha_deg"], kurt["strouhal"], color=C_REF, linewidth=2, marker="s",
+            markersize=3, linestyle="-", label="Kurtulus (2019) Fig 19 (digitized)")
     ax.set_xlabel("mean angle of attack α₀ (deg)")
     ax.set_ylabel("vortex-shedding Strouhal number (steady)")
-    ax.set_title("Test C: finer frequency resolution — does the stair-stepping smooth out?\n"
+    ax.set_title("Test C: finer frequency resolution vs. the paper's own curve\n"
                   "steady, py_static", fontsize=11)
     ax.legend(loc="upper right", fontsize=8.5, frameon=False)
     fig.tight_layout()
