@@ -1,0 +1,3 @@
+2b (dx=0.005): 1 jobs, 1-way parallel
+[1/1] done=1 skip=0 fail=0 elapsed=3527s
+2b (dx=0.005) DONE. ran=1 skipped=0 failed=0 in 3527s

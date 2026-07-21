@@ -1,0 +1,1 @@
+py_static.ibpm -name flow -outdir /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/3-further/runs/ngrid_sweep/ngrid2_a30 -tecplot 0 -restart 0 -force 1 -nx 300 -ny 152 -ngrid 2 -length 6 -xoffset -2 -yoffset -1.52 -alpha 30 -geom /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/geom/naca0012_dx0.0200.geom -Re 1000 -dt 0.01 -nsteps 3000

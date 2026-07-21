@@ -1,0 +1,6 @@
+dx refinement check: Cl(alpha=0), steady NACA0012 Re=1000, py_static only
+
+dx=0.02 (nx=300,ny=150): Cl(0) = -0.00648
+dx=0.01 (nx=600,ny=300): Cl(0) = -0.00089
+
+|Cl(0)| shrink from dx=0.02 to dx=0.01: 86.3%

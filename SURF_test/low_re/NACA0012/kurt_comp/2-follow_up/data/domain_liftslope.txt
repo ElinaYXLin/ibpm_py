@@ -1,0 +1,6 @@
+Lift-curve slope dCl/dalpha vs domain size (blockage), ngrid=1,
+steady NACA0012 Re=1000, dx=0.02, py_static only
+(paper: ~pi = 3.1416 per rad)
+
+baseline_L6: dCl/dalpha = 3.5720 per rad  (1.137 x pi)
+large_L10: dCl/dalpha = 3.4054 per rad  (1.084 x pi)

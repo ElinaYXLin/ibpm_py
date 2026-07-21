@@ -1,0 +1,14 @@
+stage 1 (2b dx=0.01, 2c ngrid, 3b sources): 17 jobs, 8-way parallel
+[5/17] done=5 skip=0 fail=0 elapsed=536s
+[10/17] done=10 skip=0 fail=0 elapsed=605s
+[15/17] done=15 skip=0 fail=0 elapsed=645s
+[17/17] done=17 skip=0 fail=0 elapsed=665s
+stage 1 (2b dx=0.01, 2c ngrid, 3b sources) DONE. ran=17 skipped=0 failed=0 in 665s
+stage 2 (3b approach-direction): 6 jobs, 8-way parallel
+[5/6] done=5 skip=0 fail=0 elapsed=60s
+[6/6] done=6 skip=0 fail=0 elapsed=60s
+stage 2 (3b approach-direction) DONE. ran=6 skipped=0 failed=0 in 60s
+stage 3 (3b perturbations): 9 jobs, 8-way parallel
+[5/9] done=5 skip=0 fail=0 elapsed=70s
+[9/9] done=9 skip=0 fail=0 elapsed=123s
+stage 3 (3b perturbations) DONE. ran=9 skipped=0 failed=0 in 123s
