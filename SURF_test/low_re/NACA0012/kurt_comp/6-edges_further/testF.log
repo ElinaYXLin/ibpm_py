@@ -1,0 +1,16 @@
+Computing the matrix for Cholesky factorization...done
+Computing the matrix for Cholesky factorization...done
+Computing the matrix for Cholesky factorization...done
+Computing the matrix for Cholesky factorization...done
+Computing the matrix for Cholesky factorization...done
+Computing the matrix for Cholesky factorization...done
+Computing the matrix for Cholesky factorization...done
+naca0006: n=101, cond(M)=2.7896e+05, min_eig=2.3791e-08, max_eig=6.6367e-03, LE_peak(lineout)=8.302
+naca0012_baseline: n=102, cond(M)=1.2708e+04, min_eig=4.2386e-07, max_eig=5.3866e-03, LE_peak(lineout)=22.176
+naca0018: n=104, cond(M)=6.7060e+03, min_eig=7.3490e-07, max_eig=4.9282e-03, LE_peak(lineout)=6.833
+naca0012_LTEdense: n=108, cond(M)=1.1475e+08, min_eig=6.6561e-11, max_eig=7.6380e-03, LE_peak(lineout)=5.802
+naca0012_LTEsparse: n=99, cond(M)=4.0497e+03, min_eig=1.2126e-06, max_eig=4.9108e-03, LE_peak(lineout)=30.992
+naca0012_roundTE: n=104, cond(M)=1.1959e+04, min_eig=4.4297e-07, max_eig=5.2974e-03, LE_peak(lineout)=1.213
+cylinder: n=157, cond(M)=1.3710e+04, min_eig=3.6209e-07, max_eig=4.9641e-03, LE_peak(lineout)=0.0
+
+wrote testF_conditioning.png

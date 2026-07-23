@@ -76,27 +76,47 @@ the short version up front. Test 2a (below) shows ibpm's shedding
 frequency doesn't drift continuously with angle; it locks onto a specific,
 internally-flat frequency plateau over a whole range of angles, then jumps
 abruptly to a different plateau, rather than transitioning smoothly.
-Tests 2b/2c then show this is a **grid/domain-resolution artifact**: at
-the representative angle checked (20°, inside the low plateau), refining
-the grid (dx=0.02→0.01) more than *doubles* the reading (0.225→0.584),
-and it keeps changing until dx=0.005 (0.584→0.592) — i.e., the dx=0.02
-grid used throughout this sweep is too coarse to resolve the true shedding
-mode at that angle, and "locks in" a specific wrong, quantized answer
-instead. **That is why ibpm shows a sharp mode transition where the
+Tests 2b/2c then show *nearby interior points* of each plateau (20°, 40°)
+are grid/domain-resolution-sensitive.
+
+**Important scoping note, added after a direct check:** the paragraph
+above establishes that plateaus *elsewhere* are resolution artifacts — it
+does NOT, on its own, establish that the 34-35° transition *itself* is.
+Tests 2b/2c's representative angles are `[15, 20, 30, 40]`, which straddle
+but never include 34 or 35 — so the original version of this claim was an
+extrapolation from nearby evidence, not a direct test, and that gap is
+worth being explicit about rather than glossing over.
+
+**Test 1c directly closes that gap.** `test1c_transition_sensitivity.py`
+reruns α=33-36 (straddling the transition) at dx=0.01, `ngrid=2`, and
+`ngrid=3`, and compares against the dx=0.02/`ngrid=1` baseline:
+
+![Test 1c: does the 33-36deg transition itself move under grid/domain refinement?](figures/test_1c_transition_sensitivity.png)
+
+At baseline resolution, both $\overline{C_l}$ (1.649→1.338) and Strouhal
+(0.266→0.333) show the sharp jump between 34° and 35°. **Under every one
+of the three refinements tested — finer dx, or either larger domain — the
+jump vanishes entirely**: $\overline{C_l}$ increases smoothly and
+monotonically across all four angles instead of dropping, and Strouhal
+stays flat at ≈0.266-0.267 across 33-36° with no jump to 0.333 at all.
+This isn't just "the transition moves to a different angle" — it
+disappears outright under refinement, which is a *stronger* result than
+the original (unverified) claim asserted. **Conclusion: the 34-35°
+transition is now directly confirmed (not merely inferred) to be a
+grid/domain-resolution artifact of this specific dx=0.02, `ngrid=1`
+configuration** — consistent with, and now supported by direct evidence
+at the same location as, the wider mode-locking behavior Test 2a
+describes. **That is why ibpm shows a sharp mode transition where the
 paper's own curve (plotted directly in the updated
 `2-follow_up/figures/test_C_strouhal_resolution.png`) decays more
 continuously**: the paper uses a much finer, curvature-graded mesh near
 the body and wake (see `1-paper_based/README.md`'s "grid could not be
 matched" note), which isn't forced into the same discrete, coarse-grid
-quantization that this solver's uniform dx=0.02 grid is. The transition
-being real (not a plotting or measurement artifact) does not mean it
-reflects true physics at Re=1000 — it's a genuine feature of *this
-specific under-resolved configuration*, confirmed grid-dependent by
-Question 2's tests below. Question 1 is resolved: mostly noise (test 1a),
-and what's left is explained by Question 2's grid-resolution-driven mode
-transition (test 1b), not a new, independent physical phenomenon — and
-not evidence that the paper's own simulation undergoes the same abrupt
-jump.
+quantization that this solver's uniform dx=0.02 grid is. Question 1 is
+resolved: mostly noise (test 1a), and what's left is explained by
+Question 2's grid-resolution-driven mode transition (tests 1b/1c), not a
+new, independent physical phenomenon — and not evidence that the paper's
+own simulation undergoes the same abrupt jump.
 
 ## Question 2: why does the shedding frequency have this multi-plateau shape?
 
@@ -130,38 +150,69 @@ staircase instead of a smooth decay. Tests 2b/2c address that.
 
 ### Test 2b — does grid refinement change the plateau values?
 
-![Test 2b: shedding Strouhal at 4 representative angles, dx=0.02 vs dx=0.01](figures/test_2b_dx_refine_strouhal.png)
+![Test 2b: shedding Strouhal at 4 representative angles, dx=0.02 vs dx=0.01, vs. the paper's own value](figures/test_2b_dx_refine_strouhal.png)
 
-At 3 of the 4 representative angles (15°, 30°, 40°), refining the grid
-barely moves the reading (≤4% change) — those plateau values are
-essentially grid-converged already. **At 20°, refinement more than
-doubles the reading** (0.225→0.584) — nowhere close to converged. 20° sits
-inside the low, "mysterious" plateau (18°-34°) identified in test 2a.
+**Update: both 2b and 2c now plot the paper's own digitized Strouhal value
+at each of the 4 angles (dashed gray line) directly alongside the ibpm
+bars.** This changes the conclusion below — refinement "settling down" to
+a stable number is not the same as that number matching the paper, and
+the two knobs (grid, domain) turn out to settle at *different* stable
+numbers at 20°, only one of which is actually close to the paper.
 
-A second refinement step at 20° (dx=0.01→0.005, the expensive ~1-hour
-point) settles the question: **0.584→0.592, a ~1.4% change — the reading
-has leveled off.** So this isn't a value that keeps climbing forever as
-the grid refines; it genuinely converges, just not to the dx=0.02 baseline's
-answer. **Conclusion: the low plateau's true, grid-converged shedding
-frequency is St≈0.58-0.59 — the dx=0.02 baseline's reading of 0.225 was a
-significantly under-resolved artifact of that specific coarse-grid
-configuration, not a different-but-equally-valid physical answer.** That's
-a genuine, actionable ibpm limitation at this angle/resolution combination,
-now confirmed rather than merely suspected.
+At 3 of the 4 representative angles, refining the grid barely moves the
+reading (≤4% change): 30° (0.257→0.266) and 40° (0.326→0.327) are
+grid-converged already, but neither matches the paper particularly well
+either (30°: paper=0.342, ~25% high vs. ibpm's ~0.26; 40°: paper=0.240,
+ibpm running ~36% high) — grid resolution isn't the story at either of
+those two. 15° is grid-converged *and* matches the paper closely
+(baseline 0.687 vs. paper 0.685, <1% off) — genuinely the cleanest angle
+of the four.
+
+**At 20°, refinement more than doubles the reading** (0.225→0.584→0.592,
+leveling off by dx=0.005 at ~0.59) — nowhere close to converged at the
+dx=0.02 baseline. But that leveled-off value, 0.59, is **20% *higher* than
+the paper's 0.493** — dx refinement overshoots past the paper's answer,
+it doesn't converge onto it. **Revised conclusion: dx=0.02 is
+genuinely under-resolved at 20° (the reading is not yet grid-independent),
+but "grid-converged" and "matches the paper" are two different claims —
+this test only established the first one.** Test 2c below is what
+actually explains the gap to the paper's value.
 
 ### Test 2c — does more far-field domain change the plateau values?
 
-![Test 2c: shedding Strouhal at 4 representative angles, ngrid sweep](figures/test_2c_ngrid_strouhal.png)
+![Test 2c: shedding Strouhal at 4 representative angles, ngrid sweep, vs. the paper's own value](figures/test_2c_ngrid_strouhal.png)
 
-Same pattern at 20°: `ngrid=1`→`2` more than doubles the reading
-(0.225→0.505), confirming test 2b from an independent knob (blockage,
-not near-body resolution). **But 40° is also sensitive here** (0.326→0.268,
-a ~18% drop) even though it was *insensitive* to dx refinement — a
-different mechanism (domain confinement, not grid resolution) affects the
-high plateau specifically. 15° and 30° stay stable under both knobs.
-**Conclusion: the low plateau (≈20°) is under-resolved in the near-body
-grid; the high plateau (≈40°) is affected by domain confinement instead —
-two distinct limitations, not one, each traceable to a specific setting.**
+At 20°, `ngrid` (far-field domain size, not near-body resolution) does
+something dx-refinement didn't: **`ngrid=1`→`2`→`3` moves the reading to
+0.505→0.495 — landing almost exactly on the paper's 0.493 (within 0.4%)**,
+a much closer match than dx-refinement's converged 0.59. Domain
+confinement, not near-body grid resolution, is the better explanation for
+20°'s mismatch with the paper — dx-refinement changes the reading
+substantially too, but toward a *different*, non-matching number, most
+likely because dx=0.02 is under-resolved *and* the ngrid=1 domain is too
+small at the same time, and refining only one of the two still leaves the
+other's error in the answer.
+
+**40° is also domain-sensitive** (0.326→0.268→0.261), moving steadily
+toward the paper's 0.240 (closing most, though not all, of the gap) —
+consistent with domain confinement affecting the high plateau too, as
+originally noted. **30° is a genuine open miss**: neither dx nor ngrid
+refinement moves it much (staying at 0.25-0.27 under both knobs), and it
+never gets close to the paper's 0.342 (~25% off throughout) — this is a
+persistent, *unexplained* disagreement that this pair of tests doesn't
+resolve, not a "stable, so it's fine" result as an earlier version of this
+section implied. 15° stays close to the paper under domain refinement too
+(0.687→0.652 vs. paper 0.685), drifting slightly further rather than
+closer, but the deviation stays small (<5%).
+
+**Revised overall conclusion for Question 2:** the low plateau's (~20°)
+mismatch with the paper is now attributable mainly to **far-field domain
+confinement** (matched almost exactly once `ngrid` is increased), not
+purely near-body grid resolution as previously stated, even though dx=0.02
+is separately confirmed under-resolved there too. The high plateau's
+(~40°) mismatch is also domain-related, as before. The mid-range (~30°)
+mismatch remains genuinely unexplained by either knob tested here — a
+real open question, not a resolved one.
 
 ## Question 3: is the post-stall jaggedness multistability, or just roughness?
 
@@ -231,17 +282,23 @@ All three open questions converge on the same finding: **there is a
 specific angle band (roughly 18°-28°, plus the sharp 34°-35° transition)
 where this configuration (dx=0.02, `ngrid=1`, t=30) has not produced a
 clean, settled, grid-converged answer** — not fully resolved in time
-(test 3a), not grid-converged in space (test 2b), sensitive to far-field
-domain size (test 2c), and it's exactly where the residual thrust-dip and
-shedding-frequency anomalies live (tests 1a/1b). Outside that band — the
-attached-flow region below ~15°, and the mid-range 29°-33° plateau — every
-test agrees: fast to converge, insensitive to grid/domain refinement,
-insensitive to initial condition. That's a specific, actionable
-characterization of ibpm's limitation here: it isn't that the solver is
-unreliable everywhere post-stall, it's that a particular, identifiable
-sub-range of angles sits in a genuinely under-resolved, slowly-relaxing
-regime, and results quoted from that specific band should be treated with
-more caution than results elsewhere in the sweep.
+(test 3a), not grid/domain-converged in space (tests 2b/2c), and it's
+exactly where the residual thrust-dip and shedding-frequency anomalies
+live (tests 1a/1b). Outside that band — the attached-flow region below
+~15°, and the mid-range 29°-33° plateau — every test agrees on
+*convergence*: fast to settle in time, insensitive to further grid/domain
+refinement, insensitive to initial condition.
+
+**That is not the same as matching the paper, and shouldn't be read as
+such.** 15° does match the paper closely (<1% off); the 29°-33° plateau
+does not — its representative point (30°, test 2b/2c) is converged and
+stable under every knob tested, yet sits a persistent ~25% below the
+paper's Strouhal value there, unexplained by grid, domain, or averaging
+window. So the actionable characterization is narrower than "everything
+outside the bad band is fine": it's that a specific angle range is
+demonstrably *unconverged* (and results from it should be treated with
+extra caution), while a *different* angle range (~30°) is converged but
+still wrong for a reason this investigation hasn't identified.
 
 ## Files
 
@@ -252,7 +309,10 @@ more caution than results elsewhere in the sweep.
   needed), `new` for 2b/2c/3b (needs `run_further.py` output), `all` for
   both.
 - `gen_further_figs.py` — generates all figures in `figures/` from `data/`.
+- `test1c_transition_sensitivity.py` — Test 1c (`run`/`analyze` modes),
+  directly checking whether the 34-35° transition itself (not just nearby
+  interior points) is grid/domain-sensitive.
 - `data/` — every test's numeric output, referenced above.
-- `figures/` — the 7 figures embedded above.
+- `figures/` — the 8 figures embedded above.
 - `runs/` — raw simulation output for the new 2b/2c/3b runs (`.cholesky`
   cache files excluded, matching this repo's convention elsewhere).

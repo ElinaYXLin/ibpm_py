@@ -62,7 +62,10 @@
       "Bash(python3 -m py_compile SURF_test/run_naca0012_polar.py)",
       "Bash(python3 SURF_test/run_naca0012_polar.py cpp)",
       "Bash(python3 SURF_test/run_naca0012_polar.py py)",
-      "Bash(wait)"
+      "Bash(wait)",
+      "Bash(set -e)",
+      "Bash(git mv *)",
+      "Bash(git rm *)"
     ]
   }
 }

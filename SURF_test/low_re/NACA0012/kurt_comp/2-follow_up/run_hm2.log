@@ -1,0 +1,3 @@
+I_ngrid2: launching (nx=300 ny=152 ngrid=2 dt=0.005 nsteps=6000 Re=1000)
+  OK in 21197s
+I_ngrid3: launching (nx=300 ny=152 ngrid=3 dt=0.005 nsteps=6000 Re=1000)

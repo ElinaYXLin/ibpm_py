@@ -1,0 +1,3 @@
+quantity,fig13_14_table_mean,fig1_digitized_value,abs_diff,within_digitization_uncertainty
+Cd,0.1198277777777778,0.1,0.01982777777777779,True
+Cl,0.6695749999999976,0.0,0.6695749999999976,False

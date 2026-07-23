@@ -148,13 +148,53 @@ resolution.
 
 ### C. Shedding-frequency plateaus: is this a frequency-resolution artifact?
 
-`1-paper_based` estimated the vortex-shedding frequency from a plain FFT,
-whose frequency resolution is coarse enough (~0.067 in the reported units)
-to produce visible "staircase" jumps in a plot, rather than a smooth curve.
+**What this test is (and isn't) about, precisely, since this has caused
+confusion twice now:** there are two different "staircase" things in
+play, and this test only targets one of them.
 
-This test re-estimates the same frequency with 8x finer resolution
-(zero-padding the signal before the FFT, then interpolating between the two
-closest points to the peak).
+1. **The large-scale multi-plateau shape** — the shedding frequency
+   holding a flat value across a *wide* range of angles (many degrees),
+   then jumping abruptly to a different flat value. This is established
+   as **real solver behavior**, not a measurement artifact — see Test
+   2a in `../3-further/` (which keeps the full spectrum, not just the
+   peak) and Tests 2b/2c there (which show it's grid/domain sensitive).
+   This test (C) does **not** address that large-scale shape at all.
+2. **A hypothetical *fine*-scale staircase** — the specific, narrower
+   concern this test actually checks: an FFT's frequency resolution is
+   set by Δf = 1/(m·dt), where m·dt is how much time-domain signal went
+   into it (here, the last ~15 of 30 simulated time units, giving
+   Δf≈0.067). Because that's a fixed, discrete grid of *readable*
+   frequency values, sweeping α in 1° steps could plausibly make the
+   *reported* peak frequency hold at the same value for several
+   consecutive angles then jump to the next available bin — a
+   measurement-resolution staircase riding on top of whatever the true,
+   continuous physical trend is, even if that trend itself is smooth.
+   **This was a hypothesis to check, not an established fact** — an
+   earlier version of this section stated it as settled ("is coarse
+   enough... to produce visible staircase jumps"), which read as more
+   confident than the test result (below) actually supports.
+
+This test re-estimates the same frequency with finer *resolution*
+(zero-padding the signal 8x before the FFT, then fitting a parabola across
+the 3 bins nearest the peak for a sub-bin-accurate estimate) to check
+hypothesis #2. **Why would finer resolution help, if it were true?**
+Zero-padding increases how finely the FFT's output is sampled in
+frequency (more, closer-together candidate bins to read the peak from),
+and the parabolic fit across the peak then gives a continuous-valued
+estimate instead of only ever reporting one of a fixed set of bin
+frequencies — together, if the reported staircase were purely an artifact
+of reading off a coarse discrete grid, this would remove it. **The
+result (see the corrected figure and its numbers below): mostly no** —
+raw and fine estimates are nearly identical almost everywhere, so
+hypothesis #2 is largely not what's happening; the real multi-plateau
+shape (#1) is a separate, already-confirmed-real phenomenon this test
+was never meant to explain.
+
+**Why FFT at all?** Extracting a periodic signal's dominant oscillation
+frequency via the peak of its FFT amplitude/power spectrum is the
+standard tool for exactly this kind of question (a shedding-driven force
+trace, here $C_l(t)$) — nothing unusual about the choice, just the
+ordinary way to turn "the force oscillates" into "at what frequency."
 
 **Why didn't `1-paper_based` just use finer resolution the first time?**
 Not to save compute — zero-padding an FFT and interpolating the peak is
@@ -170,9 +210,26 @@ finer bins; that part *would* cost more compute). Zero-padding doesn't add
 new information beyond what's already in the existing (shorter) run — it's
 a smoother, more precise *estimate* of where the peak sits given the same
 data, similar to fitting a curve through a few points rather than only
-reading values at those exact points. That's why it can fix the small
-"staircase" artifact for free, but can't be expected to resolve anything
-genuinely finer than the original run length allows.
+reading values at those exact points. That's why it could have fixed a
+fine-scale "staircase" for free if that had been the issue, but can't be
+expected to resolve anything genuinely finer than the original run length
+allows, and — per the result above — wasn't actually masking much here.
+
+**Relationship to `../3-further/`'s Test 2a "spectrogram":** that figure's
+name borrows spectrogram terminology loosely. A true spectrogram plots a
+signal's frequency content over *time* via a sliding window; Test 2a
+instead plots each angle's own steady-state FFT amplitude spectrum as one
+column of an image, stacked across the *angle* sweep instead of time — a
+frequency-vs-α map, not frequency-vs-time. It's the natural next step
+after this test: Test C only ever kept the single strongest frequency at
+each angle (a peak, collapsed to one number); Test 2a keeps the *entire*
+spectrum at each angle instead, so a hidden second frequency competing
+with the dominant one (which would look like "a jump" even if both were
+present continuously, just trading off which one is technically larger)
+can be told apart from a truly single frequency that itself jumps. That
+distinction is what let Test 2a conclude the plateaus are genuine
+mode-locking (one frequency at a time, holding, then re-locking) rather
+than smooth competition between two.
 
 | Angle range | Coarse estimate | Fine estimate |
 |---|---|---|
@@ -318,6 +375,118 @@ cleanest result in the whole follow-up.
 **Conclusion**: confirmed — this is a resolution-limited artifact that
 disappears as the grid gets finer, not a persistent limitation of ibpm.
 
+## H-M: why is Cd's excess (fig13_14_hysteresis.png) bigger than Cl's?
+
+A separate anomaly from A-G, raised only after `1-paper_based`'s
+hysteresis write-up was corrected: IBPM's peak-to-peak $C_d$ oscillation
+in the f=4Hz, α₀=0° hysteresis loop is **+123% vs. the paper** (worse
+than $C_l$'s +31%) — see `1-paper_based/README.md`'s "Open question" for
+the full framing and the brainstormed hypotheses this section tests.
+Tests H and M need no new runs; I/J/K/L each need one new f=4Hz, α₀=0°
+run (`run_followup_hm.py`), varying exactly one knob from the existing
+baseline.
+
+### H. Is this specific to the oscillation, or already present in the steady baseline?
+
+![Test H: ibpm steady/f4Hz mean Cd vs. the paper's Fig 1, alpha=0-5deg](figures/test_H_steady_vs_dynamic.png)
+
+ibpm's steady and f4Hz mean $C_d$ are nearly identical at every angle
+(0.128 vs 0.127 at α=0°) and both sit at or just above the paper's stated
+±0.05 digitization band the whole way from α=0° to 5°. **No individual
+point is definitively outside the band** — but ibpm is on the *same side*
+(above) at all 6 consecutive angles, which a pure digitization-noise
+explanation makes unlikely (~1/64 by chance alone) and a small systematic
+bias does not. **Conclusion: the excess is already present in the steady,
+non-pitching baseline, at a similar relative size to the dynamic case's
+mean level — this is a baseline drag-modeling question, not something the
+pitching motion introduces.** That reframes I/J/K/L below: they're not
+looking for what makes the *oscillation* worse, they're looking for what
+makes ibpm's drag *level* run high in general, which then also shows up
+proportionally in the oscillation amplitude.
+
+### I. Does Cd respond to the same domain knob that fixed Cl's slope?
+
+![Tests I-L](figures/test_IJKL_knob_sensitivity.png)
+
+| case | Cl ratio (ibpm/paper) | Cd ratio (ibpm/paper) |
+|---|---|---|
+| baseline | 1.31 | 2.23 |
+| ngrid=2 | 1.28 | 2.18 |
+| ngrid=3 | 1.27 | 2.16 |
+
+More domain (`ngrid`) shrinks Cd's ratio only slightly (2.23→2.16, ~3%)
+— nowhere near the effect this same knob had on the steady lift-*slope*
+(Tests D/E above). **Conclusion: domain confinement is not a meaningful
+explanation for Cd's dynamic excess.**
+
+### J. Does the LE/TE boundary-force artifact load onto drag more than lift?
+
+| case | Cl ratio | Cd ratio |
+|---|---|---|
+| baseline | 1.31 | 2.23 |
+| LE+TE boundary refined (ds=dx/4) | 1.36 | **3.57** |
+
+**Both get worse, and Cd gets far worse** — refining the boundary points
+does not fix Cd's excess, it makes it substantially larger (2.23x→3.57x).
+This is not the direction the hypothesis predicted (that a *coarse*
+boundary was the problem), but it's fully consistent with
+`../5-leading_edge/README.md`'s correction (added after
+`../6-edges_further/`): densifying LE+TE boundary points makes the
+*true* LE/TE vorticity peak worse, not better, once measured with a
+robust metric. **This is an independent, force-based confirmation of that
+correction** — the same knob that worsens the vorticity-field peak also
+worsens the integrated force error, via a completely different
+measurement (Cd from `flow.force`, not omega fields). **Conclusion: the
+boundary discretization is implicated, but in the same "can't be fixed by
+refining it" direction found elsewhere in this repo, not as a fixable
+under-resolution.**
+
+### K. Is the unsteady/added-mass force term more dt-sensitive for Cd than Cl?
+
+| case | Cl ratio | Cd ratio |
+|---|---|---|
+| baseline (dt=0.005) | 1.31 | 2.23 |
+| dt refined (dt=0.0025) | 1.31 | 2.23 |
+
+No change at all, to the precision shown. **Conclusion: not a
+time-discretization sensitivity — ruled out.**
+
+### L. Is drag more Reynolds-sensitive than lift here?
+
+| case | Cl ratio | Cd ratio |
+|---|---|---|
+| baseline (Re=1000) | 1.31 | 2.23 |
+| Re +1% (Re=1010) | 1.30 | 2.23 |
+
+No meaningful change. **Conclusion: not Reynolds-sensitive at this
+(admittedly small, +1%) perturbation — ruled out, at least at this scale.**
+
+**Summary of I-L**: of the four knobs tested, three (domain, dt, Re) do
+essentially nothing to Cd's excess, and the fourth (boundary density)
+makes it substantially *worse*, matching the same-direction correction
+already found for the LE/TE vorticity field. Combined with Test H's
+finding that the excess is already present in the steady baseline, **Cd's
+excess looks like a structural feature of this solver at this Re/grid
+combination** — not fixable by any single knob tested here, and not
+explained by an unsteady/dynamic-specific mechanism.
+
+### M. Sanity-check the paper's own numbers first
+
+![Test M: paper's Fig 13/14 table vs. its own Fig 1, same condition](figures/test_M_paper_selfcheck.png)
+
+At α₀=0°, f=4Hz: the paper's Fig. 13/14 table's own time-weighted mean
+$C_d$ (0.120, weighting each of its unevenly-spaced points by the time
+interval it represents, not a naive row-average) is close to its Fig. 1
+digitized value (0.100) — a 0.02 gap, within the stated ±0.05 digitization
+band. **Conclusion: the paper's own two data sources are self-consistent
+for $C_d$ at this condition — the reference data doesn't look internally
+contradictory, so the ~27-28% gap identified in Test H is a real
+ibpm-vs-paper difference, not an artifact of comparing two inconsistent
+numbers from the paper itself.** ($C_l$'s comparison in the same figure
+isn't meaningful and shouldn't be read as an inconsistency: the table only
+covers ~72% of one pitch cycle, so its time-average needn't match Fig 1's
+true full-cycle mean of 0 — see the figure's own annotation.)
+
 ## What's left over — the real limitation
 
 Two clear patterns emerge across all seven tests:
@@ -375,3 +544,10 @@ where this method (at this resolution) can be trusted.
   shared by D+E; one shared by F+G).
 - `runs/` — raw simulation output for the new D/E/F/G runs (`.cholesky`
   cache files excluded, matching this repo's convention elsewhere).
+- `make_hm_geoms.py` — builds the one non-standard geometry Tests H-M need
+  (a pitching variant of `../5-leading_edge/`'s LE+TE-refined geometry).
+- `run_followup_hm.py` — driver for the 4 new "Test I/J/K/L" simulations.
+- `analyze_followup_hm.py` — runs all 6 H-M tests; H/M work immediately,
+  I/J/K/L need `run_followup_hm.py` first.
+- `gen_followup_figs_hm.py` — generates the H-M figures from `data/`.
+- `runs/hm/` — raw simulation output for the new I/J/K/L runs.

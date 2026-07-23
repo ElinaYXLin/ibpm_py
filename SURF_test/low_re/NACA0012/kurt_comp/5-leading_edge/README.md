@@ -14,6 +14,13 @@ never modified). NACA0012, Re=1000, throughout. Everything is at alpha=0
 artifact is isolated from the unrelated vortex-shedding wake structure that
 shows up at higher angles.
 
+**⚠️ OUTDATED, see "Correction" at the bottom:** the bottom-line summary
+below, Group 2's conclusion, and Group 3a's conclusion were all built on
+the y=0 lineout metric, which `../6-edges_further/` subsequently found to
+be unreliable and to flip the sign of both of those conclusions. The text
+below is left as originally written (not deleted) for the record; read it
+alongside the correction.
+
 **Bottom line up front:** the striping is real (not a rendering artifact),
 not a py_static/cpp_static bug (both agree to floating-point precision
 everywhere), and doesn't grow in time (a static discretization signature,
@@ -123,6 +130,13 @@ not a growing numerical instability.**
 
 ## Group 2 -- is the grid too coarse?
 
+**⚠️ OUTDATED, see "Correction" at the bottom.** This group's "LE shrinks /
+TE grows" split verdict was measured with the y=0 lineout metric only.
+`../6-edges_further`'s Reconciliation 1 and Test C1 found that the 2-D
+field-max metric shows the LE peak **growing** under refinement too, at
+every nose sharpness tested -- i.e. there is no split verdict; both ends
+grow. Left as originally written below for the record.
+
 **Test 2a** (`test2_grid_refinement.py`): NACA0012, alpha=0, Re=1000,
 steady, dx=0.02/0.01/0.005, **both py_static and cpp_static** at every
 resolution (dx=0.02 reuses `../1-paper_based`'s existing runs; py_static
@@ -170,6 +184,13 @@ to the same floating-point-level precision as Group 1 -- see
 `data/test3_3a_spacing.csv` / `data/test3_3b_shape.csv`), fixed dx=0.02,
 Re=1000, alpha=0, steady.
 
+**⚠️ OUTDATED, see "Correction" at the bottom.** Test 3a's "densifying
+helps dramatically (22.2->5.8)" finding was also the y=0 lineout metric.
+`../6-edges_further`'s Reconciliation 2 recomputed this exact run with the
+2-D field-max metric and got 109.9 -- *worse* than the ds=dx baseline
+(71.7), not better. Densifying does not help. Left as originally written
+below for the record.
+
 **Test 3a** (`test3_shape_and_spacing.py`): boundary-point spacing at
 fixed grid. `naca0012_LTEdense` refines ds to dx/4 at both LE and TE (this
 extends the prior Re=500 investigation's LE-only densification --
@@ -199,6 +220,12 @@ in both Reynolds number (500 vs 1000) and in densifying LE-only vs. both
 LE+TE simultaneously, and the result here was double-checked visually
 (the `pcolormesh` panels above show the same dense/sparse ordering the
 numbers do, so it isn't a lineout-metric artifact).
+
+**⚠️ OUTDATED, see "Correction" at the bottom.** Test 3b's "noisier than a
+clean monotonic trend" conclusion (below) was also y=0-lineout-based.
+`../6-edges_further`'s Group A/C2 found the 2-D field-max metric gives a
+clean, nearly monotonic sharper-is-worse trend across a 9-point thickness
+family. Left as originally written below for the record.
 
 **Test 3b**: curvature/bluntness sweep -- NACA0006 (sharper nose) / NACA0012
 (baseline) / NACA0018 (blunter) / NACA0012 with a rounded, blunted TE / a
@@ -310,3 +337,61 @@ not the same folder):
   for Group 3); Groups 0/1/4 reuse `../1-paper_based/runs/` directly.
 - `geom/` -- Group 3's non-standard `.geom`/raw point files.
 - `data/`, `figures/` -- CSVs and PNGs for every test above.
+
+---
+
+## Correction (added after `../6-edges_further/`): the LE/TE metric was the real story
+
+Everything above is left exactly as originally written. This section
+supersedes it where the two disagree, rather than editing history.
+
+**What was wrong.** Every "peak |omega|" number above (Test 0b, Group 2,
+Group 3a, Group 3b, Test 4a's context) was read off a single 1-D lineout
+of omega along the grid row nearest y=0. That metric turned out to be
+unreliable: `../6-edges_further` showed it can swing by more than 5x from
+grid sub-cell phase alone, with everything else (shape, dx, Reynolds
+number) held fixed. A 2-D window max (the largest |omega| anywhere in the
+same LE/TE box, not just along one row) is far more robust and was used
+throughout `../6-edges_further` instead.
+
+**What changes when you use the robust metric:**
+
+1. **Group 2's "split verdict" (LE shrinks, TE grows under refinement) is
+   wrong. Both ends grow.** Recomputed with the field-max metric, the LE
+   peak goes 71.7 → 86.6 → 97.1 as dx refines 0.02 → 0.01 → 0.005 —
+   growing, exactly like the TE, not shrinking. There is no split; the
+   apparent one was the lineout metric failing to track a peak that was
+   moving slightly off the exact y=0 row as the grid refined.
+2. **Group 3a's "densifying boundary points helps dramatically" (22.2 →
+   5.8) is backwards.** The same run, recomputed with the field-max
+   metric: **71.7 → 109.9 — worse, not better.** This holds whether LE
+   alone or LE+TE together are densified, and at both Re=500 and Re=1000
+   (`../6-edges_further`'s Reconciliation 2). Densifying boundary points
+   does not fix the artifact; it makes it worse, consistent with Group 2's
+   corrected direction.
+3. **Group 3b's "noisy, not cleanly monotonic" thickness trend is wrong.**
+   Extended to a 9-point NACA0004-0020 family and recomputed with the
+   field-max metric, the trend is clean and nearly monotonic: sharper
+   nose → higher true peak, exactly as physical intuition expects
+   (`../6-edges_further` Group A/C2).
+4. **Both of this file's flagged "open threads" (#1 grid-refinement
+   direction vs. the Re=500 investigation, #2 densify-direction vs. the
+   Re=500 investigation) are now resolved, and it was never Reynolds
+   number.** `../6-edges_further`'s Reconciliation 1 and 2 recomputed both
+   metrics at both Re=500 and Re=1000: the field-max metric grows with
+   refinement and grows with densification at *both* Re; the lineout
+   metric shrinks under both at *both* Re. Reynolds number was never the
+   variable driving the disagreement with `../2-leading_edge_investigation/`
+   -- the metric was.
+
+**What still stands, unchanged:** Groups 0, 1, and 4's conclusions (the
+striping is real, not a py/cpp bug, not a growing instability, and the
+LE/TE curvature-vs-point-spacing geometric argument) do not depend on
+which LE/TE metric is used and are not affected by this correction. The
+revised overall picture is, if anything, a cleaner and more unified story
+than before: **both the LE and TE behave like genuinely sharp,
+near-singular geometric features that neither grid refinement nor
+boundary-point densification can resolve away**, scaling intuitively with
+nose sharpness, with a real but secondary contribution from grid
+sub-cell phase and from mutual LE/TE coupling. See
+`../6-edges_further/README.md` for the full derivation, data, and figures.

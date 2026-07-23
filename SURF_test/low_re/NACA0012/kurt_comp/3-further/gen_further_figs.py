@@ -142,10 +142,26 @@ def fig_3a():
     print("wrote test_3a_running_mean_convergence.png")
 
 
+def _paper_strouhal_at(angles):
+    """Interpolate Kurtulus (2019) Fig 19's digitized Strouhal-vs-alpha
+    curve at the given angles, for a "ground truth" reference line on the
+    2b/2c bar charts. Same file used by 1-paper_based's fig19_shedding()
+    and 2-follow_up's fig_c_strouhal_resolution()."""
+    kurt_path = HERE.parents[0] / "1-paper_based" / "data" / "kurtulus_fig19_digitized.csv"
+    lines = [l for l in kurt_path.read_text().splitlines()
+              if l.strip() and not l.lstrip().startswith("#")]
+    import io as _io
+    kurt = np.genfromtxt(_io.StringIO("\n".join(lines)), delimiter=",",
+                          names=True, dtype=None, encoding="utf-8")
+    order = np.argsort(kurt["alpha_deg"])
+    return np.interp(angles, kurt["alpha_deg"][order], kurt["strouhal"][order])
+
+
 def fig_2b_2c():
     d2b = load_csv("test2b_dx_refine_strouhal.csv")
     d2c = load_csv("test2c_ngrid_strouhal.csv")
     angles = [15, 20, 30, 40]
+    paper_st = _paper_strouhal_at(angles)
 
     fig, axes = plt.subplots(1, 4, figsize=(13, 4.3), sharey=False)
     for i, a in enumerate(angles):
@@ -162,14 +178,18 @@ def fig_2b_2c():
         ax.bar(x, vals, color=colors, width=0.6, zorder=2)
         for xi, v in zip(x, vals):
             ax.text(xi, v + 0.01, f"{v:.3f}", ha="center", va="bottom", fontsize=7.5)
+        ax.axhline(paper_st[i], color=C_REF, linewidth=1.6, linestyle="--", zorder=3,
+                   label="Kurtulus (2019)" if i == 0 else None)
+        ax.text(len(vals) - 0.5, paper_st[i], f" paper: {paper_st[i]:.3f}", color=C_REF,
+                fontsize=7, va="bottom", ha="right")
         ax.set_xticks(x)
         ax.set_xticklabels(labels, fontsize=7.5)
         ax.set_title(f"α={a}°", fontsize=10)
         if i == 0:
             ax.set_ylabel("Strouhal number St")
-    fig.suptitle("Test 2b: does the shedding-frequency reading change under grid refinement?",
-                 fontsize=12)
-    fig.tight_layout(rect=[0, 0, 1, 0.93])
+    fig.suptitle("Test 2b: does the shedding-frequency reading change under grid refinement,\n"
+                 "and does it move toward the paper's own value (dashed gray)?", fontsize=12)
+    fig.tight_layout(rect=[0, 0, 1, 0.9])
     fig.savefig(FIGS / "test_2b_dx_refine_strouhal.png", dpi=150)
     plt.close(fig)
     print("wrote test_2b_dx_refine_strouhal.png")
@@ -186,14 +206,18 @@ def fig_2b_2c():
         ax.bar(x, vals, color=colors, width=0.6, zorder=2)
         for xi, v in zip(x, vals):
             ax.text(xi, v + 0.01, f"{v:.3f}", ha="center", va="bottom", fontsize=7.5)
+        ax.axhline(paper_st[i], color=C_REF, linewidth=1.6, linestyle="--", zorder=3,
+                   label="Kurtulus (2019)" if i == 0 else None)
+        ax.text(2.5, paper_st[i], f" paper: {paper_st[i]:.3f}", color=C_REF,
+                fontsize=7, va="bottom", ha="right")
         ax.set_xticks(x)
         ax.set_xticklabels(labels, fontsize=7.5)
         ax.set_title(f"α={a}°", fontsize=10)
         if i == 0:
             ax.set_ylabel("Strouhal number St")
-    fig.suptitle("Test 2c: does the shedding-frequency reading change with more far-field domain?",
-                 fontsize=12)
-    fig.tight_layout(rect=[0, 0, 1, 0.93])
+    fig.suptitle("Test 2c: does the shedding-frequency reading change with more far-field domain,\n"
+                 "and does it move toward the paper's own value (dashed gray)?", fontsize=12)
+    fig.tight_layout(rect=[0, 0, 1, 0.9])
     fig.savefig(FIGS / "test_2c_ngrid_strouhal.png", dpi=150)
     plt.close(fig)
     print("wrote test_2c_ngrid_strouhal.png")

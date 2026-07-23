@@ -1,0 +1,8 @@
+I_ngrid2: already done
+I_ngrid3: launching (nx=300 ny=152 ngrid=3 dt=0.005 nsteps=6000 Re=1000)
+  OK in 42984s
+J_LTEdense: already done
+K_dt0.0025: launching (nx=300 ny=150 ngrid=1 dt=0.0025 nsteps=12000 Re=1000)
+  OK in 9736s
+L_Re1010: launching (nx=300 ny=150 ngrid=1 dt=0.005 nsteps=6000 Re=1010.0)
+  OK in 5215s

@@ -133,16 +133,22 @@ def main():
     print(f"\nwrote {c.DATA / 'test1b_amplitude_vs_time.csv'}")
 
     fig, axes = plt.subplots(1, 2, figsize=(12, 4.5))
-    colors = {0: "#2980b9", 9: "#c0392b", 12: "#16a085"}
+    # color = implementation (matching the IMPL_COLOR convention used
+    # elsewhere in this folder, e.g. test2/test3/test4's py-vs-cpp plots),
+    # linestyle/marker = alpha, so py vs cpp is the thing that pops out
+    # visually -- they should overlap almost exactly, per Test 1a
+    impl_color = {"py": "#1f77b4", "cpp": "#d62728"}
+    alpha_style = {0: ("-", "o"), 9: ("--", "s"), 12: (":", "^")}
     for alpha in ALPHAS:
-        for impl, ls in (("py", "-"), ("cpp", "--")):
+        ls, mk = alpha_style[alpha]
+        for impl in ("py", "cpp"):
             sub = [r for r in rows_1b if r["alpha"] == alpha and r["impl"] == impl]
             sub.sort(key=lambda r: r["t"])
             tt = [r["t"] for r in sub]
-            axes[0].plot(tt, [r["amp_le"] for r in sub], ls, color=colors[alpha],
-                         label=f"a{alpha} {impl}", lw=1.3, marker=".")
-            axes[1].plot(tt, [r["amp_te"] for r in sub], ls, color=colors[alpha],
-                         label=f"a{alpha} {impl}", lw=1.3, marker=".")
+            axes[0].plot(tt, [r["amp_le"] for r in sub], ls, color=impl_color[impl],
+                         label=f"a{alpha} {impl}", lw=1.3, marker=mk, ms=4)
+            axes[1].plot(tt, [r["amp_te"] for r in sub], ls, color=impl_color[impl],
+                         label=f"a{alpha} {impl}", lw=1.3, marker=mk, ms=4)
     axes[0].set_title("LE window peak-to-trough amplitude vs time"); axes[0].set_xlabel("t")
     axes[1].set_title("TE window peak-to-trough amplitude vs time"); axes[1].set_xlabel("t")
     for ax in axes:

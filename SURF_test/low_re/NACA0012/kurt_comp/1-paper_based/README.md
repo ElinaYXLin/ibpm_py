@@ -240,6 +240,68 @@ Fig 13/14 caption — `data/kurtulus_fig13_14_table.csv`, 15 instantaneous
   somewhat larger than) the ~14% lift-slope excess noted above for the
   mean coefficients.
 
+**Open question: why is $C_d$'s excess (+123%) bigger than $C_l$'s
+(+31%)?** Now that the two are known to be separate, differently-sized
+problems, $C_d$'s can't just be lumped into the existing lift-slope/domain
+blockage explanation (`2-follow_up`'s Tests D/E) — that was a $C_l$-specific
+fix (a bigger domain/more `ngrid` moves the lift-curve slope toward the
+textbook value), never checked against $C_d$ at all. This is flagged as
+open rather than investigated further here; some candidate hypotheses,
+in roughly the order they'd be cheapest to check:
+
+- **Is this specific to the *oscillation*, or already present in the
+  steady baseline?** A quick cross-check against data already in this
+  repo: ibpm's own *mean* $C_d$ at α₀=0° is 0.128 (steady) / 0.127 (f4Hz)
+  (`data/mean_coefficients_dx0.020.csv`), vs. the paper's own digitized
+  Fig. 1 value of 0.1 at α=0° (`data/kurtulus_fig1_digitized.csv`) — a
+  ~27-28% gap in the *mean*, in the same direction as (and roughly
+  comparable in size to) the lift-slope's ~14% mean-coefficient excess.
+  That suggests at least part of $C_d$'s problem is a baseline drag-level
+  issue, not something specific to the pitching motion — worth confirming
+  properly (the paper's Fig. 1 point at exactly α=0° may just be a coarse
+  digitized reading) before chasing anything dynamics-specific.
+- **Does $C_d$ respond to the same knobs that fixed $C_l$'s slope?**
+  `2-follow_up` Tests D/E (bigger domain / more `ngrid`) were only ever
+  checked against $C_l$. If they also shrink $C_d$'s excess, blockage is
+  the shared explanation for both; if $C_d$'s excess is untouched by the
+  exact same domain fix that cures $C_l$'s, that rules out blockage as
+  $C_d$'s mechanism and points elsewhere.
+- **Does the LE/TE boundary-force artifact load onto drag more than
+  lift?** `kurt_comp/5-leading_edge` found the boundary constraint force
+  sawtoothing sharply in magnitude right at the leading and trailing
+  edge. At α₀=0°, the net drag is essentially the boundary force's raw
+  x-component sum, concentrated exactly at those chordwise extremes,
+  while lift is the y-component sum, driven more by the whole-chord
+  top/bottom pressure asymmetry — so a boundary-discretization artifact
+  localized at the LE/TE tips could plausibly bias $C_d$ far more than
+  $C_l$ simply by *where* it sits on the body, independent of its
+  magnitude. Testable via the same LE/TE boundary-refinement geometries
+  already built in `5-leading_edge/geom/`.
+- **Is the unsteady/added-mass force term more numerically sensitive
+  than the quasi-steady one?** $C_d(t)$ is period-doubled relative to
+  $C_l(t)$ (roughly an even function of the instantaneous α, per the
+  "Instantaneous forces" discussion above) — if the force computation's
+  unsteady/rate-of-change term is evaluated via a time-discretization
+  that's coarser relative to $C_d$'s doubled oscillation frequency than
+  to $C_l$'s fundamental one, a dt-refinement check on just this one
+  case (f=4Hz, α₀=0°) would show up as $C_d$'s amplitude changing more
+  than $C_l$'s under the same dt refinement.
+- **Is drag more Reynolds-sensitive here than lift?** Unlike lift (mostly
+  pressure-driven for a thin, symmetric, mildly-loaded airfoil), drag has
+  a real skin-friction contribution that's more sensitive to how well the
+  viscous boundary layer is resolved at this Re/grid combination — worth
+  checking whether $C_d$'s excess is more Re-sensitive (e.g. under a small
+  Re perturbation) than $C_l$'s, as a proxy for how much of it is viscous
+  rather than pressure-driven.
+- **Sanity-check the paper's own numbers first.** The Fig. 13/14 table
+  is the paper's *only* tabulated numeric data (everything else in this
+  comparison is digitized off figures); before attributing the full gap
+  to ibpm, it's worth cross-checking that table's $C_d$ values against
+  the paper's *other* reported $C_d$ data (Fig. 1's mean coefficients, at
+  the same α₀ and motion) for internal consistency, in case some of the
+  apparent gap is a digitization/extraction issue on the reference-data
+  side rather than purely a solver limitation.
+
 ### Wake vorticity fields — `figures/wake_steady.png`, `figures/wake_f4hz.png`
 
 Qualitative comparison at α₀=0°, 9°, 12° (0° = attached, 9° = right at the
