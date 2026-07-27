@@ -52,6 +52,7 @@ it here for a decision on whether/how to correct it.
 python3 recon1_grid_refinement.py             # zero new runs
 python3 testA_metric_and_geom_audit.py        # zero new runs
 python3 testF_conditioning.py                 # near-free, no new runs
+python3 testG_peak_location.py                # zero new runs
 python3 make_geoms_6.py                       # builds every new geometry
 python3 run_all_6.py 9                        # 62 new runs, ~9-way parallel
 python3 analyze_6.py all                      # recon2, B, C, D, E
@@ -194,7 +195,12 @@ row happens to catch the true peak, etc).
 ## Group C: separating physics from resolution artifact (12 new runs)
 
 **C1** — NACA0006/0018 grid-refined at dx=0.02/0.01/0.005 (NACA0012's is
-`5-leading_edge`'s existing Group 2):
+`5-leading_edge`'s existing Group 2). **LE region only** (this test
+never measures the TE; `metrics_for()`'s `region` parameter defaults to
+`"LE"` and every C1/C2 call site leaves it at that default). Table below
+is the 2-D field-max metric; the figure's right panel shows the same
+three shapes on the y=0 lineout-max metric (NACA0012's lineout curve
+added from `5-leading_edge`'s existing Group 2 data, `test2a_grid_refinement.csv`):
 
 ![Test C1](figures/testC1_shape_refinement.png)
 
@@ -326,6 +332,57 @@ driver of the LE peak's magnitude either way.
 
 ---
 
+## Group G: is the reported peak actually coming from inside the body? (zero new runs)
+
+This solver's Cartesian grid is not body-fitted -- vorticity is computed
+at every grid node, including ones that fall geometrically inside the
+airfoil's outline, since the no-penetration/no-slip condition is only
+enforced at the Lagrangian boundary points, not by masking interior grid
+cells (see the discussion in chat; nothing in the projection step
+constrains what the field looks like on the interior side of the
+boundary). The whole LE/TE striping investigation's every headline
+number -- Group 2's peaks, recon1/recon2's field-max values, Group A-F's
+tables -- is a single scalar pulled from somewhere in that field. Before
+trusting any of it further, this test asks directly: physically, where
+does that number actually come from?
+
+For both dx=0.02 and dx=0.005, both metrics in play (the original y=0
+lineout, and the 2-D field-max Reconciliation 1/2 treat as the reliable
+one) are recomputed, their exact (x,y) location marked directly on the
+field, and classified inside/outside the body via a point-in-polygon
+test against the real boundary geometry -- rather than inferring the
+answer, seeing it.
+
+![Test G](figures/testG_peak_location.png)
+
+| dx | region | metric | location (x,y) | value | inside body? |
+|---|---|---|---|---|---|
+| 0.02 | LE | lineout | (0.000, 0.000) | 22.18 | **no -- in fluid** |
+| 0.02 | LE | field-max | (0.000, -0.040) | 71.66 | **no -- in fluid** |
+| 0.02 | TE | lineout | (1.000, 0.000) | 3.23 | **no -- in fluid** |
+| 0.02 | TE | field-max | (0.960, 0.040) | -18.96 | **no -- in fluid** |
+| 0.005 | LE | lineout | (-0.005, 0.000) | 2.95 | **no -- in fluid** |
+| 0.005 | LE | field-max | (0.005, -0.015) | 97.11 | **no -- in fluid** |
+| 0.005 | TE | lineout | (1.005, 0.000) | -11.15 | **no -- in fluid** |
+| 0.005 | TE | field-max | (1.005, -0.005) | 18.84 | **no -- in fluid** |
+
+**Every single peak, both metrics, both edges, both resolutions, lands
+outside the body** -- in the fluid cells immediately adjacent to the
+surface, i.e. squarely inside the near-wall shear-layer/boundary-layer
+region the rest of this investigation is actually about, not inside the
+solid interior. The interior checkerboard noise visible in the overview
+panels is real (consistent with the non-body-fitted-grid explanation
+above) and visually striking, but it never wins the max -- it's always
+smaller in magnitude than the near-wall fluid-side signal. **This rules
+out "the tracked metric is accidentally reading the ignorable interior
+region" as an explanation for any of Groups 2/3/A-F/recon1/recon2's
+numbers**: whatever is driving those peaks, it is a genuine near-wall
+fluid feature (almost certainly the discretization artifact the
+investigation already attributes to under-resolved curvature relative to
+boundary-point spacing), not a rendering/masking oversight.
+
+---
+
 ## Overall synthesis
 
 1. **The single biggest factor across this entire investigation is the
@@ -368,6 +425,9 @@ driver of the LE peak's magnitude either way.
 - `testA_metric_and_geom_audit.py` — Group A (zero new runs).
 - `testF_conditioning.py` — Group F (near-free; builds `CholeskySolver`'s
   own dense projection matrix directly and computes its condition number).
+- `testG_peak_location.py` — Group G (zero new runs; marks both metrics'
+  peak locations on the field with the body outline overlaid, classifies
+  inside/outside via point-in-polygon).
 - `gen_figs_6.py` — figures for recon2 and Groups B-E.
 - `geom/`, `runs/`, `data/`, `figures/` — new geometries, raw simulation
   output, CSVs, and PNGs for every test above.

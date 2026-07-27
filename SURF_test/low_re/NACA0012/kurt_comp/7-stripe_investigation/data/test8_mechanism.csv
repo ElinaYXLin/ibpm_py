@@ -1,0 +1,7 @@
+probe,quantity,value
+A,spread_support_cells,1
+A,spread_is_zero_far_upstream,True
+A,correlation_near_LE_support,-0.8708175175790731
+A,correlation_far_upstream,nan
+B,one_step_upstream_enstrophy,0.00011233761670923626
+B,one_step_upstream_peak,0.5821935444383819

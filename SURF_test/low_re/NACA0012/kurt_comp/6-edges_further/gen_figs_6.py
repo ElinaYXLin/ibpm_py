@@ -114,9 +114,12 @@ def fig_C1():
         return
     fig, axes = plt.subplots(1, 2, figsize=(12, 5))
     colors = {"naca0006": "#2980b9", "naca0018": "#c0392b"}
-    # 0012's existing Group-2 data (field_max recomputed via recon1's method)
+    # 0012's existing Group-2/recon1 data, both metrics (LE region, same as C1)
     naca0012_dx = [0.02, 0.01, 0.005]
-    naca0012_field = [71.664, 86.561, 97.107]  # from recon1_grid_refinement.csv
+    naca0012_by_key = {
+        "field_max": [71.664, 86.561, 97.107],   # recon1_grid_refinement.csv, Re=1000
+        "lineout_max": [22.176, 8.540, 2.952],   # 5-leading_edge/data/test2a_grid_refinement.csv, LE region
+    }
     for ax, key, title in [(axes[0], "field_max", "2-D field-max metric"),
                              (axes[1], "lineout_max", "y=0 lineout-max metric")]:
         for shape in ("naca0006", "naca0018"):
@@ -125,8 +128,7 @@ def fig_C1():
             dxs = [float(r["dx"]) for r in sub]
             vals = [float(r[key]) for r in sub]
             ax.plot(dxs, vals, "o-", color=colors[shape], label=shape, lw=1.8, ms=7)
-        if key == "field_max":
-            ax.plot(naca0012_dx, naca0012_field, "o-", color="#16a085", label="naca0012 (existing)", lw=1.8, ms=7)
+        ax.plot(naca0012_dx, naca0012_by_key[key], "o-", color="#16a085", label="naca0012 (existing)", lw=1.8, ms=7)
         ax.set_xscale("log"); ax.invert_xaxis()
         ax.set_xlabel("dx (log, refining -->)"); ax.set_title(title, fontsize=10)
         ax.legend(fontsize=8); ax.grid(alpha=0.3, which="both")
