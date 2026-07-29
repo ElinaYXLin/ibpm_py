@@ -213,3 +213,41 @@ def reach_L_up(xs, max_abs, x_le, noise_floor):
     last_idx = below[0] - 1 if below.size else len(exceeds) - 1
     L_up_chord = float(x_le - xs_o[last_idx])
     return L_up_chord, xs_o, exceeds
+
+
+# --------------------------------------------------------------------------
+# Lab-frame (flow-direction-rotated) upstream region, for angle-of-attack
+# sweeps. This solver imposes alpha by rotating the free-stream, never the
+# body (see ../1-paper_based/README.md's "Wake vorticity fields" section),
+# so the body/grid discretization is identical at every alpha, but "ahead
+# of the oncoming flow" is a direction that rotates with alpha in the lab
+# frame while the body-fixed x<x_le region does not. The free-stream unit
+# vector in grid coordinates is (cos(alpha), sin(alpha)) -- derived from
+# py_static/ibpm.py's own force-rotation convention: drag = xF*cos(alpha)
+# + yF*sin(alpha) is the force component ALONG the flow direction, so
+# (cos(alpha), sin(alpha)) is that direction's unit vector in grid coords.
+# --------------------------------------------------------------------------
+
+def upstream_mask_2d_rotated(X, Y, x_le, alpha_deg, buffer_dx, dx, half_width=0.5, y_le=0.0):
+    """Full 2-D boolean mask for the upstream null region in the LAB
+    (flow-aligned) frame: points whose position relative to the LE,
+    projected onto the flow direction, is more than buffer_dx*dx upstream,
+    and whose lateral (cross-flow) offset is within half_width of the LE.
+    At alpha=0 this reduces exactly to the body-frame `upstream_mask`
+    (u=x-x_le, v=y)."""
+    a = np.deg2rad(alpha_deg)
+    ca, sa = np.cos(a), np.sin(a)
+    dx_rel = X - x_le
+    dy_rel = Y - y_le
+    u = dx_rel * ca + dy_rel * sa          # along flow direction (negative = upstream)
+    v = -dx_rel * sa + dy_rel * ca         # cross-flow (lateral) offset
+    return (u <= -buffer_dx * dx) & (np.abs(v) <= half_width)
+
+
+def upstream_enstrophy_rotated(X, Y, om, x_le, alpha_deg, dx, buffer_dx=2.0, half_width=0.5):
+    """Enstrophy (0.5*int om^2 dA) over the lab-frame-rotated upstream
+    region -- the flow-aligned counterpart to upstream_scalar_metrics'
+    enstrophy, for comparing across an angle-of-attack sweep."""
+    m = upstream_mask_2d_rotated(X, Y, x_le, alpha_deg, buffer_dx, dx, half_width=half_width)
+    dA = dx * dx
+    return 0.5 * float(np.sum(om[m] ** 2) * dA)

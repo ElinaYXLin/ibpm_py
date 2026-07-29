@@ -1,0 +1,8 @@
+12 jobs
+  thrust_check/dx_refine/dx0.010_a35: ok (35744s)
+  thrust_check/dx_refine/dx0.010_a40: ok (35928s)
+  thrust_check/dx_refine/dx0.010_a45: ok (36171s)
+  thrust_check/dx_refine/dx0.010_a50: ok (35563s)
+  thrust_check/ngrid_sweep/ngrid2_a35: ok (25039s)
+  thrust_check/ngrid_sweep/ngrid2_a40: ok (24151s)
+  thrust_check/ngrid_sweep/ngrid2_a45: ok (23492s)

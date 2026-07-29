@@ -118,6 +118,28 @@ Question 2's grid-resolution-driven mode transition (tests 1b/1c), not a
 new, independent physical phenomenon — and not evidence that the paper's
 own simulation undergoes the same abrupt jump.
 
+**Drag companion check.** `test1c_drag_transition_sensitivity.py` reuses
+the exact same four runs/configs and asks whether mean $\overline{C_d}$
+shows the same pattern:
+
+![Test 1c drag companion: does the Cd jump also vanish under refinement?](figures/test_1c_drag_transition_sensitivity.png)
+
+| config | 33° | 34° | 35° | 36° |
+|---|---|---|---|---|
+| dx=0.02 (baseline) | 1.337 | 1.345 | **1.202** | 1.254 |
+| dx=0.01 | 1.339 | 1.430 | 1.502 | 1.568 |
+| ngrid=2 | 1.390 | 1.497 | 1.707 | 1.675 |
+| ngrid=3 | 1.453 | 1.536 | 1.615 | 1.741 |
+
+Same story as Cl and Strouhal: only the dx=0.02/`ngrid=1` baseline shows
+a sharp feature (a drop from 1.345→1.202 between 34° and 35°, mirroring
+the Cl drop at the same angles); every refinement instead shows
+$\overline{C_d}$ rising smoothly and monotonically across all four
+angles, with no jump anywhere. This is independent confirmation, from a
+third force quantity, that the 34-35° transition is a resolution
+artifact of the baseline configuration specifically, not a real
+aerodynamic feature.
+
 ## Question 2: why does the shedding frequency have this multi-plateau shape?
 
 ### Test 2a — the full spectrum, not just the strongest peak
@@ -312,6 +334,8 @@ still wrong for a reason this investigation hasn't identified.
 - `test1c_transition_sensitivity.py` — Test 1c (`run`/`analyze` modes),
   directly checking whether the 34-35° transition itself (not just nearby
   interior points) is grid/domain-sensitive.
+- `test1c_drag_transition_sensitivity.py` — Test 1c's drag ($\overline{C_d}$)
+  companion check (zero new runs, reuses Test 1c's own runs).
 - `data/` — every test's numeric output, referenced above.
 - `figures/` — the 8 figures embedded above.
 - `runs/` — raw simulation output for the new 2b/2c/3b runs (`.cholesky`

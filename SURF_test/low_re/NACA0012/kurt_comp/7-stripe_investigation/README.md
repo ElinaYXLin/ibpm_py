@@ -28,6 +28,91 @@ section), and Test 8 required one new 1-step run. Both were cheap
 (seconds each) relative to the faithful2 runs occupying the machine
 elsewhere during this investigation.
 
+## Definitions
+
+Quantities reused across multiple tests, defined once here rather than
+re-explained in each section (see `common.py`'s `upstream_scalar_metrics`,
+`upstream_profile`, and `reach_L_up` for the actual code):
+
+- **Threshold-area A(tau)**: the physical area (in chord^2) of the
+  upstream window where `|omega| > tau`, for a small ladder of tau
+  values. Literally "how big is the contaminated region," at a chosen
+  severity cutoff -- the area counterpart to a peak/severity number.
+  Computed as `(number of cells exceeding tau) * dx^2`.
+
+- **Enstrophy**: `0.5 * integral(omega^2) dA` over the upstream window.
+  This is a real physical quantity, not an arbitrary statistic -- in the
+  Navier-Stokes equations, enstrophy sets the viscous dissipation rate
+  (dissipation ~ enstrophy/Re), so it's a standard way to quantify "how
+  much rotational/vortical activity" a region contains. Three reasons
+  it's used as this folder's primary severity+extent metric: (1) it
+  combines area and severity into one number automatically (weighting
+  by omega^2 means both a large region of weak noise and a small region
+  of strong noise can contribute comparably); (2) it's an *integral*
+  over the whole window, not a single point-sample -- exactly the
+  property `../6-edges_further` established the y=0 lineout metric
+  lacks (Groups B/C found it swings 5x from phase alone); (3) it agrees
+  between py_static and cpp_static to machine precision (1e-13 to 1e-15)
+  in every test here, the strongest evidence in this whole investigation
+  that it's measuring something real rather than sampling noise.
+
+- **Signed vs. absolute integral / "oscillatory" interpretation** (Test
+  2): `integral(omega) dA` (signed, positive and negative cancel) vs.
+  `integral(|omega|) dA` (absolute, no cancellation). If the upstream
+  region contained one coherent vortical structure (e.g. a real vortex
+  that had somehow drifted or leaked upstream), the two would be close
+  in magnitude, since a single-signed rotating structure doesn't cancel
+  against itself. Instead the signed integral is only 2-12% of the
+  absolute integral at every dx tested -- meaning the region is almost
+  entirely made of positive and negative vorticity patches that
+  nearly cancel when summed with sign. That's the signature of a
+  sign-alternating (checkerboard-like) numerical pattern, not a
+  physical vortex -- and it's the reason this folder reads the upstream
+  signal as discretization noise rather than a real leaked/advected
+  flow feature. This is consistent with, and reinforced by, Test 4's
+  finding of a near-single-cell-period oscillation in the raw field.
+
+- **Reach L_up** (Test 3): given Test 1's per-column max|omega| decay
+  profile, L_up is the distance upstream of the LE out to the last
+  point (walking outward from the LE) where the profile still exceeds
+  a fixed noise floor (1e-3, chosen well above floating-point noise and
+  well below any real near-body signal) -- i.e. "how far upstream does
+  the signal actually reach before dropping below and staying below a
+  meaningful threshold." Reported in both chord units (physical
+  distance) and cells (`L_up/dx`) specifically to distinguish a local
+  mechanism (fixed cell count, e.g. the discrete delta function's
+  compact support) from a non-local one (fixed physical distance) --
+  see the Hypotheses table below.
+
+- **"LTE"** (Test 6, and `../6-edges_further`'s Groups D/F): shorthand
+  for "Leading+Trailing Edge" -- `naca0012_LTEsparse`/`naca0012_LTEdense`
+  are geometries where the boundary-point spacing was coarsened/refined
+  at *both* the leading and trailing edge together (as opposed to the
+  older, LE-only investigation these build on). Not related to "LE" the
+  region label used elsewhere in this folder.
+
+## Hypotheses tested
+
+Each test above is checking a specific hypothesis about the upstream
+noise's cause or character. Stated up front, with verdicts, so it's
+clear what each test does and doesn't establish -- details and numbers
+are in each test's own section below.
+
+| # | Hypothesis | Tested by | Verdict |
+|---|---|---|---|
+| H0 | x<x_LE is a valid "null region" (true physical vorticity ~0 there), so anything measured is artifact | Tests 1, 3, 5 (indirectly: signal shrinks under refinement and is far weaker on a cylinder, consistent with H0; not directly proven) | **Supported**, not directly proven |
+| H1a | The noise footprint is **local**: fixed cell-count (delta-function stencil support) | Test 3 (L_up in cells vs. chord under refinement) | **Not supported** -- L_up shrinks in cells too (43->15->5), not flat |
+| H1b | The noise footprint is **non-local**: fixed physical distance, independent of dx | Test 3 | **Not supported** -- L_up shrinks in chord too (0.86->0.15->0.025c), not flat |
+| H2 | The noise is odd-even/checkerboard-type grid decoupling (a specific, nameable numerical mechanism) | Test 4 (spectral fraction near Nyquist wavelength; raw-row visual) | **Supported** by the visual (clean ~1-cell-period oscillation); bulk spectral-fraction metric alone is not decisive (~5%, diluted by a smooth envelope) |
+| H3 | Sharp LE curvature is **necessary** for upstream noise (cylinder should show none) | Test 5 (cylinder control) | **Not supported** -- cylinder still shows noise, just ~78x weaker. Refined to: curvature strongly *amplifies* a generic IB artifact, isn't required to produce it |
+| H4 | Projection-matrix conditioning predicts artifact severity | Test 6 (vs. `../6-edges_further` Group F, which found no relationship using the LE-peak metric) | **Supported** on the clean upstream signal -- monotonic across all 3 geometries; Group F's null result is now understood as a consequence of measuring a physics-contaminated region, not evidence against conditioning mattering |
+| H5 | Upstream noise is **purely geometric** (fixed by discretization alone, should be flat vs. angle of attack at fixed geometry) | Test 7 (alpha sweep, geometry provably identical at every alpha; checked in both the fixed body-frame region and a lab-frame region rotated to track the actual flow direction) | **Not supported** -- enstrophy varies several-fold across alpha=0-60 at fixed geometry in *both* frames, so the noise is at least partly flow/force-magnitude-driven |
+| H6a | The noise is a direct footprint of the spread boundary force (regularization stage alone) | Test 8 Probe A | **Not supported** as a *sole* explanation -- the raw spread-force footprint is exactly zero beyond ~1-2 cells from the LE, so it cannot by itself reach far upstream |
+| H6b | The noise builds up gradually through many steps of advection | Test 8 Probe B (nsteps=1 from zero IC) | **Not supported** -- a small enstrophy signature is already present after exactly one timestep, before any advection has occurred |
+| H6c | The noise is *seeded* immediately by projection/regularization, but its full multi-chord *reach* builds up over many iterations via the elliptic solve | Test 8 (both probes combined) | **Supported** -- reconciles H6a/H6b: local instant source (Probe A/B), reach grows with iteration count (consistent with Test 3's non-trivial L_up scaling) |
+
+---
+
 ## How to reproduce
 
 ```
@@ -167,6 +252,10 @@ this whole investigation was built around.
 
 ## Test 6: boundary-point spacing and conditioning, on clean ground
 
+(`LTEsparse`/`LTEdense` = Leading+Trailing Edge boundary-point spacing
+coarsened/refined together -- see "Definitions" above; "enstrophy" is
+the `0.5*integral(omega^2)dA` quantity defined there too.)
+
 ![Test 6](figures/test6_spacing_conditioning.png)
 
 | geometry | condition number | upstream enstrophy | upstream peak |
@@ -175,22 +264,35 @@ this whole investigation was built around.
 | naca0012_baseline | 1.27e4 | 0.627 | 22.40 |
 | naca0012_LTEdense | 1.15e8 | 1.410 | 34.46 |
 
-**This is the headline new result of this folder.** `../6-edges_further`
-Group F found conditioning did *not* track the LE-peak metric (in fact
-LTEdense had by far the worst conditioning yet the *best*/lowest
-lineout peak). On the clean upstream signal, the relationship is the
-opposite: **condition number and upstream severity are monotonic
-together across all three geometries**, by both enstrophy and peak.
-This is exactly what "conditioning is a pure numerical-error quantity"
-would predict, once it's tested against a pure numerical-error signal
-instead of a physics-contaminated one -- Group F's null result was a
-consequence of measuring the wrong region, not evidence that
-conditioning doesn't matter.
+**This is the headline new result of this folder.** These are two
+different metrics on two different regions, so read them as a contrast,
+not a contradiction: `../6-edges_further` Group F measured the
+**lineout metric on the LE peak** (the physics-contaminated region) and
+found conditioning did *not* track it -- LTEdense had by far the worst
+conditioning (1.15e8) yet the *best*/lowest **lineout** LE peak (5.80,
+vs. baseline's 22.18). This folder instead measures **upstream
+enstrophy** (the clean, physics-free region defined at the top of this
+README) for the same three geometries, and there the relationship
+flips: **condition number and upstream enstrophy are monotonic together
+across all three geometries** (LTEsparse 4.05e3->0.148, baseline
+1.27e4->0.627, LTEdense 1.15e8->1.410 -- worse conditioning, more
+upstream enstrophy, every time). This is exactly what "conditioning is
+a pure numerical-error quantity" would predict, once it's tested
+against a pure numerical-error signal instead of a physics-contaminated
+one -- Group F's null result was a consequence of measuring the wrong
+region (and the unreliable lineout metric on top of that), not evidence
+that conditioning doesn't matter.
 
 **py/cpp agreement**: enstrophy matches to ~9 significant figures for
 all three geometries (differences only in the 6th-9th decimal digit).
 
 ## Test 7: angle-of-attack sweep
+
+"Upstream enstrophy" here is exactly the same quantity defined in
+"Definitions" and used in Test 2/6 -- `0.5 * integral(omega^2) dA` over
+the upstream window (an integral over the whole region, not an RMS or a
+single point-sample), just recomputed once per alpha instead of once
+per dx/geometry.
 
 ![Test 7](figures/test7_alpha_sweep.png)
 
@@ -225,10 +327,37 @@ full 16-point sweep is 6.9e-14 -- machine precision throughout.
 frame throughout this sweep (the same region used everywhere else in
 this folder), not rotated to track the incoming free-stream direction --
 so at higher alpha this region is no longer literally "ahead of" the
-oncoming flow in the lab sense. The comparison across alpha is
-internally consistent, but its physical interpretation shifts with
-alpha; a lab-frame-rotated version of this test is a natural follow-up
-if the force-magnitude story needs to be pinned down further.
+oncoming flow in the lab sense.
+
+**Lab-frame-rotated follow-up.** The figure's left panel now also plots
+a second region that rotates with alpha to stay aligned with the actual
+oncoming flow direction (`common.upstream_mask_2d_rotated`, using the
+free-stream unit vector `(cos(alpha), sin(alpha))` implied by
+`py_static/ibpm.py`'s own drag/lift rotation convention), alongside the
+original fixed body-frame region. At alpha=0 the two are identical by
+construction (both give enstrophy=0.6268, exact agreement to every
+digit shown), which is a useful sanity check that the rotation is
+implemented correctly. The right panel is a visual explainer: at an
+example alpha=40deg, it draws both regions directly on the vorticity
+field (blue=body-frame rectangle, red=lab-frame wedge rotated to track
+the flow, purple=overlap) so the difference between the two is visible
+rather than just described.
+
+**The lab-frame (true "ahead of the flow") enstrophy is consistently
+lower than the body-frame version, often by 2-4x** (e.g. alpha=24:
+0.458 body-frame vs. 0.088 lab-frame; alpha=40: 0.496 vs. 0.067;
+alpha=60: 5.500 vs. 2.065) -- meaning part of what the fixed body-frame
+region picks up at higher alpha is coming from a part of the domain
+that isn't actually upstream of the flow at all once the flow direction
+itself is accounted for. That said, **the core Test 7 conclusion is
+unchanged**: the lab-frame curve is just as clearly non-flat across
+alpha as the body-frame one (same qualitative shape -- a dip through
+the teens/twenties, a rise near 30-33, a dip at 36-40, then a sharp
+rise to the alpha=60 maximum), so the noise is still (at least partly)
+force-magnitude-driven rather than purely geometric either way.
+
+**py/cpp agreement (lab-frame)**: max relative difference over the full
+sweep is 1.16e-13 -- machine precision, same as the body-frame result.
 
 ## Test 8: mechanism isolation
 

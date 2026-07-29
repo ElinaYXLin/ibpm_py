@@ -78,9 +78,17 @@ def main():
                    marker="x", zorder=5)
     ax.set_xscale("log"); ax.set_yscale("log")
     ax.set_xlabel("condition number of projection matrix M (Group F)")
-    ax.set_ylabel("upstream enstrophy (this folder's clean numerical-error signal)")
+    ax.set_ylabel("upstream enstrophy")
     ax.set_title("Does conditioning predict upstream (pure-artifact) enstrophy?", fontsize=10)
     ax.grid(alpha=0.3, which="both"); ax.legend(fontsize=7, loc="upper left")
+    # explicit minor-tick labels (e.g. 0.2, 0.5, 2) so the axis direction/scale
+    # is legible without having to infer it from just the decade labels --
+    # matplotlib hides minor tick labels on log axes by default even with a
+    # locator/formatter set, so set values+labels directly instead
+    ymin, ymax = ax.get_ylim()
+    minor_vals = [v for v in (0.2, 0.3, 0.5, 2, 3, 5) if ymin <= v <= ymax]
+    ax.set_yticks(minor_vals, minor=True)
+    ax.set_yticklabels([f"{v:g}" for v in minor_vals], minor=True, fontsize=7)
 
     ax = axes[1]
     names = list(CASES)
@@ -98,7 +106,7 @@ def main():
 
     fig.suptitle("Test 6: boundary-point spacing & conditioning vs. upstream (clean) noise\n"
                  "NACA0012 LTEsparse/baseline/LTEdense, Re=1000, alpha=0, steady, dx=0.02", fontsize=11)
-    fig.tight_layout(rect=[0, 0, 1, 0.88])
+    fig.tight_layout(rect=[0.02, 0, 1, 0.88])
     out = c.FIGS / "test6_spacing_conditioning.png"
     fig.savefig(out, dpi=130)
     plt.close(fig)

@@ -50,6 +50,7 @@ it here for a decision on whether/how to correct it.
 
 ```
 python3 recon1_grid_refinement.py             # zero new runs
+python3 recon1_le_te_field_max.py             # zero new runs
 python3 testA_metric_and_geom_audit.py        # zero new runs
 python3 testF_conditioning.py                 # near-free, no new runs
 python3 testG_peak_location.py                # zero new runs
@@ -85,6 +86,31 @@ exact reported peak, 64.711):
 Field-max **grows** with refinement at both Re; lineout-max **shrinks**
 with refinement at both Re. Reynolds number changes the magnitude a
 little, never the direction. **Fully resolved: it was the metric.**
+
+**Recon1, LE vs. TE side by side (2-D field-max only, zero new runs):**
+same runs, same dx sweep, same metric, both Re, but LE and TE plotted
+side by side instead of only LE:
+
+![Recon1 LE/TE field-max](figures/recon1_le_te_field_max.png)
+
+| Re | dx | LE field-max | TE field-max |
+|---|---|---|---|
+| 500 | 0.02 | 64.71 | 13.41 |
+| 500 | 0.01 | 68.33 | 15.03 |
+| 500 | 0.005 | 74.67 | 14.76 |
+| 1000 | 0.02 | 71.66 | 18.96 |
+| 1000 | 0.01 | 86.56 | 19.17 |
+| 1000 | 0.005 | 97.11 | 18.84 |
+
+**LE and TE behave differently under the reliable metric.** LE grows
+steadily and substantially with refinement at both Re (as above). TE, by
+contrast, is nearly flat: a small rise from dx=0.02 to 0.01, then
+essentially no change (Re=500) or a slight decrease (Re=1000) from 0.01
+to 0.005 — nothing like LE's sustained growth. So under the metric this
+folder has established as reliable, the leading edge is the edge with
+the real, still-growing-under-refinement discretization artifact; the
+trailing edge's peak is comparatively resolution-insensitive already at
+these grid spacings.
 
 ## Reconciliation 2: LE-only vs. LE+TE boundary-point density (4 new runs)
 
@@ -419,6 +445,8 @@ boundary-point spacing), not a rendering/masking oversight.
   Group C's per-shape-refinement and thickness-family geometries; Group D's
   density levels; Group E's decoupled/common-TE variants).
 - `recon1_grid_refinement.py` — Reconciliation 1 (zero new runs).
+- `recon1_le_te_field_max.py` — Recon1's LE-vs-TE side-by-side field-max
+  comparison, both Re (zero new runs, reuses recon1's own data).
 - `run_all_6.py` — orchestrates all 62 new simulations (recon2, B, C, D, E),
   both implementations, resumable, `ProcessPoolExecutor`-parallel.
 - `analyze_6.py` — analyzes recon2 and Groups B-E (run after `run_all_6.py`).
