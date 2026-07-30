@@ -1,0 +1,230 @@
+Immersed Boundary Projection Method (IBPM), version 1.0
+
+Command:
+py_static.ibpm -name flow -outdir /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow_fine -tecplot 0 -restart 2 -force 1 -nx 300 -ny 150 -ngrid 1 -length 6 -xoffset -2 -yoffset -1.5 -alpha 0 -geom /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/geom/naca0012_dx0.0200.geom -Re 1000 -ic /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow_ic.bin -resettime 1 -dt 0.01 -nsteps 40
+
+Run name: flow
+
+Grid parameters:
+    nx      300
+    ny      150
+    ngrid   1
+    length  6.0
+    xoffset -2.0
+    yoffset -1.5
+    xshift  0.0
+    yshift  0.0
+
+Reading geometry from file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/geom/naca0012_dx0.0200.geom
+    102 points on the boundary
+
+Reynolds number = 1000.0
+
+Setting up Immersed Boundary Solver...Using Cholesky solver for projection step
+Using Cholesky solver for projection step
+Using Cholesky solver for projection step
+Loading initial condition from file: /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow_ic.bin
+Reading restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow_ic.bin...done
+using 3rd-order Runge Kutta (3-step) timestepper
+    dt = 0.01
+
+Loading Cholesky factorization from file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow_fine/flow_01.cholesky...(failed: could not open file)
+Loading Cholesky factorization from file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow_fine/flow_02.cholesky...(failed: could not open file)
+Loading Cholesky factorization from file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow_fine/flow_03.cholesky...(failed: could not open file)
+Computing the matrix for Cholesky factorization...done
+Computing Cholesky factorization...done
+Computing the matrix for Cholesky factorization...done
+Computing Cholesky factorization...done
+Computing the matrix for Cholesky factorization...done
+Computing Cholesky factorization...done
+Saving Cholesky factorization to file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow_fine/flow_01.cholesky...done
+Saving Cholesky factorization to file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow_fine/flow_02.cholesky...done
+Saving Cholesky factorization to file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow_fine/flow_03.cholesky...done
+
+Initial timestep = 0
+
+Writing restart file every 2 step(s)
+Writing forces every 1 step(s)
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow_fine/flow00000.bin...done
+Integrating for 40 steps
+
+step 1
+    x force:         0.132806, y force:      -0.00888148
+
+
+step 2
+    x force:         0.132839, y force:      -0.00771066
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow_fine/flow00002.bin...done
+
+step 3
+    x force:         0.132599, y force:      -0.00691964
+
+
+step 4
+    x force:         0.132149, y force:      -0.00622452
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow_fine/flow00004.bin...done
+
+step 5
+    x force:         0.131613, y force:      -0.00559908
+
+
+step 6
+    x force:         0.131079, y force:      -0.00503076
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow_fine/flow00006.bin...done
+
+step 7
+    x force:         0.130603, y force:      -0.00451534
+
+
+step 8
+    x force:         0.130213, y force:      -0.00405321
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow_fine/flow00008.bin...done
+
+step 9
+    x force:         0.129917, y force:      -0.00364686
+
+
+step 10
+    x force:         0.129711, y force:      -0.00329888
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow_fine/flow00010.bin...done
+
+step 11
+    x force:         0.129577, y force:       -0.0030103
+
+
+step 12
+    x force:         0.129496, y force:      -0.00277966
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow_fine/flow00012.bin...done
+
+step 13
+    x force:         0.129445, y force:       -0.0026028
+
+
+step 14
+    x force:         0.129406, y force:      -0.00247342
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow_fine/flow00014.bin...done
+
+step 15
+    x force:         0.129369, y force:      -0.00238392
+
+
+step 16
+    x force:         0.129325, y force:      -0.00232638
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow_fine/flow00016.bin...done
+
+step 17
+    x force:         0.129273, y force:       -0.0022932
+
+
+step 18
+    x force:         0.129215, y force:      -0.00227753
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow_fine/flow00018.bin...done
+
+step 19
+    x force:         0.129154, y force:      -0.00227339
+
+
+step 20
+    x force:         0.129095, y force:       -0.0022758
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow_fine/flow00020.bin...done
+
+step 21
+    x force:          0.12904, y force:      -0.00228088
+
+
+step 22
+    x force:         0.128994, y force:      -0.00228593
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow_fine/flow00022.bin...done
+
+step 23
+    x force:         0.128959, y force:      -0.00228952
+
+
+step 24
+    x force:         0.128935, y force:      -0.00229136
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow_fine/flow00024.bin...done
+
+step 25
+    x force:         0.128921, y force:      -0.00229206
+
+
+step 26
+    x force:         0.128917, y force:      -0.00229276
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow_fine/flow00026.bin...done
+
+step 27
+    x force:         0.128919, y force:      -0.00229473
+
+
+step 28
+    x force:         0.128925, y force:      -0.00229907
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow_fine/flow00028.bin...done
+
+step 29
+    x force:         0.128933, y force:      -0.00230652
+
+
+step 30
+    x force:          0.12894, y force:      -0.00231741
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow_fine/flow00030.bin...done
+
+step 31
+    x force:         0.128946, y force:      -0.00233166
+
+
+step 32
+    x force:         0.128948, y force:      -0.00234895
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow_fine/flow00032.bin...done
+
+step 33
+    x force:         0.128947, y force:      -0.00236877
+
+
+step 34
+    x force:         0.128943, y force:      -0.00239061
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow_fine/flow00034.bin...done
+
+step 35
+    x force:         0.128937, y force:      -0.00241399
+
+
+step 36
+    x force:         0.128928, y force:      -0.00243851
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow_fine/flow00036.bin...done
+
+step 37
+    x force:         0.128917, y force:      -0.00246387
+
+
+step 38
+    x force:         0.128905, y force:      -0.00248984
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow_fine/flow00038.bin...done
+
+step 39
+    x force:         0.128892, y force:      -0.00251628
+
+
+step 40
+    x force:         0.128879, y force:      -0.00254305
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow_fine/flow00040.bin...done

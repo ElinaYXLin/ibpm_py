@@ -6,3 +6,5 @@
   thrust_check/ngrid_sweep/ngrid2_a35: ok (25039s)
   thrust_check/ngrid_sweep/ngrid2_a40: ok (24151s)
   thrust_check/ngrid_sweep/ngrid2_a45: ok (23492s)
+  thrust_check/ngrid_sweep/ngrid2_a50: ok (33275s)
+  thrust_check/ngrid_sweep/ngrid3_a35: ok (38244s)

@@ -1,0 +1,2480 @@
+Immersed Boundary Projection Method (IBPM), version 1.0
+
+Command:
+py_static.ibpm -name flow -outdir /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow -tecplot 0 -restart 20 -force 1 -nx 300 -ny 150 -ngrid 1 -length 6 -xoffset -2 -yoffset -1.5 -alpha 0 -geom /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/geom/naca0012_dx0.0200.geom -Re 1000 -ic /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow_ic.bin -resettime 1 -dt 0.01 -nsteps 600
+
+Run name: flow
+
+Grid parameters:
+    nx      300
+    ny      150
+    ngrid   1
+    length  6.0
+    xoffset -2.0
+    yoffset -1.5
+    xshift  0.0
+    yshift  0.0
+
+Reading geometry from file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/geom/naca0012_dx0.0200.geom
+    102 points on the boundary
+
+Reynolds number = 1000.0
+
+Setting up Immersed Boundary Solver...Using Cholesky solver for projection step
+Using Cholesky solver for projection step
+Using Cholesky solver for projection step
+Loading initial condition from file: /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow_ic.bin
+Reading restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow_ic.bin...done
+using 3rd-order Runge Kutta (3-step) timestepper
+    dt = 0.01
+
+Loading Cholesky factorization from file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow/flow_01.cholesky...(failed: could not open file)
+Loading Cholesky factorization from file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow/flow_02.cholesky...(failed: could not open file)
+Loading Cholesky factorization from file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow/flow_03.cholesky...(failed: could not open file)
+Computing the matrix for Cholesky factorization...done
+Computing Cholesky factorization...done
+Computing the matrix for Cholesky factorization...done
+Computing Cholesky factorization...done
+Computing the matrix for Cholesky factorization...done
+Computing Cholesky factorization...done
+Saving Cholesky factorization to file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow/flow_01.cholesky...done
+Saving Cholesky factorization to file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow/flow_02.cholesky...done
+Saving Cholesky factorization to file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow/flow_03.cholesky...done
+
+Initial timestep = 0
+
+Writing restart file every 20 step(s)
+Writing forces every 1 step(s)
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow/flow00000.bin...done
+Integrating for 600 steps
+
+step 1
+    x force:         0.132806, y force:      -0.00888148
+
+
+step 2
+    x force:         0.132839, y force:      -0.00771066
+
+
+step 3
+    x force:         0.132599, y force:      -0.00691964
+
+
+step 4
+    x force:         0.132149, y force:      -0.00622452
+
+
+step 5
+    x force:         0.131613, y force:      -0.00559908
+
+
+step 6
+    x force:         0.131079, y force:      -0.00503076
+
+
+step 7
+    x force:         0.130603, y force:      -0.00451534
+
+
+step 8
+    x force:         0.130213, y force:      -0.00405321
+
+
+step 9
+    x force:         0.129917, y force:      -0.00364686
+
+
+step 10
+    x force:         0.129711, y force:      -0.00329888
+
+
+step 11
+    x force:         0.129577, y force:       -0.0030103
+
+
+step 12
+    x force:         0.129496, y force:      -0.00277966
+
+
+step 13
+    x force:         0.129445, y force:       -0.0026028
+
+
+step 14
+    x force:         0.129406, y force:      -0.00247342
+
+
+step 15
+    x force:         0.129369, y force:      -0.00238392
+
+
+step 16
+    x force:         0.129325, y force:      -0.00232638
+
+
+step 17
+    x force:         0.129273, y force:       -0.0022932
+
+
+step 18
+    x force:         0.129215, y force:      -0.00227753
+
+
+step 19
+    x force:         0.129154, y force:      -0.00227339
+
+
+step 20
+    x force:         0.129095, y force:       -0.0022758
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow/flow00020.bin...done
+
+step 21
+    x force:          0.12904, y force:      -0.00228088
+
+
+step 22
+    x force:         0.128994, y force:      -0.00228593
+
+
+step 23
+    x force:         0.128959, y force:      -0.00228952
+
+
+step 24
+    x force:         0.128935, y force:      -0.00229136
+
+
+step 25
+    x force:         0.128921, y force:      -0.00229206
+
+
+step 26
+    x force:         0.128917, y force:      -0.00229276
+
+
+step 27
+    x force:         0.128919, y force:      -0.00229473
+
+
+step 28
+    x force:         0.128925, y force:      -0.00229907
+
+
+step 29
+    x force:         0.128933, y force:      -0.00230652
+
+
+step 30
+    x force:          0.12894, y force:      -0.00231741
+
+
+step 31
+    x force:         0.128946, y force:      -0.00233166
+
+
+step 32
+    x force:         0.128948, y force:      -0.00234895
+
+
+step 33
+    x force:         0.128947, y force:      -0.00236877
+
+
+step 34
+    x force:         0.128943, y force:      -0.00239061
+
+
+step 35
+    x force:         0.128937, y force:      -0.00241399
+
+
+step 36
+    x force:         0.128928, y force:      -0.00243851
+
+
+step 37
+    x force:         0.128917, y force:      -0.00246387
+
+
+step 38
+    x force:         0.128905, y force:      -0.00248984
+
+
+step 39
+    x force:         0.128892, y force:      -0.00251628
+
+
+step 40
+    x force:         0.128879, y force:      -0.00254305
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow/flow00040.bin...done
+
+step 41
+    x force:         0.128865, y force:      -0.00257004
+
+
+step 42
+    x force:         0.128851, y force:      -0.00259713
+
+
+step 43
+    x force:         0.128837, y force:      -0.00262422
+
+
+step 44
+    x force:         0.128822, y force:      -0.00265121
+
+
+step 45
+    x force:         0.128808, y force:      -0.00267801
+
+
+step 46
+    x force:         0.128794, y force:      -0.00270452
+
+
+step 47
+    x force:          0.12878, y force:       -0.0027307
+
+
+step 48
+    x force:         0.128767, y force:      -0.00275651
+
+
+step 49
+    x force:         0.128754, y force:      -0.00278189
+
+
+step 50
+    x force:         0.128742, y force:      -0.00280683
+
+
+step 51
+    x force:         0.128731, y force:      -0.00283131
+
+
+step 52
+    x force:          0.12872, y force:      -0.00285528
+
+
+step 53
+    x force:         0.128711, y force:      -0.00287871
+
+
+step 54
+    x force:         0.128702, y force:      -0.00290156
+
+
+step 55
+    x force:         0.128694, y force:      -0.00292378
+
+
+step 56
+    x force:         0.128686, y force:      -0.00294533
+
+
+step 57
+    x force:         0.128679, y force:      -0.00296615
+
+
+step 58
+    x force:         0.128672, y force:       -0.0029862
+
+
+step 59
+    x force:         0.128666, y force:      -0.00300545
+
+
+step 60
+    x force:         0.128659, y force:      -0.00302389
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow/flow00060.bin...done
+
+step 61
+    x force:         0.128652, y force:      -0.00304151
+
+
+step 62
+    x force:         0.128646, y force:      -0.00305833
+
+
+step 63
+    x force:         0.128638, y force:      -0.00307438
+
+
+step 64
+    x force:         0.128631, y force:      -0.00308971
+
+
+step 65
+    x force:         0.128623, y force:       -0.0031044
+
+
+step 66
+    x force:         0.128616, y force:      -0.00311853
+
+
+step 67
+    x force:         0.128608, y force:      -0.00313217
+
+
+step 68
+    x force:           0.1286, y force:      -0.00314541
+
+
+step 69
+    x force:         0.128593, y force:      -0.00315832
+
+
+step 70
+    x force:         0.128585, y force:      -0.00317099
+
+
+step 71
+    x force:         0.128579, y force:      -0.00318345
+
+
+step 72
+    x force:         0.128573, y force:      -0.00319574
+
+
+step 73
+    x force:         0.128567, y force:      -0.00320788
+
+
+step 74
+    x force:         0.128562, y force:      -0.00321987
+
+
+step 75
+    x force:         0.128557, y force:       -0.0032317
+
+
+step 76
+    x force:         0.128553, y force:      -0.00324333
+
+
+step 77
+    x force:         0.128549, y force:      -0.00325474
+
+
+step 78
+    x force:         0.128545, y force:      -0.00326589
+
+
+step 79
+    x force:         0.128542, y force:      -0.00327677
+
+
+step 80
+    x force:         0.128538, y force:      -0.00328734
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow/flow00080.bin...done
+
+step 81
+    x force:         0.128535, y force:       -0.0032976
+
+
+step 82
+    x force:         0.128532, y force:      -0.00330755
+
+
+step 83
+    x force:         0.128529, y force:       -0.0033172
+
+
+step 84
+    x force:         0.128525, y force:      -0.00332657
+
+
+step 85
+    x force:         0.128522, y force:       -0.0033357
+
+
+step 86
+    x force:         0.128519, y force:      -0.00334462
+
+
+step 87
+    x force:         0.128516, y force:      -0.00335339
+
+
+step 88
+    x force:         0.128513, y force:      -0.00336205
+
+
+step 89
+    x force:          0.12851, y force:      -0.00337065
+
+
+step 90
+    x force:         0.128508, y force:      -0.00337924
+
+
+step 91
+    x force:         0.128506, y force:      -0.00338788
+
+
+step 92
+    x force:         0.128504, y force:      -0.00339662
+
+
+step 93
+    x force:         0.128502, y force:       -0.0034055
+
+
+step 94
+    x force:           0.1285, y force:      -0.00341458
+
+
+step 95
+    x force:         0.128499, y force:       -0.0034239
+
+
+step 96
+    x force:         0.128497, y force:      -0.00343351
+
+
+step 97
+    x force:         0.128496, y force:      -0.00344344
+
+
+step 98
+    x force:         0.128494, y force:      -0.00345374
+
+
+step 99
+    x force:         0.128493, y force:      -0.00346443
+
+
+step 100
+    x force:         0.128491, y force:      -0.00347554
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow/flow00100.bin...done
+
+step 101
+    x force:         0.128489, y force:       -0.0034871
+
+
+step 102
+    x force:         0.128487, y force:      -0.00349911
+
+
+step 103
+    x force:         0.128485, y force:      -0.00351159
+
+
+step 104
+    x force:         0.128483, y force:      -0.00352454
+
+
+step 105
+    x force:         0.128481, y force:      -0.00353794
+
+
+step 106
+    x force:         0.128479, y force:       -0.0035518
+
+
+step 107
+    x force:         0.128477, y force:      -0.00356608
+
+
+step 108
+    x force:         0.128475, y force:      -0.00358077
+
+
+step 109
+    x force:         0.128473, y force:      -0.00359584
+
+
+step 110
+    x force:         0.128471, y force:      -0.00361127
+
+
+step 111
+    x force:         0.128469, y force:      -0.00362701
+
+
+step 112
+    x force:         0.128468, y force:      -0.00364304
+
+
+step 113
+    x force:         0.128466, y force:      -0.00365933
+
+
+step 114
+    x force:         0.128465, y force:      -0.00367585
+
+
+step 115
+    x force:         0.128463, y force:       -0.0036926
+
+
+step 116
+    x force:         0.128462, y force:      -0.00370955
+
+
+step 117
+    x force:         0.128461, y force:       -0.0037267
+
+
+step 118
+    x force:         0.128459, y force:      -0.00374405
+
+
+step 119
+    x force:         0.128457, y force:      -0.00376162
+
+
+step 120
+    x force:         0.128455, y force:      -0.00377941
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow/flow00120.bin...done
+
+step 121
+    x force:         0.128453, y force:      -0.00379745
+
+
+step 122
+    x force:         0.128451, y force:      -0.00381574
+
+
+step 123
+    x force:         0.128449, y force:       -0.0038343
+
+
+step 124
+    x force:         0.128446, y force:      -0.00385315
+
+
+step 125
+    x force:         0.128444, y force:      -0.00387229
+
+
+step 126
+    x force:         0.128441, y force:      -0.00389172
+
+
+step 127
+    x force:         0.128439, y force:      -0.00391143
+
+
+step 128
+    x force:         0.128436, y force:      -0.00393142
+
+
+step 129
+    x force:         0.128434, y force:      -0.00395167
+
+
+step 130
+    x force:         0.128432, y force:      -0.00397215
+
+
+step 131
+    x force:         0.128429, y force:      -0.00399286
+
+
+step 132
+    x force:         0.128427, y force:      -0.00401376
+
+
+step 133
+    x force:         0.128424, y force:      -0.00403483
+
+
+step 134
+    x force:         0.128422, y force:      -0.00405606
+
+
+step 135
+    x force:          0.12842, y force:      -0.00407743
+
+
+step 136
+    x force:         0.128418, y force:      -0.00409892
+
+
+step 137
+    x force:         0.128416, y force:      -0.00412052
+
+
+step 138
+    x force:         0.128414, y force:      -0.00414221
+
+
+step 139
+    x force:         0.128412, y force:      -0.00416398
+
+
+step 140
+    x force:          0.12841, y force:      -0.00418581
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow/flow00140.bin...done
+
+step 141
+    x force:         0.128408, y force:      -0.00420769
+
+
+step 142
+    x force:         0.128407, y force:       -0.0042296
+
+
+step 143
+    x force:         0.128405, y force:      -0.00425153
+
+
+step 144
+    x force:         0.128403, y force:      -0.00427346
+
+
+step 145
+    x force:         0.128402, y force:      -0.00429536
+
+
+step 146
+    x force:         0.128401, y force:      -0.00431721
+
+
+step 147
+    x force:         0.128399, y force:      -0.00433901
+
+
+step 148
+    x force:         0.128398, y force:      -0.00436072
+
+
+step 149
+    x force:         0.128397, y force:      -0.00438234
+
+
+step 150
+    x force:         0.128396, y force:      -0.00440384
+
+
+step 151
+    x force:         0.128395, y force:      -0.00442521
+
+
+step 152
+    x force:         0.128394, y force:      -0.00444644
+
+
+step 153
+    x force:         0.128393, y force:      -0.00446751
+
+
+step 154
+    x force:         0.128393, y force:      -0.00448842
+
+
+step 155
+    x force:         0.128392, y force:      -0.00450914
+
+
+step 156
+    x force:         0.128391, y force:      -0.00452968
+
+
+step 157
+    x force:         0.128391, y force:      -0.00455002
+
+
+step 158
+    x force:          0.12839, y force:      -0.00457015
+
+
+step 159
+    x force:          0.12839, y force:      -0.00459006
+
+
+step 160
+    x force:         0.128389, y force:      -0.00460974
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow/flow00160.bin...done
+
+step 161
+    x force:         0.128389, y force:      -0.00462918
+
+
+step 162
+    x force:         0.128388, y force:      -0.00464837
+
+
+step 163
+    x force:         0.128388, y force:      -0.00466731
+
+
+step 164
+    x force:         0.128388, y force:      -0.00468599
+
+
+step 165
+    x force:         0.128387, y force:       -0.0047044
+
+
+step 166
+    x force:         0.128387, y force:      -0.00472255
+
+
+step 167
+    x force:         0.128387, y force:      -0.00474042
+
+
+step 168
+    x force:         0.128387, y force:      -0.00475802
+
+
+step 169
+    x force:         0.128387, y force:      -0.00477535
+
+
+step 170
+    x force:         0.128387, y force:       -0.0047924
+
+
+step 171
+    x force:         0.128386, y force:      -0.00480918
+
+
+step 172
+    x force:         0.128386, y force:      -0.00482569
+
+
+step 173
+    x force:         0.128386, y force:      -0.00484192
+
+
+step 174
+    x force:         0.128386, y force:      -0.00485788
+
+
+step 175
+    x force:         0.128386, y force:      -0.00487357
+
+
+step 176
+    x force:         0.128386, y force:      -0.00488899
+
+
+step 177
+    x force:         0.128386, y force:      -0.00490416
+
+
+step 178
+    x force:         0.128386, y force:      -0.00491906
+
+
+step 179
+    x force:         0.128386, y force:       -0.0049337
+
+
+step 180
+    x force:         0.128386, y force:       -0.0049481
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow/flow00180.bin...done
+
+step 181
+    x force:         0.128386, y force:      -0.00496225
+
+
+step 182
+    x force:         0.128386, y force:      -0.00497616
+
+
+step 183
+    x force:         0.128386, y force:      -0.00498984
+
+
+step 184
+    x force:         0.128386, y force:      -0.00500329
+
+
+step 185
+    x force:         0.128385, y force:      -0.00501652
+
+
+step 186
+    x force:         0.128385, y force:      -0.00502954
+
+
+step 187
+    x force:         0.128385, y force:      -0.00504235
+
+
+step 188
+    x force:         0.128385, y force:      -0.00505496
+
+
+step 189
+    x force:         0.128385, y force:      -0.00506737
+
+
+step 190
+    x force:         0.128385, y force:      -0.00507961
+
+
+step 191
+    x force:         0.128385, y force:      -0.00509166
+
+
+step 192
+    x force:         0.128385, y force:      -0.00510354
+
+
+step 193
+    x force:         0.128385, y force:      -0.00511525
+
+
+step 194
+    x force:         0.128385, y force:      -0.00512681
+
+
+step 195
+    x force:         0.128384, y force:      -0.00513821
+
+
+step 196
+    x force:         0.128384, y force:      -0.00514947
+
+
+step 197
+    x force:         0.128384, y force:      -0.00516059
+
+
+step 198
+    x force:         0.128384, y force:      -0.00517157
+
+
+step 199
+    x force:         0.128384, y force:      -0.00518244
+
+
+step 200
+    x force:         0.128384, y force:      -0.00519318
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow/flow00200.bin...done
+
+step 201
+    x force:         0.128383, y force:      -0.00520381
+
+
+step 202
+    x force:         0.128383, y force:      -0.00521433
+
+
+step 203
+    x force:         0.128383, y force:      -0.00522475
+
+
+step 204
+    x force:         0.128383, y force:      -0.00523507
+
+
+step 205
+    x force:         0.128383, y force:       -0.0052453
+
+
+step 206
+    x force:         0.128382, y force:      -0.00525544
+
+
+step 207
+    x force:         0.128382, y force:       -0.0052655
+
+
+step 208
+    x force:         0.128382, y force:      -0.00527548
+
+
+step 209
+    x force:         0.128382, y force:      -0.00528538
+
+
+step 210
+    x force:         0.128382, y force:      -0.00529522
+
+
+step 211
+    x force:         0.128381, y force:      -0.00530498
+
+
+step 212
+    x force:         0.128381, y force:      -0.00531468
+
+
+step 213
+    x force:         0.128381, y force:      -0.00532432
+
+
+step 214
+    x force:         0.128381, y force:       -0.0053339
+
+
+step 215
+    x force:          0.12838, y force:      -0.00534342
+
+
+step 216
+    x force:          0.12838, y force:      -0.00535289
+
+
+step 217
+    x force:          0.12838, y force:      -0.00536231
+
+
+step 218
+    x force:          0.12838, y force:      -0.00537167
+
+
+step 219
+    x force:         0.128379, y force:      -0.00538099
+
+
+step 220
+    x force:         0.128379, y force:      -0.00539026
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow/flow00220.bin...done
+
+step 221
+    x force:         0.128379, y force:      -0.00539948
+
+
+step 222
+    x force:         0.128379, y force:      -0.00540866
+
+
+step 223
+    x force:         0.128378, y force:       -0.0054178
+
+
+step 224
+    x force:         0.128378, y force:      -0.00542689
+
+
+step 225
+    x force:         0.128378, y force:      -0.00543593
+
+
+step 226
+    x force:         0.128378, y force:      -0.00544494
+
+
+step 227
+    x force:         0.128377, y force:       -0.0054539
+
+
+step 228
+    x force:         0.128377, y force:      -0.00546282
+
+
+step 229
+    x force:         0.128377, y force:       -0.0054717
+
+
+step 230
+    x force:         0.128376, y force:      -0.00548053
+
+
+step 231
+    x force:         0.128376, y force:      -0.00548932
+
+
+step 232
+    x force:         0.128376, y force:      -0.00549807
+
+
+step 233
+    x force:         0.128376, y force:      -0.00550678
+
+
+step 234
+    x force:         0.128375, y force:      -0.00551544
+
+
+step 235
+    x force:         0.128375, y force:      -0.00552405
+
+
+step 236
+    x force:         0.128375, y force:      -0.00553263
+
+
+step 237
+    x force:         0.128375, y force:      -0.00554115
+
+
+step 238
+    x force:         0.128374, y force:      -0.00554963
+
+
+step 239
+    x force:         0.128374, y force:      -0.00555807
+
+
+step 240
+    x force:         0.128374, y force:      -0.00556645
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow/flow00240.bin...done
+
+step 241
+    x force:         0.128374, y force:      -0.00557479
+
+
+step 242
+    x force:         0.128373, y force:      -0.00558308
+
+
+step 243
+    x force:         0.128373, y force:      -0.00559132
+
+
+step 244
+    x force:         0.128373, y force:      -0.00559951
+
+
+step 245
+    x force:         0.128373, y force:      -0.00560765
+
+
+step 246
+    x force:         0.128372, y force:      -0.00561574
+
+
+step 247
+    x force:         0.128372, y force:      -0.00562378
+
+
+step 248
+    x force:         0.128372, y force:      -0.00563176
+
+
+step 249
+    x force:         0.128372, y force:      -0.00563969
+
+
+step 250
+    x force:         0.128371, y force:      -0.00564757
+
+
+step 251
+    x force:         0.128371, y force:       -0.0056554
+
+
+step 252
+    x force:         0.128371, y force:      -0.00566316
+
+
+step 253
+    x force:         0.128371, y force:      -0.00567088
+
+
+step 254
+    x force:          0.12837, y force:      -0.00567854
+
+
+step 255
+    x force:          0.12837, y force:      -0.00568615
+
+
+step 256
+    x force:          0.12837, y force:       -0.0056937
+
+
+step 257
+    x force:          0.12837, y force:      -0.00570119
+
+
+step 258
+    x force:          0.12837, y force:      -0.00570863
+
+
+step 259
+    x force:         0.128369, y force:      -0.00571601
+
+
+step 260
+    x force:         0.128369, y force:      -0.00572334
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow/flow00260.bin...done
+
+step 261
+    x force:         0.128369, y force:      -0.00573061
+
+
+step 262
+    x force:         0.128369, y force:      -0.00573783
+
+
+step 263
+    x force:         0.128368, y force:      -0.00574499
+
+
+step 264
+    x force:         0.128368, y force:      -0.00575209
+
+
+step 265
+    x force:         0.128368, y force:      -0.00575914
+
+
+step 266
+    x force:         0.128368, y force:      -0.00576614
+
+
+step 267
+    x force:         0.128367, y force:      -0.00577308
+
+
+step 268
+    x force:         0.128367, y force:      -0.00577996
+
+
+step 269
+    x force:         0.128367, y force:       -0.0057868
+
+
+step 270
+    x force:         0.128367, y force:      -0.00579358
+
+
+step 271
+    x force:         0.128367, y force:       -0.0058003
+
+
+step 272
+    x force:         0.128366, y force:      -0.00580698
+
+
+step 273
+    x force:         0.128366, y force:       -0.0058136
+
+
+step 274
+    x force:         0.128366, y force:      -0.00582017
+
+
+step 275
+    x force:         0.128366, y force:       -0.0058267
+
+
+step 276
+    x force:         0.128366, y force:      -0.00583317
+
+
+step 277
+    x force:         0.128365, y force:      -0.00583959
+
+
+step 278
+    x force:         0.128365, y force:      -0.00584596
+
+
+step 279
+    x force:         0.128365, y force:      -0.00585229
+
+
+step 280
+    x force:         0.128365, y force:      -0.00585857
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow/flow00280.bin...done
+
+step 281
+    x force:         0.128365, y force:       -0.0058648
+
+
+step 282
+    x force:         0.128364, y force:      -0.00587098
+
+
+step 283
+    x force:         0.128364, y force:      -0.00587712
+
+
+step 284
+    x force:         0.128364, y force:      -0.00588322
+
+
+step 285
+    x force:         0.128364, y force:      -0.00588927
+
+
+step 286
+    x force:         0.128364, y force:      -0.00589528
+
+
+step 287
+    x force:         0.128363, y force:      -0.00590125
+
+
+step 288
+    x force:         0.128363, y force:      -0.00590717
+
+
+step 289
+    x force:         0.128363, y force:      -0.00591306
+
+
+step 290
+    x force:         0.128363, y force:       -0.0059189
+
+
+step 291
+    x force:         0.128363, y force:      -0.00592471
+
+
+step 292
+    x force:         0.128363, y force:      -0.00593047
+
+
+step 293
+    x force:         0.128362, y force:       -0.0059362
+
+
+step 294
+    x force:         0.128362, y force:      -0.00594189
+
+
+step 295
+    x force:         0.128362, y force:      -0.00594755
+
+
+step 296
+    x force:         0.128362, y force:      -0.00595316
+
+
+step 297
+    x force:         0.128362, y force:      -0.00595875
+
+
+step 298
+    x force:         0.128362, y force:       -0.0059643
+
+
+step 299
+    x force:         0.128361, y force:      -0.00596981
+
+
+step 300
+    x force:         0.128361, y force:      -0.00597529
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow/flow00300.bin...done
+
+step 301
+    x force:         0.128361, y force:      -0.00598074
+
+
+step 302
+    x force:         0.128361, y force:      -0.00598615
+
+
+step 303
+    x force:         0.128361, y force:      -0.00599154
+
+
+step 304
+    x force:         0.128361, y force:      -0.00599689
+
+
+step 305
+    x force:          0.12836, y force:      -0.00600221
+
+
+step 306
+    x force:          0.12836, y force:      -0.00600751
+
+
+step 307
+    x force:          0.12836, y force:      -0.00601277
+
+
+step 308
+    x force:          0.12836, y force:        -0.006018
+
+
+step 309
+    x force:          0.12836, y force:      -0.00602321
+
+
+step 310
+    x force:          0.12836, y force:      -0.00602839
+
+
+step 311
+    x force:         0.128359, y force:      -0.00603354
+
+
+step 312
+    x force:         0.128359, y force:      -0.00603866
+
+
+step 313
+    x force:         0.128359, y force:      -0.00604375
+
+
+step 314
+    x force:         0.128359, y force:      -0.00604882
+
+
+step 315
+    x force:         0.128359, y force:      -0.00605386
+
+
+step 316
+    x force:         0.128359, y force:      -0.00605887
+
+
+step 317
+    x force:         0.128359, y force:      -0.00606386
+
+
+step 318
+    x force:         0.128358, y force:      -0.00606882
+
+
+step 319
+    x force:         0.128358, y force:      -0.00607375
+
+
+step 320
+    x force:         0.128358, y force:      -0.00607866
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow/flow00320.bin...done
+
+step 321
+    x force:         0.128358, y force:      -0.00608354
+
+
+step 322
+    x force:         0.128358, y force:       -0.0060884
+
+
+step 323
+    x force:         0.128358, y force:      -0.00609322
+
+
+step 324
+    x force:         0.128358, y force:      -0.00609802
+
+
+step 325
+    x force:         0.128357, y force:       -0.0061028
+
+
+step 326
+    x force:         0.128357, y force:      -0.00610754
+
+
+step 327
+    x force:         0.128357, y force:      -0.00611226
+
+
+step 328
+    x force:         0.128357, y force:      -0.00611694
+
+
+step 329
+    x force:         0.128357, y force:       -0.0061216
+
+
+step 330
+    x force:         0.128357, y force:      -0.00612622
+
+
+step 331
+    x force:         0.128357, y force:      -0.00613082
+
+
+step 332
+    x force:         0.128356, y force:      -0.00613538
+
+
+step 333
+    x force:         0.128356, y force:      -0.00613991
+
+
+step 334
+    x force:         0.128356, y force:       -0.0061444
+
+
+step 335
+    x force:         0.128356, y force:      -0.00614886
+
+
+step 336
+    x force:         0.128356, y force:      -0.00615328
+
+
+step 337
+    x force:         0.128356, y force:      -0.00615766
+
+
+step 338
+    x force:         0.128356, y force:        -0.006162
+
+
+step 339
+    x force:         0.128356, y force:      -0.00616629
+
+
+step 340
+    x force:         0.128355, y force:      -0.00617054
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow/flow00340.bin...done
+
+step 341
+    x force:         0.128355, y force:      -0.00617475
+
+
+step 342
+    x force:         0.128355, y force:      -0.00617891
+
+
+step 343
+    x force:         0.128355, y force:      -0.00618302
+
+
+step 344
+    x force:         0.128355, y force:      -0.00618707
+
+
+step 345
+    x force:         0.128355, y force:      -0.00619107
+
+
+step 346
+    x force:         0.128355, y force:      -0.00619502
+
+
+step 347
+    x force:         0.128355, y force:       -0.0061989
+
+
+step 348
+    x force:         0.128355, y force:      -0.00620272
+
+
+step 349
+    x force:         0.128354, y force:      -0.00620648
+
+
+step 350
+    x force:         0.128354, y force:      -0.00621017
+
+
+step 351
+    x force:         0.128354, y force:      -0.00621379
+
+
+step 352
+    x force:         0.128354, y force:      -0.00621734
+
+
+step 353
+    x force:         0.128354, y force:      -0.00622081
+
+
+step 354
+    x force:         0.128354, y force:      -0.00622421
+
+
+step 355
+    x force:         0.128354, y force:      -0.00622752
+
+
+step 356
+    x force:         0.128354, y force:      -0.00623076
+
+
+step 357
+    x force:         0.128354, y force:       -0.0062339
+
+
+step 358
+    x force:         0.128353, y force:      -0.00623696
+
+
+step 359
+    x force:         0.128353, y force:      -0.00623993
+
+
+step 360
+    x force:         0.128353, y force:      -0.00624281
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow/flow00360.bin...done
+
+step 361
+    x force:         0.128353, y force:      -0.00624559
+
+
+step 362
+    x force:         0.128353, y force:      -0.00624827
+
+
+step 363
+    x force:         0.128353, y force:      -0.00625086
+
+
+step 364
+    x force:         0.128353, y force:      -0.00625334
+
+
+step 365
+    x force:         0.128353, y force:      -0.00625573
+
+
+step 366
+    x force:         0.128353, y force:      -0.00625801
+
+
+step 367
+    x force:         0.128353, y force:      -0.00626018
+
+
+step 368
+    x force:         0.128352, y force:      -0.00626226
+
+
+step 369
+    x force:         0.128352, y force:      -0.00626422
+
+
+step 370
+    x force:         0.128352, y force:      -0.00626609
+
+
+step 371
+    x force:         0.128352, y force:      -0.00626785
+
+
+step 372
+    x force:         0.128352, y force:       -0.0062695
+
+
+step 373
+    x force:         0.128352, y force:      -0.00627105
+
+
+step 374
+    x force:         0.128352, y force:       -0.0062725
+
+
+step 375
+    x force:         0.128352, y force:      -0.00627385
+
+
+step 376
+    x force:         0.128352, y force:       -0.0062751
+
+
+step 377
+    x force:         0.128352, y force:      -0.00627625
+
+
+step 378
+    x force:         0.128352, y force:      -0.00627731
+
+
+step 379
+    x force:         0.128351, y force:      -0.00627828
+
+
+step 380
+    x force:         0.128351, y force:      -0.00627916
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow/flow00380.bin...done
+
+step 381
+    x force:         0.128351, y force:      -0.00627996
+
+
+step 382
+    x force:         0.128351, y force:      -0.00628068
+
+
+step 383
+    x force:         0.128351, y force:      -0.00628133
+
+
+step 384
+    x force:         0.128351, y force:      -0.00628191
+
+
+step 385
+    x force:         0.128351, y force:      -0.00628242
+
+
+step 386
+    x force:         0.128351, y force:      -0.00628288
+
+
+step 387
+    x force:         0.128351, y force:      -0.00628329
+
+
+step 388
+    x force:         0.128351, y force:      -0.00628365
+
+
+step 389
+    x force:         0.128351, y force:      -0.00628397
+
+
+step 390
+    x force:         0.128351, y force:      -0.00628427
+
+
+step 391
+    x force:          0.12835, y force:      -0.00628454
+
+
+step 392
+    x force:          0.12835, y force:       -0.0062848
+
+
+step 393
+    x force:          0.12835, y force:      -0.00628506
+
+
+step 394
+    x force:          0.12835, y force:      -0.00628531
+
+
+step 395
+    x force:          0.12835, y force:      -0.00628558
+
+
+step 396
+    x force:          0.12835, y force:      -0.00628586
+
+
+step 397
+    x force:          0.12835, y force:      -0.00628617
+
+
+step 398
+    x force:          0.12835, y force:      -0.00628652
+
+
+step 399
+    x force:          0.12835, y force:      -0.00628692
+
+
+step 400
+    x force:          0.12835, y force:      -0.00628737
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow/flow00400.bin...done
+
+step 401
+    x force:          0.12835, y force:      -0.00628788
+
+
+step 402
+    x force:          0.12835, y force:      -0.00628847
+
+
+step 403
+    x force:          0.12835, y force:      -0.00628913
+
+
+step 404
+    x force:         0.128349, y force:      -0.00628989
+
+
+step 405
+    x force:         0.128349, y force:      -0.00629074
+
+
+step 406
+    x force:         0.128349, y force:       -0.0062917
+
+
+step 407
+    x force:         0.128349, y force:      -0.00629277
+
+
+step 408
+    x force:         0.128349, y force:      -0.00629396
+
+
+step 409
+    x force:         0.128349, y force:      -0.00629527
+
+
+step 410
+    x force:         0.128349, y force:      -0.00629672
+
+
+step 411
+    x force:         0.128349, y force:       -0.0062983
+
+
+step 412
+    x force:         0.128349, y force:      -0.00630002
+
+
+step 413
+    x force:         0.128349, y force:      -0.00630188
+
+
+step 414
+    x force:         0.128349, y force:      -0.00630389
+
+
+step 415
+    x force:         0.128349, y force:      -0.00630605
+
+
+step 416
+    x force:         0.128349, y force:      -0.00630835
+
+
+step 417
+    x force:         0.128349, y force:      -0.00631081
+
+
+step 418
+    x force:         0.128349, y force:      -0.00631342
+
+
+step 419
+    x force:         0.128348, y force:      -0.00631617
+
+
+step 420
+    x force:         0.128348, y force:      -0.00631908
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow/flow00420.bin...done
+
+step 421
+    x force:         0.128348, y force:      -0.00632212
+
+
+step 422
+    x force:         0.128348, y force:      -0.00632531
+
+
+step 423
+    x force:         0.128348, y force:      -0.00632863
+
+
+step 424
+    x force:         0.128348, y force:      -0.00633208
+
+
+step 425
+    x force:         0.128348, y force:      -0.00633565
+
+
+step 426
+    x force:         0.128348, y force:      -0.00633934
+
+
+step 427
+    x force:         0.128348, y force:      -0.00634314
+
+
+step 428
+    x force:         0.128348, y force:      -0.00634705
+
+
+step 429
+    x force:         0.128348, y force:      -0.00635104
+
+
+step 430
+    x force:         0.128348, y force:      -0.00635512
+
+
+step 431
+    x force:         0.128348, y force:      -0.00635927
+
+
+step 432
+    x force:         0.128348, y force:      -0.00636348
+
+
+step 433
+    x force:         0.128348, y force:      -0.00636775
+
+
+step 434
+    x force:         0.128348, y force:      -0.00637205
+
+
+step 435
+    x force:         0.128348, y force:      -0.00637638
+
+
+step 436
+    x force:         0.128347, y force:      -0.00638073
+
+
+step 437
+    x force:         0.128347, y force:      -0.00638508
+
+
+step 438
+    x force:         0.128347, y force:      -0.00638943
+
+
+step 439
+    x force:         0.128347, y force:      -0.00639375
+
+
+step 440
+    x force:         0.128347, y force:      -0.00639803
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow/flow00440.bin...done
+
+step 441
+    x force:         0.128347, y force:      -0.00640227
+
+
+step 442
+    x force:         0.128347, y force:      -0.00640645
+
+
+step 443
+    x force:         0.128347, y force:      -0.00641055
+
+
+step 444
+    x force:         0.128347, y force:      -0.00641457
+
+
+step 445
+    x force:         0.128347, y force:      -0.00641849
+
+
+step 446
+    x force:         0.128347, y force:      -0.00642229
+
+
+step 447
+    x force:         0.128347, y force:      -0.00642598
+
+
+step 448
+    x force:         0.128347, y force:      -0.00642953
+
+
+step 449
+    x force:         0.128347, y force:      -0.00643294
+
+
+step 450
+    x force:         0.128347, y force:       -0.0064362
+
+
+step 451
+    x force:         0.128347, y force:      -0.00643929
+
+
+step 452
+    x force:         0.128347, y force:      -0.00644222
+
+
+step 453
+    x force:         0.128347, y force:      -0.00644496
+
+
+step 454
+    x force:         0.128347, y force:      -0.00644752
+
+
+step 455
+    x force:         0.128346, y force:      -0.00644989
+
+
+step 456
+    x force:         0.128346, y force:      -0.00645207
+
+
+step 457
+    x force:         0.128346, y force:      -0.00645405
+
+
+step 458
+    x force:         0.128346, y force:      -0.00645583
+
+
+step 459
+    x force:         0.128346, y force:       -0.0064574
+
+
+step 460
+    x force:         0.128346, y force:      -0.00645877
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow/flow00460.bin...done
+
+step 461
+    x force:         0.128346, y force:      -0.00645994
+
+
+step 462
+    x force:         0.128346, y force:       -0.0064609
+
+
+step 463
+    x force:         0.128346, y force:      -0.00646166
+
+
+step 464
+    x force:         0.128346, y force:      -0.00646223
+
+
+step 465
+    x force:         0.128346, y force:       -0.0064626
+
+
+step 466
+    x force:         0.128346, y force:      -0.00646278
+
+
+step 467
+    x force:         0.128346, y force:      -0.00646279
+
+
+step 468
+    x force:         0.128346, y force:      -0.00646261
+
+
+step 469
+    x force:         0.128346, y force:      -0.00646227
+
+
+step 470
+    x force:         0.128346, y force:      -0.00646176
+
+
+step 471
+    x force:         0.128346, y force:      -0.00646111
+
+
+step 472
+    x force:         0.128346, y force:      -0.00646031
+
+
+step 473
+    x force:         0.128346, y force:      -0.00645938
+
+
+step 474
+    x force:         0.128346, y force:      -0.00645833
+
+
+step 475
+    x force:         0.128346, y force:      -0.00645717
+
+
+step 476
+    x force:         0.128345, y force:      -0.00645591
+
+
+step 477
+    x force:         0.128345, y force:      -0.00645456
+
+
+step 478
+    x force:         0.128345, y force:      -0.00645314
+
+
+step 479
+    x force:         0.128345, y force:      -0.00645166
+
+
+step 480
+    x force:         0.128345, y force:      -0.00645013
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow/flow00480.bin...done
+
+step 481
+    x force:         0.128345, y force:      -0.00644856
+
+
+step 482
+    x force:         0.128345, y force:      -0.00644697
+
+
+step 483
+    x force:         0.128345, y force:      -0.00644536
+
+
+step 484
+    x force:         0.128345, y force:      -0.00644376
+
+
+step 485
+    x force:         0.128345, y force:      -0.00644217
+
+
+step 486
+    x force:         0.128345, y force:       -0.0064406
+
+
+step 487
+    x force:         0.128345, y force:      -0.00643907
+
+
+step 488
+    x force:         0.128345, y force:      -0.00643758
+
+
+step 489
+    x force:         0.128345, y force:      -0.00643615
+
+
+step 490
+    x force:         0.128345, y force:      -0.00643479
+
+
+step 491
+    x force:         0.128345, y force:       -0.0064335
+
+
+step 492
+    x force:         0.128345, y force:       -0.0064323
+
+
+step 493
+    x force:         0.128345, y force:      -0.00643119
+
+
+step 494
+    x force:         0.128345, y force:      -0.00643017
+
+
+step 495
+    x force:         0.128345, y force:      -0.00642927
+
+
+step 496
+    x force:         0.128345, y force:      -0.00642847
+
+
+step 497
+    x force:         0.128345, y force:       -0.0064278
+
+
+step 498
+    x force:         0.128345, y force:      -0.00642724
+
+
+step 499
+    x force:         0.128345, y force:      -0.00642681
+
+
+step 500
+    x force:         0.128345, y force:       -0.0064265
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow/flow00500.bin...done
+
+step 501
+    x force:         0.128345, y force:      -0.00642632
+
+
+step 502
+    x force:         0.128344, y force:      -0.00642627
+
+
+step 503
+    x force:         0.128344, y force:      -0.00642636
+
+
+step 504
+    x force:         0.128344, y force:      -0.00642657
+
+
+step 505
+    x force:         0.128344, y force:      -0.00642691
+
+
+step 506
+    x force:         0.128344, y force:      -0.00642737
+
+
+step 507
+    x force:         0.128344, y force:      -0.00642796
+
+
+step 508
+    x force:         0.128344, y force:      -0.00642867
+
+
+step 509
+    x force:         0.128344, y force:      -0.00642949
+
+
+step 510
+    x force:         0.128344, y force:      -0.00643043
+
+
+step 511
+    x force:         0.128344, y force:      -0.00643147
+
+
+step 512
+    x force:         0.128344, y force:      -0.00643261
+
+
+step 513
+    x force:         0.128344, y force:      -0.00643385
+
+
+step 514
+    x force:         0.128344, y force:      -0.00643517
+
+
+step 515
+    x force:         0.128344, y force:      -0.00643658
+
+
+step 516
+    x force:         0.128344, y force:      -0.00643806
+
+
+step 517
+    x force:         0.128344, y force:      -0.00643961
+
+
+step 518
+    x force:         0.128344, y force:      -0.00644121
+
+
+step 519
+    x force:         0.128344, y force:      -0.00644287
+
+
+step 520
+    x force:         0.128344, y force:      -0.00644457
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow/flow00520.bin...done
+
+step 521
+    x force:         0.128344, y force:      -0.00644631
+
+
+step 522
+    x force:         0.128344, y force:      -0.00644808
+
+
+step 523
+    x force:         0.128344, y force:      -0.00644986
+
+
+step 524
+    x force:         0.128344, y force:      -0.00645166
+
+
+step 525
+    x force:         0.128344, y force:      -0.00645347
+
+
+step 526
+    x force:         0.128344, y force:      -0.00645527
+
+
+step 527
+    x force:         0.128344, y force:      -0.00645707
+
+
+step 528
+    x force:         0.128344, y force:      -0.00645885
+
+
+step 529
+    x force:         0.128344, y force:       -0.0064606
+
+
+step 530
+    x force:         0.128344, y force:      -0.00646233
+
+
+step 531
+    x force:         0.128344, y force:      -0.00646403
+
+
+step 532
+    x force:         0.128344, y force:      -0.00646569
+
+
+step 533
+    x force:         0.128344, y force:       -0.0064673
+
+
+step 534
+    x force:         0.128344, y force:      -0.00646886
+
+
+step 535
+    x force:         0.128343, y force:      -0.00647037
+
+
+step 536
+    x force:         0.128343, y force:      -0.00647183
+
+
+step 537
+    x force:         0.128343, y force:      -0.00647322
+
+
+step 538
+    x force:         0.128343, y force:      -0.00647456
+
+
+step 539
+    x force:         0.128343, y force:      -0.00647582
+
+
+step 540
+    x force:         0.128343, y force:      -0.00647702
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow/flow00540.bin...done
+
+step 541
+    x force:         0.128343, y force:      -0.00647816
+
+
+step 542
+    x force:         0.128343, y force:      -0.00647922
+
+
+step 543
+    x force:         0.128343, y force:      -0.00648022
+
+
+step 544
+    x force:         0.128343, y force:      -0.00648115
+
+
+step 545
+    x force:         0.128343, y force:        -0.006482
+
+
+step 546
+    x force:         0.128343, y force:      -0.00648279
+
+
+step 547
+    x force:         0.128343, y force:      -0.00648351
+
+
+step 548
+    x force:         0.128343, y force:      -0.00648417
+
+
+step 549
+    x force:         0.128343, y force:      -0.00648476
+
+
+step 550
+    x force:         0.128343, y force:      -0.00648529
+
+
+step 551
+    x force:         0.128343, y force:      -0.00648576
+
+
+step 552
+    x force:         0.128343, y force:      -0.00648617
+
+
+step 553
+    x force:         0.128343, y force:      -0.00648653
+
+
+step 554
+    x force:         0.128343, y force:      -0.00648684
+
+
+step 555
+    x force:         0.128343, y force:      -0.00648709
+
+
+step 556
+    x force:         0.128343, y force:      -0.00648731
+
+
+step 557
+    x force:         0.128343, y force:      -0.00648747
+
+
+step 558
+    x force:         0.128343, y force:       -0.0064876
+
+
+step 559
+    x force:         0.128343, y force:      -0.00648769
+
+
+step 560
+    x force:         0.128343, y force:      -0.00648775
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow/flow00560.bin...done
+
+step 561
+    x force:         0.128343, y force:      -0.00648779
+
+
+step 562
+    x force:         0.128343, y force:      -0.00648779
+
+
+step 563
+    x force:         0.128343, y force:      -0.00648777
+
+
+step 564
+    x force:         0.128343, y force:      -0.00648773
+
+
+step 565
+    x force:         0.128343, y force:      -0.00648768
+
+
+step 566
+    x force:         0.128343, y force:      -0.00648761
+
+
+step 567
+    x force:         0.128343, y force:      -0.00648753
+
+
+step 568
+    x force:         0.128343, y force:      -0.00648744
+
+
+step 569
+    x force:         0.128343, y force:      -0.00648735
+
+
+step 570
+    x force:         0.128343, y force:      -0.00648725
+
+
+step 571
+    x force:         0.128343, y force:      -0.00648716
+
+
+step 572
+    x force:         0.128343, y force:      -0.00648706
+
+
+step 573
+    x force:         0.128343, y force:      -0.00648697
+
+
+step 574
+    x force:         0.128343, y force:      -0.00648688
+
+
+step 575
+    x force:         0.128343, y force:       -0.0064868
+
+
+step 576
+    x force:         0.128343, y force:      -0.00648672
+
+
+step 577
+    x force:         0.128343, y force:      -0.00648665
+
+
+step 578
+    x force:         0.128343, y force:       -0.0064866
+
+
+step 579
+    x force:         0.128342, y force:      -0.00648655
+
+
+step 580
+    x force:         0.128342, y force:      -0.00648651
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow/flow00580.bin...done
+
+step 581
+    x force:         0.128342, y force:      -0.00648648
+
+
+step 582
+    x force:         0.128342, y force:      -0.00648647
+
+
+step 583
+    x force:         0.128342, y force:      -0.00648647
+
+
+step 584
+    x force:         0.128342, y force:      -0.00648648
+
+
+step 585
+    x force:         0.128342, y force:       -0.0064865
+
+
+step 586
+    x force:         0.128342, y force:      -0.00648653
+
+
+step 587
+    x force:         0.128342, y force:      -0.00648657
+
+
+step 588
+    x force:         0.128342, y force:      -0.00648663
+
+
+step 589
+    x force:         0.128342, y force:      -0.00648669
+
+
+step 590
+    x force:         0.128342, y force:      -0.00648676
+
+
+step 591
+    x force:         0.128342, y force:      -0.00648684
+
+
+step 592
+    x force:         0.128342, y force:      -0.00648694
+
+
+step 593
+    x force:         0.128342, y force:      -0.00648703
+
+
+step 594
+    x force:         0.128342, y force:      -0.00648714
+
+
+step 595
+    x force:         0.128342, y force:      -0.00648725
+
+
+step 596
+    x force:         0.128342, y force:      -0.00648736
+
+
+step 597
+    x force:         0.128342, y force:      -0.00648749
+
+
+step 598
+    x force:         0.128342, y force:      -0.00648761
+
+
+step 599
+    x force:         0.128342, y force:      -0.00648774
+
+
+step 600
+    x force:         0.128342, y force:      -0.00648787
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/regrow/flow00600.bin...done

@@ -1,0 +1,1309 @@
+Immersed Boundary Projection Method (IBPM), version 1.0
+
+Command:
+py_static.ibpm -name flow -outdir /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00 -tecplot 0 -restart 5 -force 1 -nx 300 -ny 150 -ngrid 1 -length 6 -xoffset -2 -yoffset -1.5 -alpha 0 -geom /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/geom/naca0012_dx0.0200.geom -Re 1000 -dt 0.01 -nsteps 300
+
+Run name: flow
+
+Grid parameters:
+    nx      300
+    ny      150
+    ngrid   1
+    length  6.0
+    xoffset -2.0
+    yoffset -1.5
+    xshift  0.0
+    yshift  0.0
+
+Reading geometry from file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/geom/naca0012_dx0.0200.geom
+    102 points on the boundary
+
+Reynolds number = 1000.0
+
+Setting up Immersed Boundary Solver...Using Cholesky solver for projection step
+Using Cholesky solver for projection step
+Using Cholesky solver for projection step
+Using zero initial condition
+using 3rd-order Runge Kutta (3-step) timestepper
+    dt = 0.01
+
+Loading Cholesky factorization from file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow_01.cholesky...(failed: could not open file)
+Loading Cholesky factorization from file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow_02.cholesky...(failed: could not open file)
+Loading Cholesky factorization from file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow_03.cholesky...(failed: could not open file)
+Computing the matrix for Cholesky factorization...done
+Computing Cholesky factorization...done
+Computing the matrix for Cholesky factorization...done
+Computing Cholesky factorization...done
+Computing the matrix for Cholesky factorization...done
+Computing Cholesky factorization...done
+Saving Cholesky factorization to file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow_01.cholesky...done
+Saving Cholesky factorization to file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow_02.cholesky...done
+Saving Cholesky factorization to file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow_03.cholesky...done
+
+Initial timestep = 0
+
+Writing restart file every 5 step(s)
+Writing forces every 1 step(s)
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00000.bin...done
+Integrating for 300 steps
+
+step 1
+    x force:         0.282101, y force:       0.00862807
+
+
+step 2
+    x force:         0.280242, y force:       0.00437507
+
+
+step 3
+    x force:         0.280217, y force:      6.09557e-05
+
+
+step 4
+    x force:         0.277934, y force:      -0.00340698
+
+
+step 5
+    x force:         0.273929, y force:       -0.0060073
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00005.bin...done
+
+step 6
+    x force:         0.268781, y force:       -0.0078893
+
+
+step 7
+    x force:         0.263041, y force:      -0.00926864
+
+
+step 8
+    x force:         0.257155, y force:       -0.0103389
+
+
+step 9
+    x force:         0.251434, y force:       -0.0112255
+
+
+step 10
+    x force:         0.246045, y force:       -0.0119827
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00010.bin...done
+
+step 11
+    x force:         0.241046, y force:       -0.0126168
+
+
+step 12
+    x force:         0.236423, y force:       -0.0131165
+
+
+step 13
+    x force:         0.232138, y force:       -0.0134741
+
+
+step 14
+    x force:         0.228149, y force:       -0.0136947
+
+
+step 15
+    x force:         0.224424, y force:       -0.0137942
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00015.bin...done
+
+step 16
+    x force:          0.22094, y force:       -0.0137938
+
+
+step 17
+    x force:         0.217679, y force:       -0.0137135
+
+
+step 18
+    x force:         0.214624, y force:       -0.0135684
+
+
+step 19
+    x force:         0.211758, y force:        -0.013368
+
+
+step 20
+    x force:         0.209066, y force:       -0.0131179
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00020.bin...done
+
+step 21
+    x force:         0.206532, y force:       -0.0128221
+
+
+step 22
+    x force:         0.204144, y force:       -0.0124848
+
+
+step 23
+    x force:          0.20189, y force:       -0.0121123
+
+
+step 24
+    x force:          0.19976, y force:       -0.0117125
+
+
+step 25
+    x force:         0.197746, y force:       -0.0112952
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00025.bin...done
+
+step 26
+    x force:         0.195838, y force:       -0.0108706
+
+
+step 27
+    x force:         0.194028, y force:       -0.0104492
+
+
+step 28
+    x force:         0.192308, y force:       -0.0100408
+
+
+step 29
+    x force:         0.190668, y force:      -0.00965409
+
+
+step 30
+    x force:         0.189098, y force:      -0.00929612
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00030.bin...done
+
+step 31
+    x force:         0.187588, y force:      -0.00897227
+
+
+step 32
+    x force:         0.186127, y force:      -0.00868596
+
+
+step 33
+    x force:         0.184708, y force:      -0.00843875
+
+
+step 34
+    x force:         0.183323, y force:      -0.00823048
+
+
+step 35
+    x force:         0.181967, y force:      -0.00805952
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00035.bin...done
+
+step 36
+    x force:         0.180638, y force:      -0.00792312
+
+
+step 37
+    x force:         0.179333, y force:      -0.00781777
+
+
+step 38
+    x force:         0.178054, y force:      -0.00773949
+
+
+step 39
+    x force:         0.176801, y force:      -0.00768419
+
+
+step 40
+    x force:         0.175577, y force:      -0.00764785
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00040.bin...done
+
+step 41
+    x force:         0.174384, y force:       -0.0076267
+
+
+step 42
+    x force:         0.173225, y force:       -0.0076173
+
+
+step 43
+    x force:         0.172101, y force:      -0.00761656
+
+
+step 44
+    x force:         0.171015, y force:      -0.00762184
+
+
+step 45
+    x force:         0.169967, y force:      -0.00763086
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00045.bin...done
+
+step 46
+    x force:         0.168958, y force:      -0.00764179
+
+
+step 47
+    x force:         0.167988, y force:      -0.00765319
+
+
+step 48
+    x force:         0.167055, y force:      -0.00766403
+
+
+step 49
+    x force:         0.166159, y force:      -0.00767363
+
+
+step 50
+    x force:         0.165298, y force:      -0.00768166
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00050.bin...done
+
+step 51
+    x force:         0.164469, y force:      -0.00768804
+
+
+step 52
+    x force:         0.163671, y force:      -0.00769286
+
+
+step 53
+    x force:           0.1629, y force:      -0.00769635
+
+
+step 54
+    x force:         0.162156, y force:      -0.00769879
+
+
+step 55
+    x force:         0.161435, y force:      -0.00770046
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00055.bin...done
+
+step 56
+    x force:         0.160736, y force:       -0.0077016
+
+
+step 57
+    x force:         0.160057, y force:      -0.00770241
+
+
+step 58
+    x force:         0.159397, y force:      -0.00770303
+
+
+step 59
+    x force:         0.158754, y force:       -0.0077035
+
+
+step 60
+    x force:         0.158126, y force:      -0.00770386
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00060.bin...done
+
+step 61
+    x force:         0.157515, y force:      -0.00770408
+
+
+step 62
+    x force:         0.156917, y force:       -0.0077041
+
+
+step 63
+    x force:         0.156334, y force:      -0.00770382
+
+
+step 64
+    x force:         0.155764, y force:      -0.00770316
+
+
+step 65
+    x force:         0.155208, y force:        -0.007702
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00065.bin...done
+
+step 66
+    x force:         0.154664, y force:      -0.00770025
+
+
+step 67
+    x force:         0.154133, y force:       -0.0076978
+
+
+step 68
+    x force:         0.153613, y force:       -0.0076946
+
+
+step 69
+    x force:         0.153106, y force:       -0.0076906
+
+
+step 70
+    x force:          0.15261, y force:      -0.00768581
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00070.bin...done
+
+step 71
+    x force:         0.152125, y force:      -0.00768025
+
+
+step 72
+    x force:         0.151652, y force:        -0.007674
+
+
+step 73
+    x force:         0.151189, y force:      -0.00766718
+
+
+step 74
+    x force:         0.150737, y force:      -0.00765991
+
+
+step 75
+    x force:         0.150296, y force:      -0.00765237
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00075.bin...done
+
+step 76
+    x force:         0.149865, y force:      -0.00764472
+
+
+step 77
+    x force:         0.149445, y force:      -0.00763713
+
+
+step 78
+    x force:         0.149035, y force:      -0.00762974
+
+
+step 79
+    x force:         0.148635, y force:      -0.00762269
+
+
+step 80
+    x force:         0.148245, y force:       -0.0076161
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00080.bin...done
+
+step 81
+    x force:         0.147865, y force:      -0.00761002
+
+
+step 82
+    x force:         0.147494, y force:      -0.00760452
+
+
+step 83
+    x force:         0.147133, y force:      -0.00759959
+
+
+step 84
+    x force:         0.146781, y force:      -0.00759525
+
+
+step 85
+    x force:         0.146438, y force:      -0.00759145
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00085.bin...done
+
+step 86
+    x force:         0.146103, y force:      -0.00758814
+
+
+step 87
+    x force:         0.145777, y force:      -0.00758526
+
+
+step 88
+    x force:         0.145459, y force:      -0.00758275
+
+
+step 89
+    x force:         0.145149, y force:      -0.00758053
+
+
+step 90
+    x force:         0.144847, y force:      -0.00757852
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00090.bin...done
+
+step 91
+    x force:         0.144553, y force:      -0.00757665
+
+
+step 92
+    x force:         0.144266, y force:      -0.00757485
+
+
+step 93
+    x force:         0.143986, y force:      -0.00757304
+
+
+step 94
+    x force:         0.143714, y force:      -0.00757116
+
+
+step 95
+    x force:         0.143449, y force:      -0.00756914
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00095.bin...done
+
+step 96
+    x force:         0.143191, y force:      -0.00756695
+
+
+step 97
+    x force:          0.14294, y force:      -0.00756453
+
+
+step 98
+    x force:         0.142696, y force:      -0.00756185
+
+
+step 99
+    x force:         0.142458, y force:      -0.00755889
+
+
+step 100
+    x force:         0.142226, y force:      -0.00755563
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00100.bin...done
+
+step 101
+    x force:         0.142001, y force:      -0.00755207
+
+
+step 102
+    x force:         0.141781, y force:      -0.00754821
+
+
+step 103
+    x force:         0.141568, y force:      -0.00754407
+
+
+step 104
+    x force:         0.141359, y force:      -0.00753966
+
+
+step 105
+    x force:         0.141156, y force:      -0.00753502
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00105.bin...done
+
+step 106
+    x force:         0.140958, y force:      -0.00753017
+
+
+step 107
+    x force:         0.140765, y force:      -0.00752517
+
+
+step 108
+    x force:         0.140576, y force:      -0.00752005
+
+
+step 109
+    x force:         0.140392, y force:      -0.00751487
+
+
+step 110
+    x force:         0.140212, y force:      -0.00750968
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00110.bin...done
+
+step 111
+    x force:         0.140036, y force:      -0.00750455
+
+
+step 112
+    x force:         0.139864, y force:      -0.00749953
+
+
+step 113
+    x force:         0.139696, y force:      -0.00749468
+
+
+step 114
+    x force:         0.139532, y force:      -0.00749005
+
+
+step 115
+    x force:         0.139372, y force:      -0.00748571
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00115.bin...done
+
+step 116
+    x force:         0.139215, y force:       -0.0074817
+
+
+step 117
+    x force:         0.139062, y force:      -0.00747805
+
+
+step 118
+    x force:         0.138912, y force:      -0.00747481
+
+
+step 119
+    x force:         0.138765, y force:        -0.007472
+
+
+step 120
+    x force:         0.138622, y force:      -0.00746964
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00120.bin...done
+
+step 121
+    x force:         0.138481, y force:      -0.00746776
+
+
+step 122
+    x force:         0.138344, y force:      -0.00746637
+
+
+step 123
+    x force:          0.13821, y force:      -0.00746548
+
+
+step 124
+    x force:         0.138078, y force:       -0.0074651
+
+
+step 125
+    x force:         0.137949, y force:      -0.00746524
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00125.bin...done
+
+step 126
+    x force:         0.137822, y force:      -0.00746591
+
+
+step 127
+    x force:         0.137698, y force:      -0.00746711
+
+
+step 128
+    x force:         0.137576, y force:      -0.00746884
+
+
+step 129
+    x force:         0.137457, y force:      -0.00747109
+
+
+step 130
+    x force:         0.137341, y force:      -0.00747386
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00130.bin...done
+
+step 131
+    x force:         0.137226, y force:      -0.00747714
+
+
+step 132
+    x force:         0.137114, y force:       -0.0074809
+
+
+step 133
+    x force:         0.137003, y force:      -0.00748513
+
+
+step 134
+    x force:         0.136895, y force:       -0.0074898
+
+
+step 135
+    x force:         0.136789, y force:      -0.00749489
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00135.bin...done
+
+step 136
+    x force:         0.136685, y force:      -0.00750036
+
+
+step 137
+    x force:         0.136583, y force:      -0.00750619
+
+
+step 138
+    x force:         0.136482, y force:      -0.00751234
+
+
+step 139
+    x force:         0.136384, y force:      -0.00751879
+
+
+step 140
+    x force:         0.136287, y force:      -0.00752551
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00140.bin...done
+
+step 141
+    x force:         0.136191, y force:      -0.00753247
+
+
+step 142
+    x force:         0.136097, y force:      -0.00753963
+
+
+step 143
+    x force:         0.136005, y force:      -0.00754698
+
+
+step 144
+    x force:         0.135915, y force:      -0.00755448
+
+
+step 145
+    x force:         0.135825, y force:      -0.00756209
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00145.bin...done
+
+step 146
+    x force:         0.135738, y force:      -0.00756979
+
+
+step 147
+    x force:         0.135652, y force:      -0.00757754
+
+
+step 148
+    x force:         0.135567, y force:      -0.00758532
+
+
+step 149
+    x force:         0.135483, y force:      -0.00759308
+
+
+step 150
+    x force:         0.135401, y force:      -0.00760081
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00150.bin...done
+
+step 151
+    x force:          0.13532, y force:      -0.00760847
+
+
+step 152
+    x force:          0.13524, y force:      -0.00761603
+
+
+step 153
+    x force:         0.135162, y force:      -0.00762347
+
+
+step 154
+    x force:         0.135085, y force:      -0.00763078
+
+
+step 155
+    x force:         0.135009, y force:      -0.00763792
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00155.bin...done
+
+step 156
+    x force:         0.134934, y force:      -0.00764489
+
+
+step 157
+    x force:          0.13486, y force:      -0.00765167
+
+
+step 158
+    x force:         0.134787, y force:      -0.00765824
+
+
+step 159
+    x force:         0.134715, y force:      -0.00766458
+
+
+step 160
+    x force:         0.134645, y force:      -0.00767069
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00160.bin...done
+
+step 161
+    x force:         0.134575, y force:      -0.00767655
+
+
+step 162
+    x force:         0.134506, y force:      -0.00768216
+
+
+step 163
+    x force:         0.134439, y force:      -0.00768749
+
+
+step 164
+    x force:         0.134372, y force:      -0.00769254
+
+
+step 165
+    x force:         0.134306, y force:      -0.00769731
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00165.bin...done
+
+step 166
+    x force:         0.134241, y force:      -0.00770178
+
+
+step 167
+    x force:         0.134177, y force:      -0.00770596
+
+
+step 168
+    x force:         0.134114, y force:      -0.00770984
+
+
+step 169
+    x force:         0.134052, y force:      -0.00771342
+
+
+step 170
+    x force:          0.13399, y force:       -0.0077167
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00170.bin...done
+
+step 171
+    x force:          0.13393, y force:      -0.00771968
+
+
+step 172
+    x force:          0.13387, y force:      -0.00772237
+
+
+step 173
+    x force:         0.133811, y force:      -0.00772476
+
+
+step 174
+    x force:         0.133753, y force:      -0.00772687
+
+
+step 175
+    x force:         0.133695, y force:       -0.0077287
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00175.bin...done
+
+step 176
+    x force:         0.133639, y force:      -0.00773024
+
+
+step 177
+    x force:         0.133583, y force:      -0.00773152
+
+
+step 178
+    x force:         0.133527, y force:      -0.00773252
+
+
+step 179
+    x force:         0.133473, y force:      -0.00773327
+
+
+step 180
+    x force:         0.133419, y force:      -0.00773376
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00180.bin...done
+
+step 181
+    x force:         0.133366, y force:      -0.00773401
+
+
+step 182
+    x force:         0.133313, y force:      -0.00773401
+
+
+step 183
+    x force:         0.133261, y force:      -0.00773379
+
+
+step 184
+    x force:          0.13321, y force:      -0.00773336
+
+
+step 185
+    x force:         0.133159, y force:      -0.00773271
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00185.bin...done
+
+step 186
+    x force:          0.13311, y force:      -0.00773185
+
+
+step 187
+    x force:          0.13306, y force:      -0.00773081
+
+
+step 188
+    x force:         0.133011, y force:      -0.00772959
+
+
+step 189
+    x force:         0.132963, y force:       -0.0077282
+
+
+step 190
+    x force:         0.132916, y force:      -0.00772664
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00190.bin...done
+
+step 191
+    x force:         0.132869, y force:      -0.00772493
+
+
+step 192
+    x force:         0.132822, y force:      -0.00772307
+
+
+step 193
+    x force:         0.132776, y force:      -0.00772107
+
+
+step 194
+    x force:         0.132731, y force:      -0.00771895
+
+
+step 195
+    x force:         0.132686, y force:      -0.00771671
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00195.bin...done
+
+step 196
+    x force:         0.132642, y force:      -0.00771436
+
+
+step 197
+    x force:         0.132598, y force:       -0.0077119
+
+
+step 198
+    x force:         0.132555, y force:      -0.00770935
+
+
+step 199
+    x force:         0.132513, y force:      -0.00770671
+
+
+step 200
+    x force:          0.13247, y force:      -0.00770399
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00200.bin...done
+
+step 201
+    x force:         0.132429, y force:      -0.00770119
+
+
+step 202
+    x force:         0.132388, y force:      -0.00769833
+
+
+step 203
+    x force:         0.132347, y force:       -0.0076954
+
+
+step 204
+    x force:         0.132307, y force:      -0.00769242
+
+
+step 205
+    x force:         0.132267, y force:      -0.00768939
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00205.bin...done
+
+step 206
+    x force:         0.132228, y force:      -0.00768632
+
+
+step 207
+    x force:         0.132189, y force:       -0.0076832
+
+
+step 208
+    x force:          0.13215, y force:      -0.00768005
+
+
+step 209
+    x force:         0.132112, y force:      -0.00767687
+
+
+step 210
+    x force:         0.132075, y force:      -0.00767366
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00210.bin...done
+
+step 211
+    x force:         0.132038, y force:      -0.00767043
+
+
+step 212
+    x force:         0.132001, y force:      -0.00766718
+
+
+step 213
+    x force:         0.131965, y force:       -0.0076639
+
+
+step 214
+    x force:         0.131929, y force:      -0.00766062
+
+
+step 215
+    x force:         0.131894, y force:      -0.00765732
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00215.bin...done
+
+step 216
+    x force:         0.131859, y force:      -0.00765401
+
+
+step 217
+    x force:         0.131824, y force:       -0.0076507
+
+
+step 218
+    x force:          0.13179, y force:      -0.00764738
+
+
+step 219
+    x force:         0.131756, y force:      -0.00764406
+
+
+step 220
+    x force:         0.131722, y force:      -0.00764073
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00220.bin...done
+
+step 221
+    x force:         0.131689, y force:       -0.0076374
+
+
+step 222
+    x force:         0.131656, y force:      -0.00763407
+
+
+step 223
+    x force:         0.131624, y force:      -0.00763074
+
+
+step 224
+    x force:         0.131592, y force:      -0.00762742
+
+
+step 225
+    x force:          0.13156, y force:      -0.00762409
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00225.bin...done
+
+step 226
+    x force:         0.131529, y force:      -0.00762077
+
+
+step 227
+    x force:         0.131498, y force:      -0.00761745
+
+
+step 228
+    x force:         0.131467, y force:      -0.00761414
+
+
+step 229
+    x force:         0.131437, y force:      -0.00761083
+
+
+step 230
+    x force:         0.131407, y force:      -0.00760752
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00230.bin...done
+
+step 231
+    x force:         0.131377, y force:      -0.00760422
+
+
+step 232
+    x force:         0.131348, y force:      -0.00760093
+
+
+step 233
+    x force:         0.131319, y force:      -0.00759763
+
+
+step 234
+    x force:          0.13129, y force:      -0.00759435
+
+
+step 235
+    x force:         0.131262, y force:      -0.00759107
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00235.bin...done
+
+step 236
+    x force:         0.131234, y force:      -0.00758779
+
+
+step 237
+    x force:         0.131206, y force:      -0.00758452
+
+
+step 238
+    x force:         0.131178, y force:      -0.00758125
+
+
+step 239
+    x force:         0.131151, y force:      -0.00757799
+
+
+step 240
+    x force:         0.131124, y force:      -0.00757473
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00240.bin...done
+
+step 241
+    x force:         0.131098, y force:      -0.00757148
+
+
+step 242
+    x force:         0.131071, y force:      -0.00756824
+
+
+step 243
+    x force:         0.131045, y force:        -0.007565
+
+
+step 244
+    x force:         0.131019, y force:      -0.00756176
+
+
+step 245
+    x force:         0.130994, y force:      -0.00755853
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00245.bin...done
+
+step 246
+    x force:         0.130969, y force:      -0.00755531
+
+
+step 247
+    x force:         0.130944, y force:      -0.00755209
+
+
+step 248
+    x force:         0.130919, y force:      -0.00754888
+
+
+step 249
+    x force:         0.130894, y force:      -0.00754568
+
+
+step 250
+    x force:          0.13087, y force:      -0.00754248
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00250.bin...done
+
+step 251
+    x force:         0.130846, y force:      -0.00753929
+
+
+step 252
+    x force:         0.130822, y force:      -0.00753611
+
+
+step 253
+    x force:         0.130799, y force:      -0.00753294
+
+
+step 254
+    x force:         0.130776, y force:      -0.00752977
+
+
+step 255
+    x force:         0.130753, y force:      -0.00752662
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00255.bin...done
+
+step 256
+    x force:          0.13073, y force:      -0.00752347
+
+
+step 257
+    x force:         0.130707, y force:      -0.00752034
+
+
+step 258
+    x force:         0.130685, y force:      -0.00751721
+
+
+step 259
+    x force:         0.130663, y force:       -0.0075141
+
+
+step 260
+    x force:         0.130641, y force:      -0.00751099
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00260.bin...done
+
+step 261
+    x force:          0.13062, y force:       -0.0075079
+
+
+step 262
+    x force:         0.130598, y force:      -0.00750482
+
+
+step 263
+    x force:         0.130577, y force:      -0.00750176
+
+
+step 264
+    x force:         0.130556, y force:      -0.00749871
+
+
+step 265
+    x force:         0.130535, y force:      -0.00749567
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00265.bin...done
+
+step 266
+    x force:         0.130515, y force:      -0.00749264
+
+
+step 267
+    x force:         0.130494, y force:      -0.00748964
+
+
+step 268
+    x force:         0.130474, y force:      -0.00748664
+
+
+step 269
+    x force:         0.130454, y force:      -0.00748367
+
+
+step 270
+    x force:         0.130434, y force:      -0.00748071
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00270.bin...done
+
+step 271
+    x force:         0.130415, y force:      -0.00747777
+
+
+step 272
+    x force:         0.130396, y force:      -0.00747484
+
+
+step 273
+    x force:         0.130376, y force:      -0.00747193
+
+
+step 274
+    x force:         0.130357, y force:      -0.00746904
+
+
+step 275
+    x force:         0.130339, y force:      -0.00746616
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00275.bin...done
+
+step 276
+    x force:          0.13032, y force:      -0.00746331
+
+
+step 277
+    x force:         0.130302, y force:      -0.00746046
+
+
+step 278
+    x force:         0.130284, y force:      -0.00745764
+
+
+step 279
+    x force:         0.130265, y force:      -0.00745483
+
+
+step 280
+    x force:         0.130248, y force:      -0.00745203
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00280.bin...done
+
+step 281
+    x force:          0.13023, y force:      -0.00744924
+
+
+step 282
+    x force:         0.130212, y force:      -0.00744647
+
+
+step 283
+    x force:         0.130195, y force:       -0.0074437
+
+
+step 284
+    x force:         0.130178, y force:      -0.00744095
+
+
+step 285
+    x force:         0.130161, y force:      -0.00743819
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00285.bin...done
+
+step 286
+    x force:         0.130144, y force:      -0.00743544
+
+
+step 287
+    x force:         0.130127, y force:      -0.00743268
+
+
+step 288
+    x force:         0.130111, y force:      -0.00742992
+
+
+step 289
+    x force:         0.130095, y force:      -0.00742714
+
+
+step 290
+    x force:         0.130078, y force:      -0.00742435
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00290.bin...done
+
+step 291
+    x force:         0.130062, y force:      -0.00742153
+
+
+step 292
+    x force:         0.130047, y force:      -0.00741868
+
+
+step 293
+    x force:         0.130031, y force:      -0.00741579
+
+
+step 294
+    x force:         0.130015, y force:      -0.00741286
+
+
+step 295
+    x force:             0.13, y force:      -0.00740988
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00295.bin...done
+
+step 296
+    x force:         0.129985, y force:      -0.00740682
+
+
+step 297
+    x force:          0.12997, y force:       -0.0074037
+
+
+step 298
+    x force:         0.129955, y force:      -0.00740049
+
+
+step 299
+    x force:          0.12994, y force:      -0.00739718
+
+
+step 300
+    x force:         0.129925, y force:      -0.00739376
+
+Writing restart file /Users/elina/Desktop/SURF2026/ibpm_py-main/SURF_test/low_re/NACA0012/kurt_comp/8-stripe_further/runs/fine_cadence_a00/flow00300.bin...done

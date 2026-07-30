@@ -432,6 +432,101 @@ partially-understood mechanism, not a mystery or a sign of a solver bug
 every single test above, at every resolution, shape, and angle of
 attack tested).
 
+## Proposals: further tests and mitigation strategies (not yet implemented)
+
+Written up as a proposal for discussion -- nothing in this section has
+been coded or run. Two goals: close the remaining gaps in the 8 tests
+above (mostly things that were inferred rather than directly measured),
+and suggest ways to reduce the striping that don't rely on halving dx
+everywhere (halving dx is 8x the runtime -- one factor of 2 in each of
+x, y, and the CFL-limited timestep -- which is too slow to use as a
+routine fix).
+
+### Further tests, to close the remaining gaps
+
+1. **Time-resolved buildup (closes the weakest link in H6c).** Test 8's
+   "seeded immediately, full reach builds up over many iterations" claim
+   was inferred from exactly two points -- step 1 and the converged step
+   3000. The baseline run already saved a restart snapshot every 250
+   steps; plotting upstream enstrophy and L_up vs. step number through
+   the existing run is zero new runs and turns an interpolated claim
+   into an observed curve. If the reach grows gradually (roughly
+   diffusion-front-like) that directly confirms elliptic-solve-mediated
+   spreading; if it's already at full extent by step 250, that part of
+   the synthesis needs correcting.
+
+2. **Extend Test 6's conditioning relationship past 3 points.**
+   `../6-edges_further` Group D's existing LE-density sweep (0.5x, 2x,
+   8x, and the diverged 16x) already has known condition-number context
+   and is sitting on disk unused by this folder. Recomputing upstream
+   enstrophy on those runs would turn Test 6's 3-point monotonic result
+   into a 6-7-point dose-response curve spanning ~5 orders of magnitude
+   in cond(M), and would show how far the sparser direction (see
+   mitigation #1 below) can be pushed before the boundary itself starts
+   misbehaving. Zero new runs.
+
+3. **Quantify the checkerboard claim (H2) instead of eyeballing it.**
+   Test 4's bulk Nyquist-fraction metric came out weak (~5%) only
+   because the alternating pattern rides on top of a smooth decaying
+   envelope, which spreads the signal's spectral power across many
+   bands. Dividing out the envelope first (fit and subtract, or
+   normalize by a local moving RMS) before computing the Nyquist
+   fraction, or equivalently computing the lag-1 autocorrelation of the
+   sign sequence, would turn "visually looks like a checkerboard" into
+   an actual number. Zero new runs.
+
+4. **Test the untested link in the mechanism chain.** Test 8 shows the
+   noise is seeded by the projection step; Test 6 shows severity tracks
+   cond(M) -- but nothing yet shows the noise specifically lives in M's
+   ill-conditioned (small-eigenvalue) modes. `../6-edges_further` Group
+   F's script already builds M explicitly; eigendecomposing it and
+   projecting the converged boundary force (already saved in every
+   restart file, as `State.f`) onto that eigenbasis would show directly
+   whether the upstream noise's amplitude is carried by the
+   high-frequency-along-the-boundary, ill-conditioned modes. If so,
+   that closes the causal chain completely and pinpoints exactly which
+   modes a fix needs to damp. Near-free computationally (one dense
+   eigendecomposition of an already-built matrix).
+
+5. **Regrow test: static artifact or continuously re-seeded?** Take one
+   converged snapshot, zero out the upstream noise once by hand, restart
+   the simulation from that edited field, and watch whether/how fast it
+   comes back. Fast regrowth means the steady boundary force
+   continuously re-seeds it (so only a method change removes it for
+   good); no regrowth means it was a startup transient that got locked
+   into the "steady" state (so even a one-time cleanup filter would
+   suffice). One short, cheap new run.
+
+### Mitigation strategies (other than reducing dx)
+
+Ranked cheapest/best-supported-by-existing-evidence first.
+
+| Strategy | Evidence already in hand | Cost | Main risk |
+|---|---|---|---|
+| **Sparser boundary points at LE/TE** (ds ~ 1.5-4x dx locally, instead of ds=dx) | Already demonstrated, not hypothetical: `../6-edges_further`'s LTEsparse geometry cut upstream enstrophy 4.2x (0.627->0.148, Test 6) and even slightly *improved* the LE field-max (Group D's 0.5x-density case: 67.7 vs. baseline 71.7) | Zero -- fewer boundary points means a smaller, faster Cholesky factorization too | Sparsify too far and the boundary becomes "leaky" (this repo's own `checkgeom` utility warns about under-resolved boundaries); must reverify Cl/Cd/Strouhal are unchanged before adopting |
+| **Sub-cell grid-phase tuning** (`xshift`/`yshift`, already a supported CLI parameter) | `../6-edges_further` Test B1: field-max ranged 59.3-83.4 from phase alone, at fixed shape/grid/everything else | Zero | Only a partial mitigation (~30% swing, never zero); the optimal phase may not be the same for every case/angle, so it isn't a one-time fix |
+| **Wider/smoother discrete delta kernel** | `py_static/regularizer.py` currently uses the 3-point Roma-Peskin-Berger (1999) kernel with a hard-coded 1.5-cell support radius (`deltaSupportRadius = 1.5`) -- one of the *sharpest* standard IB kernels. Wider kernels (the classic 4-point Peskin kernel, or other smoothed variants) are the immersed-boundary literature's standard remedy for exactly this grid-locking/high-frequency-force oscillation, and should also improve cond(M) directly, tying back to Test 6 | Small, localized code change (one function); negligible runtime cost | Spreads the effective interface over ~2 cells instead of 1.5 -- boundary-layer force resolution needs revalidating, not just the far-field striping |
+| **Regularize the projection solve** (e.g. a small ridge/Tikhonov term, or truncating M's smallest eigenvalues) | Tests 6 and Group D's divergence at 16x density both identify ill-conditioning of M as a real driver; this targets it directly rather than indirectly (via boundary spacing) | Small, localized to the Cholesky/projection-solver path | No-slip stops being satisfied exactly and becomes a least-squares approximation instead -- must monitor the actual slip-velocity residual, not just the vorticity field, to confirm forces stay accurate |
+| **Smooth the boundary force along arc length each step** | Same target as the row above (damp the high-frequency components of the boundary force specifically), simpler to implement than modifying the linear-algebra path | Trivial per-step cost | Same constraint-softening concern as above, same validation needed |
+| **Targeted 2-cell-wavelength filter on vorticity near the body** | Directly targets the specific Nyquist-wavelength mode Test 4 identified, in principle leaving every other resolvable scale untouched | Trivial to add | The most invasive option philosophically (edits the solved field directly, after the fact, rather than fixing the mechanism that produces it) -- needs the most careful validation that real force/wake quantities (Cl, Cd, St) are unaffected |
+
+**Two points worth flagging to the mentor directly.** First, sparser
+LE/TE boundary points is unusual among these options in that it is
+*already supported by this folder's own data* (not a hypothesis to go
+test), costs nothing, and would make runs faster rather than slower --
+the natural pilot is proposed test #2 above (extend Group D's sweep and
+re-derive the best density from the resulting dose-response curve), then
+revalidate forces before adopting it as the new default. Second, "avoid
+the 8x cost of halving dx everywhere" is really only a constraint on
+*uniform* refinement -- the multi-domain-nesting approach already in use
+elsewhere in this repo (a tight finest box hugging just the airfoil,
+with coarser nested levels covering the rest of the domain -- see the
+faithful2 configuration and `GRID_UPGRADE_MANUAL.md`) buys the same
+near-body dx without paying for it over the whole domain, since cost
+scales with the finest box's area rather than the full 6c x 3c extent.
+That's the structural fallback if the mitigations above turn out to be
+insufficient on their own.
+
 ## Files
 
 - `common.py` -- shared helpers (upstream-region metrics: streamwise
