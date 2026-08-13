@@ -1,1 +1,3 @@
 py: launching (1336x400 grid, ngrid=7, 194667 steps) ...
+py: OK in 1015012s (281.95h)
+SUMMARY: {'py': True}

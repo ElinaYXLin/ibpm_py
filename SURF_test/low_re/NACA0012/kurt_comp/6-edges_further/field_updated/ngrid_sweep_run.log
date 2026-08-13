@@ -1,0 +1,10 @@
+8 jobs, 6-way parallel
+  ngrid1_cpp: ok (78s) [1/8, elapsed=78s]
+  ngrid1_py: ok (91s) [2/8, elapsed=91s]
+  ngrid2_cpp: ok (163s) [3/8, elapsed=163s]
+  ngrid3_cpp: ok (249s) [4/8, elapsed=249s]
+  ngrid2_py: ok (252s) [5/8, elapsed=252s]
+  ngrid4_cpp: ok (310s) [6/8, elapsed=401s]
+  ngrid3_py: ok (402s) [7/8, elapsed=403s]
+  ngrid4_py: ok (515s) [8/8, elapsed=593s]
+DONE. ran=8 skipped=0 failed=0 in 593s

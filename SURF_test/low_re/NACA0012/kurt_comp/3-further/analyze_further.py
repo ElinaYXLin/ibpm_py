@@ -248,6 +248,24 @@ def test_2c_ngrid_strouhal():
 
 
 # ================================================================
+# 2d. dx=0.01 combined with ngrid=2,3: does refinement + far-field
+#     synergize, or are the two corrections independent/redundant?
+# ================================================================
+def test_2d_dxngrid_strouhal():
+    out = ["alpha_deg,st_dx001_ngrid1,st_dx001_ngrid2,st_dx001_ngrid3"]
+    for a in REP_ANGLES:
+        st1 = _steady_st(FUP_RUNS / "dx_refine" / f"dx0.010_a{a:02d}")
+        st2 = _steady_st(FUP_RUNS / "dx_ngrid_sweep" / f"dx0.010_ngrid2_a{a:02d}")
+        st3 = _steady_st(FUP_RUNS / "dx_ngrid_sweep" / f"dx0.010_ngrid3_a{a:02d}")
+        s1 = f"{st1:.4f}" if st1 is not None else ""
+        s2 = f"{st2:.4f}" if st2 is not None else ""
+        s3 = f"{st3:.4f}" if st3 is not None else ""
+        out.append(f"{a},{s1},{s2},{s3}")
+    (DATA / "test2d_dxngrid_strouhal.csv").write_text("\n".join(out) + "\n")
+    print("wrote test2d_dxngrid_strouhal.csv")
+
+
+# ================================================================
 # 3b. IC ensemble: multistability / hysteresis check
 # ================================================================
 def test_3b_ic_ensemble():
@@ -292,4 +310,5 @@ if __name__ == "__main__":
         print("=== new-run-dependent tests ===")
         test_2b_dx_refine()
         test_2c_ngrid_strouhal()
+        test_2d_dxngrid_strouhal()
         test_3b_ic_ensemble()

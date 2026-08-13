@@ -409,6 +409,26 @@ boundary-point spacing), not a rendering/masking oversight.
 
 ---
 
+## `field_updated/`: completing the field-max recomputation (added later)
+
+Groups A-G above and Reconciliation 1/2 recomputed *most* of
+`5-leading_edge`'s lineout-based numbers with the field-max metric, but
+left specific cases untouched (Test 0b's alpha=9°/12°; Test 3a's
+`naca0012_LTEsparse`; Test 3b's `naca0012_roundTE` and `cylinder`) and
+never tested `ngrid` against the LE/TE peak specifically. See
+[`field_updated/README.md`](field_updated/README.md) for the complete
+set: all four gaps filled in (mostly zero new runs), a new ngrid=1-4
+sweep at this folder's default settings (8 new runs), and py/cpp
+agreement confirmed on the field-max metric itself for every case
+across all 5 tables (6.1e-14 to 5.3e-9 relative — floating-point
+precision throughout, same as everywhere else in this repo). Headline
+new finding: unlike grid refinement (dx), far-field domain size (ngrid)
+barely moves the LE/TE peak at this attached-flow condition (≤5% total
+change, saturating by ngrid=3) — the artifact is a near-body/boundary
+effect, not a domain-confinement one.
+
+---
+
 ## Overall synthesis
 
 1. **The single biggest factor across this entire investigation is the
@@ -457,5 +477,10 @@ boundary-point spacing), not a rendering/masking oversight.
   peak locations on the field with the body outline overlaid, classifies
   inside/outside via point-in-polygon).
 - `gen_figs_6.py` — figures for recon2 and Groups B-E.
+- `field_updated/` — completes the field-max recomputation this folder
+  left partial (Test 0b's alpha=9°/12°, Test 3a's LTEsparse, Test 3b's
+  roundTE/cylinder), confirms py/cpp agreement on field-max for every
+  case across all groups, and adds a new ngrid=1-4 sweep at default
+  settings. See its own README for details.
 - `geom/`, `runs/`, `data/`, `figures/` — new geometries, raw simulation
   output, CSVs, and PNGs for every test above.

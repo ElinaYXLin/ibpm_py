@@ -272,6 +272,200 @@ toward the more structural options (wider/smoother delta kernel,
 boundary-point respacing, or genuinely regularizing the linear solve)
 as the more promising next steps.
 
+## Proposals: next round of tests (not yet implemented)
+
+Written up for discussion -- nothing in this section has been coded or
+run. `../7-stripe_investigation`'s Proposals section had two jobs
+(close inferential gaps, and list candidate mitigations); its five
+"further tests" are now all done, above. So this round has a different
+shape. Stage 8 changed the state of the question in three ways that
+should drive what comes next:
+
+1. **The mechanism is essentially settled.** Seeded by the projection
+   step, continuously re-seeded by the steady boundary force, exactly
+   checkerboard (-1.000 autocorrelation) at dx=0.02 and 0.01, severity
+   tracking cond(M) across 5 orders of magnitude. There is little left
+   to learn by measuring the artifact more precisely; the open work is
+   whether it *matters* and whether it can be *removed*.
+2. **Two of the six proposed mitigations are now weakened.** Test 4
+   tempers modal truncation of M; Test 5 kills one-time post-hoc
+   filtering outright (regrowth to 90% in 8 steps). Neither is
+   definitively dead -- both have per-step variants that were never
+   tested -- but the untested structural options (delta kernel,
+   boundary respacing, regularized solve) are now the better bets.
+3. **Two genuinely open anomalies were produced**, both flagged rather
+   than smoothed over: the dx=0.005 partial-checkerboard exception
+   (Test 3) and the local non-monotonicity of the conditioning
+   relationship among the closely-clustered low-density geometries
+   (Test 2).
+
+The nine tests below follow from those three, in that priority order.
+Every one should produce a figure (or, where a figure genuinely doesn't
+fit, a table), per this investigation's convention throughout.
+
+### Group A: does the striping actually change the answer?
+
+This is the largest remaining gap in the whole investigation, stages
+5-8 included. Nine tests across two folders have quantified the
+artifact's area, severity, spectrum, timescale, mechanism, and
+conditioning dependence -- and **not one of them has measured its
+effect on Cl, Cd, or Strouhal number**, which are the only quantities
+`../1-paper_based` is actually validating against Kurtulus. Everything
+downstream (whether any mitigation is worth adopting, whether the
+faithful-2 runs need redoing) depends on this answer, so it should go
+first.
+
+1. **Force-coefficient sensitivity across the geometries already on
+   disk.** For every geometry/resolution whose upstream enstrophy is
+   already tabulated (baseline, LTEsparse, Group D's 0.5x/2x/4x/8x
+   density sweep, and the dx=0.01/0.005 refinements), pull the
+   corresponding `flow.force` and compute mean Cl, mean Cd, and
+   Strouhal where the case is unsteady. Plot each against that case's
+   upstream enstrophy. Zero new runs. **The decisive outcome**: if Cd
+   varies by <1% while enstrophy varies 10x, the striping is
+   cosmetically ugly but validation-irrelevant, and the mitigation
+   table becomes a low-priority cleanup rather than a correctness
+   issue. If instead Cd tracks enstrophy, LTEsparse's 4.2x enstrophy
+   reduction becomes an accuracy claim, not just an aesthetic one, and
+   the priority inverts. Either result is worth having before spending
+   any more compute.
+
+2. **Does the artifact carry momentum? A control-volume budget.** The
+   sharper version of test 1, for the steady alpha=0 case where the
+   answer should be exactly known. Evaluate the momentum flux through a
+   control volume that (a) excludes and (b) includes the striped
+   upstream region, and compare each against the directly integrated
+   boundary force. A near-perfect match for the excluded case plus a
+   measurable discrepancy for the included case would prove the
+   striping is confined to a region that doesn't contaminate the force
+   integral -- a much stronger statement than "Cd happens to look
+   similar," because it says *why*. Zero new runs (post-processing of
+   existing converged snapshots).
+
+### Group B: head-to-head trial of the surviving mitigations
+
+Tests 4 and 5 narrowed the candidate list; these test what's left,
+under one common protocol so the results are comparable. Each is a
+single cheap alpha=0 steady run plus one unsteady case (alpha=12,
+where vortex shedding makes force errors visible) and reports the same
+three numbers: **upstream enstrophy** (does it help), **Cl/Cd/St vs.
+baseline** (does it break anything), and **the max slip-velocity
+residual on the boundary** (does the no-slip constraint still hold).
+That third number matters because several of these options soften the
+constraint, and reporting only the vorticity field would hide it --
+the same "measuring the wrong thing" failure Test 3 diagnosed.
+
+3. **Wider delta kernel (highest-value single experiment in this
+   list).** `py_static/regularizer.py:45`'s `deltaFunction` is the
+   3-point Roma-Peskin-Berger kernel with `deltaSupportRadius = 1.5`
+   hard-coded at line 42 -- one of the sharpest standard IB kernels.
+   Swap in the classic 4-point Peskin kernel (support radius 2.0) and
+   rerun. This is the immersed-boundary literature's standard remedy
+   for precisely this grid-locking pathology, it is a one-function
+   change, and it should improve cond(M) directly, which by Test 2's
+   dose-response curve predicts a specific enstrophy reduction --
+   making it a *falsifiable* prediction rather than an open-ended
+   trial. Worth reporting cond(M) for the new kernel first (near-free,
+   no run needed) and checking it against Test 2's curve before
+   spending the run.
+
+4. **Per-step boundary-force smoothing along arc length.** Test 4
+   showed truncating M's eigenmodes doesn't cleanly separate artifact
+   from real load -- but eigenmodes of M are not the same basis as
+   arc-length wavenumber, and the checkerboard is defined in the
+   latter. Apply a mild low-pass along the boundary to `f` each step
+   and measure the same three numbers. This is the natural rescue of
+   the "damp the high-frequency force" idea in a basis matched to the
+   observed pattern, and is cheap to implement.
+
+5. **Per-step (not one-time) targeted 2-cell filter.** Test 5 killed
+   the one-time cleanup filter, but the *per-step* version was never
+   tested and is a different proposition: if the filter runs every
+   step, regrowth speed no longer defeats it. Because it is the most
+   invasive option philosophically (it edits the solved field), it is
+   proposed here strictly as a **diagnostic upper bound**, not a
+   recommended fix: it answers "if the striping were removed entirely,
+   how much would Cl/Cd/St change?" -- which is Group A's question
+   asked in the most direct possible way, and a useful cross-check on
+   test 1's answer.
+
+6. **Sub-cell phase (`xshift`/`yshift`) at the best-performing
+   geometry.** Group B1 measured a ~30% field-max swing from phase
+   alone at the baseline geometry. Whether that swing is additive with
+   a structural fix, or whether the structural fix absorbs it, is
+   unknown and cheap to check: repeat the phase sweep on whichever of
+   tests 3-5 wins. If the swing collapses, that's independent evidence
+   the structural fix addressed the mechanism rather than just the
+   symptom.
+
+### Group C: close stage 8's own two open anomalies
+
+7. **Why does dx=0.005 break the checkerboard signature?** Test 3's
+   most interesting loose end: -0.500 after envelope normalization,
+   versus exactly -1.000 at both coarser resolutions. Two competing
+   explanations are separable with existing data plus at most one run.
+   (a) *Resolution-dependent mechanism change*: at dx=0.005 the
+   boundary spacing ds=dx is fine enough relative to the kernel support
+   that the pattern is no longer single-cell-periodic -- testable by
+   computing the 2D spatial spectrum of the upstream region rather than
+   a 1D row-wise autocorrelation, and checking whether the power has
+   moved to a diagonal or a longer wavelength rather than disappeared.
+   (b) *Measurement artifact*: the moving-RMS window used for envelope
+   normalization is defined in cells, so at 4x the resolution it spans
+   a 4x smaller physical distance and may no longer be normalizing the
+   envelope correctly -- testable for free by repeating Test 3 with the
+   window fixed in chord units instead of cells. **(b) should be
+   checked first**, because it costs nothing and, if it explains the
+   result, the anomaly evaporates; that ordering is worth stating
+   explicitly since the interesting explanation is also the one more
+   likely to be believed prematurely.
+
+8. **Is the low-density non-monotonicity real or noise?** Test 2's 2x
+   geometry has slightly higher cond(M) but lower enstrophy than
+   baseline. Before this is treated as a real feature of the
+   relationship, it needs an error bar: repeat the enstrophy
+   measurement for those three clustered geometries at 2-3 different
+   `xshift` phases (Group B1 established phase alone moves near-LE
+   metrics ~30%). If the phase-induced spread exceeds the
+   baseline-to-2x gap, the non-monotonicity is within measurement
+   scatter and the honest statement is "flat in this range," not
+   "non-monotonic." Cheap runs.
+
+9. **Test the diffusion-front interpretation directly.** Test 1 found
+   the reach L_up ramps ~7x more slowly than the local enstrophy and
+   attributed this to elliptic-solve-mediated spreading. That
+   interpretation makes a quantitative prediction that was never
+   checked: the ramp rate should scale in a specific way with Re (which
+   sets the diffusion length nu/U) and should be nearly independent of
+   dx once the source is resolved. Rerun the fine-cadence buildup at
+   Re=500 and Re=2000 and check whether the L_up saturation time moves
+   as predicted. If it doesn't, the spreading is being set by something
+   else (most likely the elliptic solver's own iteration structure),
+   which would be a more interesting result than confirmation.
+
+### Suggested priority
+
+| # | Test | New runs | Why this rank |
+|---|---|---|---|
+| 1 | Cl/Cd/St vs. enstrophy | none | Gates everything else; decides whether this is a correctness problem or a cosmetic one |
+| 3 | 4-point Peskin kernel | 2 cheap | Best-supported untested mitigation; falsifiable prediction via Test 2's curve; one-function change |
+| 7b | Chord-fixed normalization window | none | Free; may dissolve a headline anomaly before it gets built on |
+| 2 | Control-volume momentum budget | none | Explains *why* test 1 came out the way it did |
+| 4, 5 | Per-step force smoothing / 2-cell filter | 2-4 cheap | Rescues two ideas stage 8 weakened but did not kill; #5 also bounds Group A |
+| 8 | Phase error bars on the density sweep | few cheap | Prevents overclaiming a 3-point non-monotonicity |
+| 6 | Phase sweep on the winning fix | few cheap | Only meaningful after 3-5 resolve |
+| 9 | Re-scaling of the reach ramp | 2 cheap | Interpretive, not decision-relevant -- last |
+
+**One point worth flagging directly.** Group A is proposed first not
+because it is the most interesting test here but because it is the one
+whose answer could make most of the rest unnecessary. Stages 5-8 have
+built a thorough, quantitatively solid account of an artifact whose
+practical consequence has never been measured, and it is entirely
+possible that the correct conclusion is "confined to a region that
+doesn't affect the validated quantities -- document it and move on."
+That would not invalidate this work, but it should change what gets
+done next, and finding out costs zero new runs.
+
 ## Files
 
 - `common.py` -- imports (not redefines) `../7-stripe_investigation`'s

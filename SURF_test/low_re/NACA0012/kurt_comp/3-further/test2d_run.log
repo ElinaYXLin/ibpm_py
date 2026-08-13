@@ -1,0 +1,4 @@
+2d (dx=0.01 x ngrid=2,3): 8 jobs, 6-way parallel
+[5/8] done=5 skip=0 fail=0 elapsed=2813s
+[8/8] done=8 skip=0 fail=0 elapsed=4337s
+2d (dx=0.01 x ngrid=2,3) DONE. ran=8 skipped=0 failed=0 in 4337s

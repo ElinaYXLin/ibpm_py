@@ -286,6 +286,41 @@ that conditioning doesn't matter.
 **py/cpp agreement**: enstrophy matches to ~9 significant figures for
 all three geometries (differences only in the 6th-9th decimal digit).
 
+**What equation `cond(M)` is actually the condition number of, and why
+denser spacing worsens it.** `testF_conditioning.py` builds and factors
+the exact operator the solver applies every timestep
+(`py_static/projection_solver.py`'s `M(f)` method):
+
+```python
+def M(self, f, y=None):
+    u = Scalar(self._grid)
+    self.B(f, u)      # u = B f        -- spread boundary force onto the Eulerian grid
+    self.Ainv(u, u)   # u = A^-1 B f   -- diffuse that forcing through the fluid
+    self.C(u, y)      # y = C A^-1 B f -- interpolate the induced velocity back to the boundary points
+```
+
+So every timestep solves `M f = b` for `M = C·A⁻¹·B`: **B** spreads a
+candidate boundary force onto the grid through the discrete regularized
+delta function (~1.5-cell support radius, `regularizer.py`), **A⁻¹** is
+the implicit viscous/diffusion solve that propagates that forcing
+through the fluid, and **C** (≈Bᵀ) interpolates the resulting velocity
+back onto the same boundary points. Physically, `M` is a discrete
+Green's-function/mobility matrix: `M_ij` is "how much velocity a unit
+force at boundary point *j* induces at boundary point *i*, once
+diffused through the fluid." Solving `M f = b` finds the unique
+boundary force distribution enforcing no-slip/no-penetration — the
+projection step run every timestep.
+
+**Why density worsens conditioning**: if two boundary points sit closer
+together than the delta kernel's support radius, their spread patterns
+`B_i`/`B_j` overlap almost completely, so `C_i A⁻¹ B_j ≈ C_i A⁻¹ B_i` —
+rows/columns *i* and *j* of `M` become nearly identical. Near-identical
+rows are near-linear-dependence, which drives `M`'s smallest singular
+value toward zero while the largest stays roughly fixed, and
+`cond(M)=σ_max/σ_min` blows up. This is exactly what LTEdense (points
+packed 4x closer than baseline) does: `cond(M)` jumps to 1.15e8, ~9000x
+worse than baseline, from that overlap alone.
+
 ## Test 7: angle-of-attack sweep
 
 "Upstream enstrophy" here is exactly the same quantity defined in
@@ -319,6 +354,34 @@ changes, **this variation can only be coming from the flow/force-magnitude
 side, not the discretization** -- upstream noise is (at least partly)
 force-driven, not purely a fixed geometric artifact. This is a genuinely
 new finding this folder's design was built to be able to make.
+
+**Reading the figure: what each panel actually plots, and why the right
+panel's red box looks tilted/jagged.** The center panel's purple line
+(`upstream peak |omega|`) is computed from `upstream_scalar_metrics`
+using the plain, non-rotated `upstream_mask` -- **the same body-frame
+region as the left panel's blue line, not the red/lab-frame one**
+(there is no rotated version of `peak` anywhere in this script, only of
+enstrophy); its own axis label says so directly
+(`"upstream peak |omega| (body-frame)"`).
+
+The right panel overlays both regions on one example field (alpha=40),
+color-coded to match the left panel: blue = body-frame, red =
+lab-frame. Both use the *same* fixed perpendicular half-width for a fair
+comparison -- `YLIM=(-0.5,0.5)` for blue (measured along plain grid y)
+and `half_width=0.5` for red (measured along the *rotated* cross-flow
+direction `v = -Δx·sinα + Δy·cosα`), both a 1.0-chord-wide band. The red
+region genuinely is a perfect rectangle -- but only in that rotated
+(flow-aligned) coordinate frame. The figure itself is drawn on the
+solver's actual, never-rotated Cartesian (x,y) grid (`common.py`'s
+`upstream_mask_2d_rotated` just tests each grid cell's *rotated*
+coordinates against rectangular bounds; the grid itself doesn't move).
+So at alpha=40°, a true rectangle in flow-aligned coordinates renders as
+a **tilted band** on the fixed pixel grid, and because the rotation
+angle doesn't line up with the grid's rows/columns, individual cells
+only approximate the tilted boundary -- producing the jagged,
+staircase-like edges visible on the red box. The blue box, defined
+directly in x/y with no rotation, renders as a clean axis-aligned
+rectangle by contrast.
 
 **py/cpp agreement**: max relative difference in enstrophy over the
 full 16-point sweep is 6.9e-14 -- machine precision throughout.

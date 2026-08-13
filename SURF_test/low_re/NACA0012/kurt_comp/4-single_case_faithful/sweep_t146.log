@@ -1,0 +1,10 @@
+86 jobs, 6-way parallel
+[10/86] done=10 skip=0 fail=0 elapsed=745s
+[20/86] done=20 skip=0 fail=0 elapsed=1372s
+[30/86] done=30 skip=0 fail=0 elapsed=1682s
+[40/86] done=40 skip=0 fail=0 elapsed=2308s
+[50/86] done=50 skip=0 fail=0 elapsed=2807s
+[60/86] done=60 skip=0 fail=0 elapsed=3094s
+[70/86] done=70 skip=0 fail=0 elapsed=3555s
+[80/86] done=80 skip=0 fail=0 elapsed=4059s
+DONE. ran=86 skipped=0 failed=0 in 4288s

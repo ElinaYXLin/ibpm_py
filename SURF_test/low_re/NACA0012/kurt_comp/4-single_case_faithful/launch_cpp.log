@@ -1,1 +1,3 @@
 cpp: launching (1336x400 grid, ngrid=7, 194667 steps) ...
+cpp: OK in 846502s (235.14h)
+SUMMARY: {'cpp': True}

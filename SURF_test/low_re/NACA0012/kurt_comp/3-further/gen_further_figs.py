@@ -223,6 +223,41 @@ def fig_2b_2c():
     print("wrote test_2c_ngrid_strouhal.png")
 
 
+def fig_2d():
+    d2d = load_csv("test2d_dxngrid_strouhal.csv")
+    angles = [15, 20, 30, 40]
+    paper_st = _paper_strouhal_at(angles)
+
+    fig, axes = plt.subplots(1, 4, figsize=(13, 4.3), sharey=False)
+    for i, a in enumerate(angles):
+        ax = axes[i]
+        style_ax(ax)
+        row = d2d[d2d["alpha_deg"] == a]
+        vals = [float(row["st_dx001_ngrid1"][0]), float(row["st_dx001_ngrid2"][0]),
+                float(row["st_dx001_ngrid3"][0])]
+        labels = ["dx=0.01\nngrid=1\n(2b baseline)", "dx=0.01\nngrid=2", "dx=0.01\nngrid=3"]
+        colors = [C_A, C_B, C_C]
+        x = np.arange(3)
+        ax.bar(x, vals, color=colors, width=0.6, zorder=2)
+        for xi, v in zip(x, vals):
+            ax.text(xi, v + 0.01, f"{v:.3f}", ha="center", va="bottom", fontsize=7.5)
+        ax.axhline(paper_st[i], color=C_REF, linewidth=1.6, linestyle="--", zorder=3,
+                   label="Kurtulus (2019)" if i == 0 else None)
+        ax.text(2.5, paper_st[i], f" paper: {paper_st[i]:.3f}", color=C_REF,
+                fontsize=7, va="bottom", ha="right")
+        ax.set_xticks(x)
+        ax.set_xticklabels(labels, fontsize=7)
+        ax.set_title(f"α={a}°", fontsize=10)
+        if i == 0:
+            ax.set_ylabel("Strouhal number St")
+    fig.suptitle("Test 2d: does combining finer dx (0.01) with more far-field domain (ngrid=2,3)\n"
+                 "synergize, beyond what dx=0.01 alone (2b) or ngrid alone (2c) achieved?", fontsize=12)
+    fig.tight_layout(rect=[0, 0, 1, 0.88])
+    fig.savefig(FIGS / "test_2d_dxngrid_strouhal.png", dpi=150)
+    plt.close(fig)
+    print("wrote test_2d_dxngrid_strouhal.png")
+
+
 def fig_3b():
     d = load_csv("test3b_ic_ensemble.csv")
     angles = [25, 28, 30]
@@ -269,4 +304,5 @@ if __name__ == "__main__":
     fig_2a()
     fig_3a()
     fig_2b_2c()
+    fig_2d()
     fig_3b()

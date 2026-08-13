@@ -395,3 +395,14 @@ boundary-point densification can resolve away**, scaling intuitively with
 nose sharpness, with a real but secondary contribution from grid
 sub-cell phase and from mutual LE/TE coupling. See
 `../6-edges_further/README.md` for the full derivation, data, and figures.
+
+**Further update**: `../6-edges_further/field_updated/` (added later)
+completes this recomputation — it fills in every case above that `../6-edges_further`'s
+original Groups A-G never actually redid with field-max (this file's own
+Test 0b at alpha=9°/12°, Test 3a's `naca0012_LTEsparse`, and Test 3b's
+`naca0012_roundTE`/`cylinder`), confirms py/cpp agreement on the
+field-max metric itself (floating-point precision, every case), and adds
+a new ngrid=1-4 sweep showing far-field domain size barely affects the
+LE/TE peak at this attached-flow condition (≤5% total change) — unlike
+grid refinement, which keeps growing it. See
+`../6-edges_further/field_updated/README.md`.

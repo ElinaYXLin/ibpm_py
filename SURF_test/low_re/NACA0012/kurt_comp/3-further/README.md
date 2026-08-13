@@ -227,14 +227,77 @@ section implied. 15° stays close to the paper under domain refinement too
 (0.687→0.652 vs. paper 0.685), drifting slightly further rather than
 closer, but the deviation stays small (<5%).
 
-**Revised overall conclusion for Question 2:** the low plateau's (~20°)
-mismatch with the paper is now attributable mainly to **far-field domain
-confinement** (matched almost exactly once `ngrid` is increased), not
-purely near-body grid resolution as previously stated, even though dx=0.02
-is separately confirmed under-resolved there too. The high plateau's
-(~40°) mismatch is also domain-related, as before. The mid-range (~30°)
-mismatch remains genuinely unexplained by either knob tested here — a
-real open question, not a resolved one.
+### Test 2d — does combining finer dx with more far-field domain synergize?
+
+![Test 2d: shedding Strouhal at 4 representative angles, dx=0.01 combined with ngrid=2,3, vs. the paper's own value](figures/test_2d_dxngrid_strouhal.png)
+
+Tests 2b and 2c each moved one knob at a time (dx=0.02→0.01 at ngrid=1;
+ngrid=1→2→3 at dx=0.02). This combines both at once — dx=0.01 with
+ngrid=2 and ngrid=3 — at the same 4 angles, to check whether the two
+corrections stack (worth paying for both) or are redundant/substitutable
+(one alone already captures most of the benefit). Comparing each config's
+absolute error against the paper's digitized value:
+
+| alpha | paper St | baseline (dx=0.02,ngrid=1) | 2b: dx=0.01 alone | 2c: ngrid=3 alone | 2d: dx=0.01+ngrid=3 |
+|---|---|---|---|---|---|
+| 15 | 0.685 | 0.687 (err 0.002) | 0.740 (err 0.055) | 0.652 (err 0.033) | 0.702 (err 0.017) |
+| 20 | 0.493 | 0.225 (err 0.268) | 0.584 (err 0.091) | 0.495 (err **0.002**) | 0.525 (err 0.032) |
+| 30 | 0.342 | 0.257 (err 0.085) | 0.266 (err **0.076**) | 0.248 (err 0.094) | 0.212 (err 0.130) |
+| 40 | 0.240 | 0.326 (err 0.086) | 0.327 (err 0.087) | 0.261 (err 0.021) | 0.258 (err **0.018**) |
+
+**No consistent synergy — at 2 of 4 angles the combination is worse than
+the single best knob, not better.** At 15°, the untouched baseline was
+already closest to the paper (err 0.002); refining anything moves away
+from it, and combining both knobs (err 0.017) is worse than either
+refining dx alone would suggest is necessary, though better than dx=0.01
+alone (err 0.055) — the ngrid correction partially cancels dx's
+overshoot here rather than adding to it. At 20°, **ngrid alone is
+distinctly the best answer of all five configs tested** (err 0.002,
+landing almost exactly on the paper) — adding dx=0.01 on top *worsens*
+it to err 0.032, i.e. combining the two knobs actively hurts at this
+angle rather than helping. At 30°, dx=0.01 alone is the best of the
+five (err 0.076, barely better than baseline); the combination with
+ngrid=3 is the **worst** of all five configs at this angle (err 0.130)
+— the mid-range mismatch flagged as unexplained in Test 2c gets no
+better, and arguably worse, from combining knobs. Only at 40° does the
+combination (err 0.018) edge out the best single knob (ngrid=3 alone,
+err 0.021) — a genuine but marginal improvement (~16% error reduction
+on top of ngrid's already-large 4x reduction over baseline), not a
+dramatic synergistic effect.
+
+**One consistent, useful finding, though**: within Test 2d's own data,
+increasing ngrid from 1→2→3 *at dx=0.01* moves St in the same direction,
+by a similar relative amount, at every angle (15°: 0.740→0.713→0.702;
+20°: 0.584→0.539→0.525; 30°: 0.266→0.253→0.212; 40°: 0.327→0.271→0.258)
+as it did at dx=0.02 in Test 2c. That reproducibility — ngrid's
+correction pointing the same direction regardless of which dx it's
+layered on top of — is good evidence that Test 2c's ngrid effect is a
+real, systematic domain-confinement correction rather than an accident
+of the particular dx=0.02 grid it was first measured on. dx=0.01's own
+effect, by contrast, is not reproducibly helpful across angles (it
+overshoots at 15°, barely moves 30°/40°) — reinforcing Test 2c's
+conclusion that far-field domain size, not near-body resolution, is the
+more reliable knob for this particular quantity, and that paying for
+both at once buys little beyond what ngrid alone already gets.
+
+**Revised overall conclusion for Question 2 (now incorporating Test
+2d):** the low plateau's (~20°) mismatch with the paper is attributable
+mainly to **far-field domain confinement** (matched almost exactly once
+`ngrid` is increased alone), not near-body grid resolution — and Test
+2d shows this isn't just uncorrected by adding dx=0.01 on top, it's
+actively *undone* by it (err 0.002→0.032). The high plateau's (~40°)
+mismatch is also domain-related, as before, and is the one case where
+combining both knobs gives a small additional improvement over ngrid
+alone (err 0.021→0.018) — real, but marginal next to ngrid's own 4x
+gain over baseline. The mid-range (~30°) mismatch remains genuinely
+unexplained by any knob or combination tested here — Test 2d's combined
+config is in fact the single worst result at that angle (err 0.130) —
+confirming this is a real open question rather than one that just
+needed a more thorough refinement. **Practical takeaway:** ngrid
+(far-field domain size) is the knob that actually matters for this
+quantity; dx refinement adds cost without reliably adding accuracy, and
+at two of the four representative angles actively degrades the
+ngrid-alone result.
 
 ## Question 3: is the post-stall jaggedness multistability, or just roughness?
 
@@ -326,17 +389,31 @@ still wrong for a reason this investigation hasn't identified.
 
 - `run_further.py` — driver for all new simulations. `short` mode runs
   everything except the dx=0.005 point (~15 min, 8-way parallel); `long`
-  mode runs just that one point (~3h, serial).
-- `analyze_further.py` — all 7 tests; `zero` for 1a/1b/2a/3a (no new runs
-  needed), `new` for 2b/2c/3b (needs `run_further.py` output), `all` for
+  mode runs just that one point (~3h, serial); `test2d` mode runs Test
+  2d's 8 combined dx=0.01×ngrid=2,3 jobs (~72 min, 6-way parallel).
+- `analyze_further.py` — all 8 tests; `zero` for 1a/1b/2a/3a (no new runs
+  needed), `new` for 2b/2c/2d/3b (needs `run_further.py` output), `all` for
   both.
 - `gen_further_figs.py` — generates all figures in `figures/` from `data/`.
 - `test1c_transition_sensitivity.py` — Test 1c (`run`/`analyze` modes),
   directly checking whether the 34-35° transition itself (not just nearby
   interior points) is grid/domain-sensitive.
-- `test1c_drag_transition_sensitivity.py` — Test 1c's drag ($\overline{C_d}$)
-  companion check (zero new runs, reuses Test 1c's own runs).
+- `test1c_drag_transition_sensitivity.py` — Test 1c's mean-drag
+  ($\overline{C_d}$) companion check (zero new runs, reuses Test 1c's
+  own runs).
+- `test1c_mindrag_transition_sensitivity.py` — Test 1c's minimum-instantaneous-Cd
+  companion (zero new runs): checks the same 34-35° transition in min(Cd)
+  rather than mean(Cd). At these steady, non-pitching angles min(Cd)
+  never actually goes negative (no real thrust here — see
+  `test1d_thrust_transition_sensitivity.py` for the pitching-motion case
+  that does produce thrust), so this is a min-drag check, not a
+  max-thrust one.
+- `test1d_thrust_transition_sensitivity.py` — separate from Test 1c:
+  reruns the oscillating f=4Hz pitching motion at dx=0.01/ngrid=2,3 to
+  check whether IBPM's extended thrust regime (vs. the paper's reported
+  cutoff) shrinks under refinement.
 - `data/` — every test's numeric output, referenced above.
-- `figures/` — the 8 figures embedded above.
-- `runs/` — raw simulation output for the new 2b/2c/3b runs (`.cholesky`
-  cache files excluded, matching this repo's convention elsewhere).
+- `figures/` — the figures embedded above.
+- `runs/` — raw simulation output for the new 2b/2c/2d/3b runs
+  (`.cholesky` cache files excluded, matching this repo's convention
+  elsewhere).

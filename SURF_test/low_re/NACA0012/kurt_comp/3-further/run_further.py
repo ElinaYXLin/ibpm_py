@@ -22,9 +22,17 @@ see analyze_further.py). Steady, py_static only, Re=1000 baseline (see
       "perturbation" runs (impulsive start, Re nudged by a small relative
       amount, three angles x three perturbation levels).
 
+  2d. Does refining dx AND increasing ngrid together do better than either
+      alone? Combines 2b's dx=0.01 with 2c's ngrid=2,3 (same 4 angles,
+      same ngrid-domain-height fix as 2c, scaled to dx=0.01: ny=304
+      instead of 152, keeping the same 3.04c physical domain height and
+      the ngrid>1 divisible-by-4 requirement). dx=0.005 excluded per the
+      mentor's/user's own call -- too slow to be worth it here.
+
 Usage:
   python3 run_further.py short [njobs]   -- everything except the dx=0.005 point
   python3 run_further.py long            -- just the dx=0.005 point (serial, 1 job)
+  python3 run_further.py test2d [njobs]  -- 2d: dx=0.01 x ngrid=2,3 (8 jobs)
 Output: 3-further/runs/<test>/<case>/
 """
 import pathlib
@@ -149,6 +157,25 @@ def build_perturbation_jobs():
     return jobs
 
 
+def build_test2d_jobs():
+    """2d: dx=0.01 combined with ngrid=2,3 at the same 4 representative
+    angles. Domain height widened from BASE_DOMAIN's 3.0c to 3.04c (same
+    fix 2c used, here at 2x resolution: ny=304 instead of 152) purely to
+    satisfy the ngrid>1 divisible-by-4 requirement -- not a physical
+    change vs. the dx=0.01/ngrid=1 baseline already on disk from 2b,
+    which used yoffset=-1.5 (3.00c) instead; the 0.04c difference in
+    domain height is negligible next to the resolution/far-field
+    variables actually being tested."""
+    jobs = []
+    ngrid_domain = dict(length=6, xoffset=-2, yoffset=-1.52)
+    for ngrid in (2, 3):
+        for a in REP_ANGLES:
+            outdir = RUNS / "dx_ngrid_sweep" / f"dx0.010_ngrid{ngrid}_a{a:02d}"
+            jobs.append(dict(outdir=outdir, geom=GEOM["0.01"], nx=600, ny=304, ngrid=ngrid,
+                              domain=ngrid_domain, alpha=a, Re=RE, dt=0.005, nsteps=6000))
+    return jobs
+
+
 def build_long_job():
     outdir = RUNS / "dx_refine" / "dx0.005_a20"
     return dict(outdir=outdir, geom=GEOM["0.005"], nx=1200, ny=600, ngrid=1,
@@ -183,6 +210,10 @@ def main():
 
     if mode == "long":
         ok = run_pool([build_long_job()], 1, "2b (dx=0.005)")
+        sys.exit(0 if ok else 1)
+
+    if mode == "test2d":
+        ok = run_pool(build_test2d_jobs(), njobs, "2d (dx=0.01 x ngrid=2,3)")
         sys.exit(0 if ok else 1)
 
     # short mode: 2b(dx=0.01) + 2c(ngrid) + 3b(source) in one pool, THEN
